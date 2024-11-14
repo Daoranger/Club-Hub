@@ -9,4 +9,4 @@ Project description
 ## Installation
 
 ## Usage
-Read the README.md file in backend and client folders
+Read instructions in the README.md file for (each) backend and client 
