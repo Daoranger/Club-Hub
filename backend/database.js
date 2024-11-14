@@ -19,7 +19,7 @@ app.get("/", (req,res)=> {
   res.json("Hello! You are connected to backend!");
 });
 
-// Start the server at localhost:8800
+// Start the backend server at localhost:8800
 app.listen(8800, ()=>{
   console.log("Connected to backend!");
 });
