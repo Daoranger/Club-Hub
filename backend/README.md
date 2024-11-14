@@ -1,4 +1,4 @@
-# Instructions
+# Instructions for Backend
 
 1. **Open terminal**  
    Either from your PC or VSCode
@@ -9,10 +9,10 @@
 3. **Install any new packages**  
    Run `npm install` to ensure all dependencies are up to date.
 
-4. **Start the server**  
+4. **Start the backend server**  
    Run `npm start`. You should see a console log message saying:  
    `"Connected to backend!"`
 
-5. **Test the server**  
+5. **Test the backend server**  
    Open your browser and go to `localhost:8800`. The root page ("/" route) should load, displaying the message:  
    `"Hello! You are connected to the backend!"`

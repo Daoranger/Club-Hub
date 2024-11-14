@@ -9,11 +9,11 @@
 3. **Install any new packages**  
   Run `npm install` to ensure all dependencies are up to date.
 
-4. **Start the server**  
+4. **Start the frontend server**  
   Run `npm start`. 
 
-5. **Test the server**  
-  The page will be open in your browser. root is `localhost:3000/`
+5. **Test the frontend server**  
+  The page will automatically open in your browser. root is `localhost:3000/`
 
 6. **Navigate through different pages**
   If you want to go to the login page, the route is `localhost:3000/login`
