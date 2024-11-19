@@ -1,6 +1,9 @@
 import React, { useState } from "react";
+import { useTheme } from "../context/ThemeContext";
 
 function Dashboard() {
+  const { darkMode } = useTheme();
+
   // State to store clubs
   const [clubs, setClubs] = useState([
     { name: "Photography Club", description: "Capture the world through your lens!" },
@@ -26,10 +29,10 @@ function Dashboard() {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>My Clubs</h1>
+    <div className={`container ${darkMode ? "dark-moden" : "light-mode"}`} style={{ padding: "20px" }}>
+      <h1 className={darkMode ? "dark-mode" : "light-mode"}> My Clubs</h1>
       {/* List of clubs */}
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
+      <div className={darkMode ? "dark-mode" : "light-mode"} style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
         {clubs.map((club, index) => (
           <div
             key={index}
@@ -38,7 +41,6 @@ function Dashboard() {
               borderRadius: "10px",
               padding: "20px",
               width: "200px",
-              backgroundColor: "#fff",
               boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
             }}
           >
@@ -49,7 +51,7 @@ function Dashboard() {
       </div>
       {/* Form to add new club */}
       <form onSubmit={handleSubmit} style={{ marginTop: "20px" }}>
-        <h2>Add a New Club</h2>
+        <h2 className={darkMode ? "dark-mode" : "light-mode"}>Add a New Club</h2>
         <input
           type="text"
           name="name"

@@ -7,6 +7,7 @@ import Dashboard from "./pages/Dashboard";
 import ThreadPage from "./pages/ThreadPage";
 import Navbar from "./components/NavBar";
 import { ThemeProvider, useTheme } from "./context/ThemeContext";
+import "./styles.css";
 
 function App() {
   return (

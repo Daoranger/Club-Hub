@@ -8,21 +8,20 @@ function Navbar() {
 
   return (
     <nav
+      className={`navbar ${darkMode ? "dark-mode" : "light-mode"}`}
       style={{
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
         padding: "10px 20px",
-        backgroundColor: darkMode ? "#1a1a1a" : "#2c3e50",
-        color: "white",
       }}
     >
-      <h2 style={{ margin: 0 }}>Club Hub</h2>
+      <h2 className={darkMode ? "dark-mode" : "light-mode"} style={{ margin: 0 }}>Club Hub</h2>
       <div>
         <Link
           to="/"
+          className={darkMode ? "dark-mode" : "light-mode"}
           style={{
-            color: "white",
             textDecoration: "none",
             marginRight: "15px",
           }}
@@ -31,8 +30,8 @@ function Navbar() {
         </Link>
         <Link
           to="/dashboard"
+          className={darkMode ? "dark-mode" : "light-mode"}
           style={{
-            color: "white",
             textDecoration: "none",
             marginRight: "15px",
           }}
@@ -41,8 +40,8 @@ function Navbar() {
         </Link>
         <Link
           to="/login"
+          className={darkMode ? "dark-mode" : "light-mode"}
           style={{
-            color: "white",
             textDecoration: "none",
             marginRight: "15px",
           }}
@@ -53,8 +52,8 @@ function Navbar() {
           onClick={toggleDarkMode}
           style={{
             padding: "5px 10px",
-            backgroundColor: darkMode ? "#555" : "#e74c3c",
-            color: "white",
+            backgroundColor: darkMode ? "#ffffff": "#3c3c3c",
+            color: darkMode ? "#000000" : "#ffffff",
             border: "none",
             borderRadius: "5px",
             cursor: "pointer",
