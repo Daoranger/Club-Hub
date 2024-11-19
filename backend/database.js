@@ -1,9 +1,18 @@
 import express from "express";
 import mysql from "mysql2";
 import dotenv from "dotenv";
+import cors from "cors";
+
+// Required modules
+const express = require("express");
+const mysql = require("mysql2");
+const dotenv = require("dotenv");
+const cors = require("cors");
+
 // App configuration
 const app = express();
 dotenv.config();
+app.use(cors());
 
 // DB connection; make sure to set up .env variables
 const dbCon = mysql.createConnection({
@@ -18,13 +27,36 @@ dbCon.connect(function(err) {
   if(err) {
     console.log("DB Connection error!");
   } else {
-    console.log("DB Connection are good!");
+    console.log("DB Connection is good!");
   }
 });
 
 // Backend connection
 app.get("/", (req,res)=> {
   res.json("Hello! You are connected to backend!");
+});
+
+app.get("/login", (req,res)=> {
+  dbCon.query("SELECT * FROM users", (err, result)=> {
+    if(err) {
+      console.log("Error in fetching users!");
+    } else {
+      res.json(result);
+    }
+  });
+});
+
+app.get("/signup", (req,res)=> {
+  const username = req.query.username;
+  const email = req.query.email;
+  const password = req.query.password;
+  dbCon.query("INSERT INTO users (username, password) VALUES (?, ?)", [username, email, password], (err, result)=> {
+    if(err) {
+      console.log("Error in fetching users!");
+    } else {
+      res.json(result);
+    }
+  });
 });
 
 // Start the backend server at localhost:8800
