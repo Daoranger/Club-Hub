@@ -8,7 +8,7 @@ function Navbar() {
 
   return (
     <nav
-      className={`navbar ${darkMode ? "dark-mode" : "light-mode"}`}
+      className={`navbar`}
       style={{
         display: "flex",
         justifyContent: "space-between",

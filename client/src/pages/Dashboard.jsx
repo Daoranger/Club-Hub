@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useTheme } from "../context/ThemeContext";
 
 function Dashboard() {
-  const { darkMode } = useTheme();
 
   // State to store clubs
   const [clubs, setClubs] = useState([
@@ -35,7 +34,7 @@ function Dashboard() {
       <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
         {clubs.map((club, index) => (
           <div
-            className={`club-card ${darkMode ? "dark-mode" : "light-mode"}`}
+            className={`club-card`}
             key={index}
             style={{
               border: "1px solid #ddd",
@@ -54,6 +53,7 @@ function Dashboard() {
       <form onSubmit={handleSubmit} style={{ marginTop: "20px" }}>
         <h2>Add a New Club</h2>
         <input
+          className={`text-area`}
           type="text"
           name="name"
           value={newClub.name}
@@ -69,6 +69,7 @@ function Dashboard() {
           }}
         />
         <textarea
+          className={`text-area`}
           name="description"
           value={newClub.description}
           onChange={handleChange}

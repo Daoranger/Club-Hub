@@ -8,6 +8,7 @@ function LoginPage() {
       <h1>Login to Club Hub</h1>
       <form style={{ marginTop: "20px" }}>
         <input
+          className={`text-area`}
           type="email"
           placeholder="Email"
           style={{
@@ -20,6 +21,7 @@ function LoginPage() {
           }}
         />
         <input
+          className={`text-area`}
           type="password"
           placeholder="Password"
           style={{

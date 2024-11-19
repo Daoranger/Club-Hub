@@ -5,7 +5,7 @@ function HomePage() {
   const { darkMode } = useTheme();
 
   return (
-    <div className={`container ${darkMode ? "dark-mode" : "light-mode"}`} style={styles.container}>
+    <div className={`container`} style={styles.container}>
       <h1 style={styles.heading}>Welcome to Club Hub!</h1>
       <p style={styles.text}>
         This is your personalized dashboard for managing university clubs, events, and discussions.
