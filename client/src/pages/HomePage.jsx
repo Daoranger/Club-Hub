@@ -1,13 +1,16 @@
 import React from "react";
+import { useTheme } from "../context/ThemeContext";
 
 function HomePage() {
+  const { darkMode } = useTheme();
+
   return (
-    <div style={styles.container}>
-      <h1 style={styles.heading}>Welcome to Club Hub!</h1>
-      <p style={styles.text}>
+    <div className={`container ${darkMode ? "dark-mode" : "light-mode"}`} style={styles.container}>
+      <h1 className={darkMode ? "dark-mode" : "light-mode"} style={styles.heading}>Welcome to Club Hub!</h1>
+      <p className={darkMode ? "dark-mode" : "light-mode"} style={styles.text}>
         This is your personalized dashboard for managing university clubs, events, and discussions.
       </p>
-      <p style={styles.note}>
+      <p className={darkMode ? "dark-mode" : "light-mode"} style={styles.note}>
         Use the navigation bar to explore the dashboard and discover your clubs.
       </p>
     </div>
@@ -19,7 +22,6 @@ const styles = {
     textAlign: "center",
     padding: "40px",
     marginTop: "50px",
-    backgroundColor: "#ffffff",
     borderRadius: "12px",
     boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
     maxWidth: "800px",
@@ -27,18 +29,15 @@ const styles = {
   },
   heading: {
     fontSize: "2.5rem",
-    color: "#2c3e50",
     marginBottom: "20px",
   },
   text: {
     fontSize: "1.2rem",
-    color: "#555",
     lineHeight: "1.6",
     marginBottom: "10px",
   },
   note: {
     fontSize: "1rem",
-    color: "#888",
     fontStyle: "italic",
   },
 };
