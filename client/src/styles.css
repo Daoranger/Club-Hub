@@ -36,5 +36,15 @@ body.dark-mode .container {
   color: white;
 }
 
+.club-card {
+  background-color: #f6f8fa; /* Lighter grey for the club cards in light mode */
+  color: black;
+}
+
+body.dark-mode .club-card {
+  background-color: #3c3c3c; /* Darker background for the club cards in dark mode */
+  color: white;
+}
+
 
 /* Add more styles as needed */

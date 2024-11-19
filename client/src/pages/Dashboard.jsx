@@ -29,12 +29,13 @@ function Dashboard() {
   };
 
   return (
-    <div className={`container ${darkMode ? "dark-moden" : "light-mode"}`} style={{ padding: "20px" }}>
-      <h1 className={darkMode ? "dark-mode" : "light-mode"}> My Clubs</h1>
+    <div style={{ padding: "20px" }}>
+      <h1> My Clubs</h1>
       {/* List of clubs */}
-      <div className={darkMode ? "dark-mode" : "light-mode"} style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
         {clubs.map((club, index) => (
           <div
+            className={`club-card ${darkMode ? "dark-mode" : "light-mode"}`}
             key={index}
             style={{
               border: "1px solid #ddd",
@@ -51,7 +52,7 @@ function Dashboard() {
       </div>
       {/* Form to add new club */}
       <form onSubmit={handleSubmit} style={{ marginTop: "20px" }}>
-        <h2 className={darkMode ? "dark-mode" : "light-mode"}>Add a New Club</h2>
+        <h2>Add a New Club</h2>
         <input
           type="text"
           name="name"
