@@ -1,16 +1,27 @@
 //Nayte's code
 // src/pages/SignUpPage.jsx
 import React, { useEffect } from "react";
-import axios  from "axios";
+import axios from "axios";
 
 function SignUpPage() {
   const [username, setUsername] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [error, setError] = React.useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(username, email, password);
+    axios.post("http://localhost:8800/signup", { username: username, email: email, password: password })
+      .then(data => {
+        console.log(data);
+        setUsername("");
+        setEmail("");
+        setPassword("");
+        setError(""); // Clear error on successful signup
+      })
+      .catch(err => {
+        setError(`Error: ${err.response.data.errors[0].msg}`);
+      })
   }
 
   return (
@@ -77,6 +88,11 @@ function SignUpPage() {
         >
           Sign Up
         </button>
+        {error && (
+          <div style={{ color: "red", marginTop: "10px" }}>
+            {error}
+          </div>
+        )}
       </form>
     </div>
   );
