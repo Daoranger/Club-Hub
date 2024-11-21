@@ -1,6 +1,6 @@
 //Shervan's code
 // src/pages/LoginPage.jsx
-import React, { useEffect } from "react";
+import React from "react";
 import axios  from "axios";
 
 function LoginPage() {

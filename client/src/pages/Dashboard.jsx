@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useTheme } from "../context/ThemeContext";
 
 function Dashboard() {
 
