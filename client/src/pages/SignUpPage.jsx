@@ -1,46 +1,56 @@
+//Nayte's code
+// src/pages/SignUpPage.jsx
 import React from "react";
-<<<<<<< Updated upstream
-
-function LoginPage() {
-=======
-import axios  from "axios";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-function LoginPage() {
+function SignUpPage() {
   const [username, setUsername] = React.useState("");
+  const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [error, setError] = React.useState("");
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post("http://localhost:8800/login", { username: username, password: password })
+    axios.post("http://localhost:8800/signup", { username: username, email: email, password: password })
       .then(data => {
-        if (data){
-          navigate("/dashboard");
-        }
+        console.log(data);
+        setUsername("");
+        setEmail("");
+        setPassword("");
+        setError(""); // Clear error on successful signup
+        navigate("/login");
       })
       .catch(err => {
         setError(`Error: ${err.response.data.errors[0].msg}`);
       })
   }
 
-  const handleSignUp = () => {
-    window.location.href = "/signup";
-  }
-
->>>>>>> Stashed changes
   return (
     <div style={{ padding: "20px", textAlign: "center" }}>
-      <h1>Login to Club Hub</h1>
+      <h1>Sign Up for Club Hub</h1>
       <form style={{ marginTop: "20px" }}>
         <input
-          type="email"
-<<<<<<< Updated upstream
-=======
+          className={`text-area`}
+          type="username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
->>>>>>> Stashed changes
+          placeholder="Username"
+          style={{
+            display: "block",
+            margin: "10px auto",
+            padding: "10px",
+            width: "300px",
+            borderRadius: "5px",
+            border: "1px solid #ccc",
+          }}
+        />
+        <input
+          className={`text-area`}
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           placeholder="Email"
           style={{
             display: "block",
@@ -52,7 +62,10 @@ function LoginPage() {
           }}
         />
         <input
+          className={`text-area`}
           type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
           style={{
             display: "block",
@@ -65,6 +78,7 @@ function LoginPage() {
         />
         <button
           type="submit"
+          onClick={handleSubmit}
           style={{
             padding: "10px 20px",
             marginTop: "10px",
@@ -75,35 +89,16 @@ function LoginPage() {
             cursor: "pointer",
           }}
         >
-          Login
+          Sign Up
         </button>
-<<<<<<< Updated upstream
-=======
-        <button
-        type="button"
-        onClick={handleSignUp}
-        style={{
-          padding: "10px 20px",
-          marginTop: "10px",
-          marginLeft: "10px",
-          backgroundColor: "#3498db",
-          color: "white",
-          border: "none",
-          borderRadius: "5px",
-          cursor: "pointer",
-        }}
-      >
-        Sign Up
-      </button>
-      {error && (
+        {error && (
           <div style={{ color: "red", marginTop: "10px" }}>
             {error}
           </div>
-      )}
->>>>>>> Stashed changes
+        )}
       </form>
     </div>
   );
 }
 
-export default LoginPage;
+export default SignUpPage;
