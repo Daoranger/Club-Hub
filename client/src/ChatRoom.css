@@ -1,0 +1,203 @@
+/* General container styles */
+.chatroom-container {
+  display: flex;
+  flex-direction: column;
+  width: 80%; /* Chat takes up 80% of the page width */
+  height: calc(100vh - 100px); /* Adjust height to go to the bottom of the visible webpage */
+  margin: 0; /* No margin */
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  background-color: var(--container-bg); /* Use variable for background based on mode */
+}
+
+/* Light and dark mode variables */
+body.light-mode {
+  --container-bg: #ffffff; /* Light background */
+  --text-color: black; /* Dark text */
+}
+
+body.dark-mode {
+  --container-bg: #2b2b2b; /* Dark background */
+  --text-color: white; /* Light text */
+}
+
+/* Set text color dynamically */
+.chatroom-container {
+  color: var(--text-color);
+}
+
+/* Chat messages section */
+.chatroom-messages {
+  flex-grow: 1;
+  padding: 10px;
+  overflow-y: auto;
+  border: 1px solid #e9ecef; /* Light border for light mode */
+}
+
+body.dark-mode .chatroom-messages {
+  border: 1px solid #5a5a5a; /* Dark border for dark mode */
+}
+
+/* Message styles */
+.message {
+  margin-bottom: 15px;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #f6f8fa; /* Light background for messages in light mode */
+  color: black;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+body.dark-mode .message {
+  background-color: #3c3c3c; /* Dark background for messages in dark mode */
+  color: white;
+}
+
+/* Replied message (inline above the main message) */
+.replied-message {
+  background-color: #e9ecef;
+  padding: 5px 10px;
+  border-left: 3px solid #7289da; /* Highlighted border */
+  margin-bottom: 5px;
+  font-size: 0.9rem;
+  color: #6c757d; /* Muted text color */
+  border-radius: 4px;
+}
+
+body.dark-mode .replied-message {
+  background-color: #2f3136; /* Darker background for replies */
+  color: #b9bbbe; /* Muted grey in dark mode */
+}
+
+/* Main message content */
+.message-content {
+  font-size: 1rem;
+  color: black;
+}
+
+body.dark-mode .message-content {
+  color: white;
+}
+
+/* Timestamp (hidden by default, shown on hover) */
+.timestamp {
+  font-size: 0.8rem;
+  color: #6c757d;
+  position: absolute;
+  right: 10px;
+  bottom: 5px;
+}
+
+body.dark-mode .timestamp {
+  color: #b9bbbe;
+}
+
+/* Reply button (hidden by default, shown on hover) */
+.reply-button {
+  font-size: 0.8rem;
+  background: none;
+  border: none;
+  color: #7289da;
+  cursor: pointer;
+  position: absolute;
+  right: 10px;
+  top: 5px;
+  visibility: hidden;
+}
+
+.message:hover .reply-button {
+  visibility: visible;
+}
+
+.reply-button:hover {
+  text-decoration: underline;
+}
+
+/* Input section */
+.chatroom-input {
+  display: flex;
+  flex-direction: column; /* Stack reply indicator above input + button */
+  padding: 10px;
+  background-color: #f6f8fa; /* Input background for light mode */
+  border-top: 1px solid #e9ecef;
+}
+
+body.dark-mode .chatroom-input {
+  background-color: #3c3c3c; /* Input background for dark mode */
+  border-top: 1px solid #5a5a5a;
+}
+
+/* Reply indicator positioned above the text input */
+.reply-indicator {
+  display: flex;
+  justify-content: space-between; /* Align the cancel button to the right */
+  align-items: center;
+  background-color: #e9ecef;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  margin-left: 10px; /* Space between the left edge of the container */
+  margin-bottom: 10px; /* Space between the reply indicator and the input */
+  color: black;
+  gap: 10px; /* Space between the text and the cancel button */
+}
+
+body.dark-mode .reply-indicator {
+  background-color: #3c3c3c;
+  color: white;
+}
+
+.reply-indicator button {
+  background: none;
+  border: none;
+  color: #7289da;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+/* Input and button row layout */
+.chat-input-container {
+  display: flex;
+  flex-direction: row; /* Input and button side by side */
+  align-items: center; /* Vertically align input and button */
+  gap: 10px; /* Space between input and button */
+}
+
+.chatroom-input input {
+  flex-grow: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: #e9ecef;
+  color: black;
+}
+
+body.dark-mode .chatroom-input input {
+  background-color: #5a5a5a;
+  color: white;
+}
+
+.chatroom-input input::placeholder {
+  color: #6c757d; /* Placeholder text in light mode */
+}
+
+body.dark-mode .chatroom-input input::placeholder {
+  color: #f6f8fa; /* Placeholder text in dark mode */
+}
+
+/* Send button */
+.chatroom-input button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  background-color: #7289da; /* Primary button color */
+  color: white;
+  cursor: pointer;
+  flex-shrink: 0; /* Prevent the button from resizing */
+}
+
+.chatroom-input button:hover {
+  background-color: #5b6eae;
+}

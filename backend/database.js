@@ -38,14 +38,6 @@ app.get("/", (req,res)=> {
       res.json(result);
     }
   });
-  dbCon.query("SELECT * FROM messages", (err, result)=> {
-    if(err) {
-      console.log("Error in fetching messages!");
-      console.log(err)
-    } else {
-      res.json(result);
-    }
-  });
 });
 
 app.post("/login", (req,res)=> {
@@ -70,7 +62,15 @@ app.post("/signup", (req,res)=> {
 });
 
 app.get("/messages", (req,res)=> {
-  dbCon.query("SELECT message FROM messages ORDER BY id ASC", (err, result)=> {
+  const sql = `
+    SELECT 
+      m1.id, m1.message, m1.reply_to, m1.timestamp, 
+      m2.message AS replied_message 
+    FROM messages m1
+    LEFT JOIN messages m2 ON m1.reply_to = m2.id
+    ORDER BY m1.timestamp ASC;
+  `;
+  dbCon.query(sql, (err, result)=> {
     if(err) {
       check_err_code(err);
     } else {
@@ -80,8 +80,9 @@ app.get("/messages", (req,res)=> {
 });
 
 app.post("/messages", (req,res)=> {
-  const message = req.body.message;
-  dbCon.query("INSERT INTO messages (message) VALUES (?)", [message], (err, result)=> {
+  const { message, reply_to } = req.body;
+  const sql = "INSERT INTO messages (message, reply_to) VALUES (?, ?)";
+  dbCon.query(sql, [message, reply_to || null], (err, result)=> {
     if(err) {
       console.log("Error in inserting message!");
       console.log(err)
