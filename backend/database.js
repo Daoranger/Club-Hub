@@ -4,10 +4,10 @@ import dotenv from "dotenv";
 import cors from "cors";
 
 // Required modules
-const express = require("express");
-const mysql = require("mysql2");
-const dotenv = require("dotenv");
-const cors = require("cors");
+// const express = require("express");
+// const mysql = require("mysql2");
+// const dotenv = require("dotenv");
+// const cors = require("cors");
 
 // App configuration
 const app = express();

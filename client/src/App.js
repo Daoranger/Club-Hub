@@ -6,6 +6,7 @@ import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 import Dashboard from "./pages/Dashboard";
 import ThreadPage from "./pages/ThreadPage";
+import CreateThreadPage from "./pages/CreateThreadPage";
 import ChatRoomPage from "./pages/ChatRoomPage";
 import Navbar from "./components/NavBar";
 import { ThemeProvider } from "./context/ThemeContext";
@@ -22,6 +23,7 @@ function App() {
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/thread" element={<ThreadPage />} />
+          <Route path="/create-thread" element={<CreateThreadPage />} />
           <Route path="/chatroom" element={<ChatRoomPage />} />
         </Routes>
       </Router>
