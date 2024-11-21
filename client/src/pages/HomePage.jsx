@@ -1,8 +1,6 @@
 import React from "react";
-import { useTheme } from "../context/ThemeContext";
 
 function HomePage() {
-  const { darkMode } = useTheme();
 
   return (
     <div className={`container`} style={styles.container}>
