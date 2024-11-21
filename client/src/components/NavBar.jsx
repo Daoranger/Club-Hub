@@ -16,7 +16,12 @@ function Navbar() {
         padding: "10px 20px",
       }}
     >
-      <h2>Club Hub</h2>
+      <h2
+        style={{
+          margin: "0px",
+        }}
+      >
+        Club Hub</h2>
       <div>
         <Link
           to="/"

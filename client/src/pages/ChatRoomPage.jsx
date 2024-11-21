@@ -1,15 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
+import "../ChatRoom.css";
 
 function ChatRoomPage() {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
+  const [replyTo, setReplyTo] = useState(null);
+  const [replyToContent, setReplyToContent] = useState("");
+  const inputRef = useRef(null);
 
   useEffect(() => {
     const fetchMessages = async () => {
       try {
         const res = await axios.get("http://localhost:8800/messages");
         setMessages(res.data);
+        console.log(messages.replied_message);
       } catch (err) {
         console.error(err);
       }
@@ -24,10 +29,12 @@ function ChatRoomPage() {
   const sendMessage = async (e) => {
     e.preventDefault();
     if (message.trim()) {
-      await axios.post("http://localhost:8800/messages", {message: message})
+      await axios.post("http://localhost:8800/messages", {message: message, reply_to: replyTo})
       .then(data => {
         console.log(data);
         setMessage("");
+        setReplyTo(null);
+        setReplyToContent("");
       })
       .catch(err => {
         console.log(`Error: ${err.response.data.errors[0].msg}`);
@@ -44,54 +51,73 @@ function ChatRoomPage() {
     };
   };
 
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      sendMessage(e);
+    }
+  };
+
+  const handleReply = (id, content) => {
+    setReplyTo(id);
+    setReplyToContent(content);
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }
 
   return (
-    <div>
-      <div
-        style={{
-          height: "400px",
-          overflowY: "scroll",
-          border: "1px solid #ccc",
-          padding: "10px",
-        }}
-      >
-        {messages.map((msg, index) => (
-          <div key={index} style={{ margin: "10px 0" }}>
-            <span>{msg.message}</span>
+    <div className="chatroom-container">
+      <div className="chatroom-messages">
+        {messages.map((msg) => (
+          <div key={msg.id} className="message">
+            {/* Display the replied-to message */}
+            {msg.reply_to && (
+              <div className="replied-message">
+                Replying to: {msg.replied_message || "Deleted Message"}
+              </div>
+            )}
+            {/* Display the main message */}
+            <div className="message-content">{msg.message}</div>
+            <button
+              className="reply-button"
+              onClick={() => handleReply(msg.id, msg.message)}
+            >
+              Reply
+            </button>
+            <div className="timestamp">
+              {new Date(msg.timestamp).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </div>
           </div>
         ))}
       </div>
-      <form onSubmit={sendMessage} style={{ marginTop: "10px" }}>
-        <input
-          className={`text-area`}
-          type="text"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          placeholder="Type a message..."
-          style={{
-            margin: "10px 0",
-            padding: "10px",
-            width: "80%",
-            borderRadius: "5px",
-            border: "1px solid #ccc",
-        }}
-        />
-        <button
-          type="submit"
-          style={{
-            padding: "10px 20px",
-            backgroundColor: "#2c3e50",
-            color: "white",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer",
-          }}
-        >
-          Send
-        </button>
+      <form
+        onSubmit={sendMessage}
+        className="chatroom-input"
+      >
+        {replyTo && (
+          <div className="reply-indicator">
+            Replying to: {replyToContent}{" "}
+            <button onClick={() => setReplyTo(null)}>Cancel</button>
+          </div>
+        )}
+        <div className="chat-input-container">
+          <input
+            type="text"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder="Type a message..."
+            onKeyDown={handleKeyPress}
+            ref={inputRef}
+          />
+          <button type="submit">Send</button>
+        </div>
       </form>
     </div>
   );
-}
+};
 
 export default ChatRoomPage;
