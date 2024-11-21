@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 function Dashboard() {
+
   // State to store clubs
   const [clubs, setClubs] = useState([
     { name: "Photography Club", description: "Capture the world through your lens!" },
@@ -27,18 +28,18 @@ function Dashboard() {
 
   return (
     <div style={{ padding: "20px" }}>
-      <h1>My Clubs</h1>
+      <h1> My Clubs</h1>
       {/* List of clubs */}
       <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
         {clubs.map((club, index) => (
           <div
+            className={`club-card`}
             key={index}
             style={{
               border: "1px solid #ddd",
               borderRadius: "10px",
               padding: "20px",
               width: "200px",
-              backgroundColor: "#fff",
               boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
             }}
           >
@@ -51,6 +52,7 @@ function Dashboard() {
       <form onSubmit={handleSubmit} style={{ marginTop: "20px" }}>
         <h2>Add a New Club</h2>
         <input
+          className={`text-area`}
           type="text"
           name="name"
           value={newClub.name}
@@ -66,6 +68,7 @@ function Dashboard() {
           }}
         />
         <textarea
+          className={`text-area`}
           name="description"
           value={newClub.description}
           onChange={handleChange}

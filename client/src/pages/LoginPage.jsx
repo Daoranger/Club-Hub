@@ -1,8 +1,4 @@
 import React from "react";
-<<<<<<< Updated upstream
-
-function LoginPage() {
-=======
 import axios  from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -28,20 +24,16 @@ function LoginPage() {
   const handleSignUp = () => {
     window.location.href = "/signup";
   }
-
->>>>>>> Stashed changes
   return (
     <div style={{ padding: "20px", textAlign: "center" }}>
       <h1>Login to Club Hub</h1>
       <form style={{ marginTop: "20px" }}>
         <input
-          type="email"
-<<<<<<< Updated upstream
-=======
+          className={`text-area`}
+          type="username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
->>>>>>> Stashed changes
-          placeholder="Email"
+          placeholder="Username"
           style={{
             display: "block",
             margin: "10px auto",
@@ -52,7 +44,10 @@ function LoginPage() {
           }}
         />
         <input
+          className={`text-area`}
           type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
           style={{
             display: "block",
@@ -65,6 +60,7 @@ function LoginPage() {
         />
         <button
           type="submit"
+          onClick={handleSubmit}
           style={{
             padding: "10px 20px",
             marginTop: "10px",
@@ -77,8 +73,6 @@ function LoginPage() {
         >
           Login
         </button>
-<<<<<<< Updated upstream
-=======
         <button
         type="button"
         onClick={handleSignUp}
@@ -100,7 +94,6 @@ function LoginPage() {
             {error}
           </div>
       )}
->>>>>>> Stashed changes
       </form>
     </div>
   );
