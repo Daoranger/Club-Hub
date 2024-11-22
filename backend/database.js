@@ -79,6 +79,45 @@ app.get("/messages", (req,res)=> {
   });
 });
 
+app.post("/login", (req,res)=> {
+  const username = req.body.username;
+  const password = req.body.password;
+
+  dbCon.query("SELECT username FROM users WHERE username = ? AND password = ?", [username, password], (err, result)=> {
+    if (err) {
+      console.log(err)
+    } else {
+      if (result.length === 0) {
+        res.status(400).json({
+          errors:[{
+              msg: "Username/password is incorrect."
+            }]
+        });
+      } else {
+        res.send({username: username});
+      }
+    }
+  });
+});
+
+
+app.post("/signup", (req,res)=> {
+  const username = req.body.username;
+  const email = req.body.email;
+  const password = req.body.password;
+  // check_password_validity(password);
+
+  // const hashedPassword = bcrypt.hashSync(password, 10);
+
+  dbCon.query("INSERT INTO users (username, email, password) VALUES (?, ?, ?)", [username, email, password], (err, result)=> {
+    if(err) {
+      check_err_code(err);
+    } else {
+      res.send({username: username});
+    }
+  });
+});
+
 app.post("/messages", (req,res)=> {
   const { message, reply_to } = req.body;
   const sql = "INSERT INTO messages (message, reply_to) VALUES (?, ?)";

@@ -1,31 +1,39 @@
-//Shervan's code
-// src/pages/LoginPage.jsx
 import React from "react";
 import axios  from "axios";
+import { useNavigate } from "react-router-dom";
 
 function LoginPage() {
-  const [email, setEmail] = React.useState("");
+  const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [error, setError] = React.useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(email, password);
+    axios.post("http://localhost:8800/login", { username: username, password: password })
+      .then(data => {
+        if (data){
+          navigate("/dashboard");
+        }
+      })
+      .catch(err => {
+        setError(`Error: ${err.response.data.errors[0].msg}`);
+      })
   }
 
   const handleSignUp = () => {
     window.location.href = "/signup";
   }
-
   return (
     <div style={{ padding: "20px", textAlign: "center" }}>
       <h1>Login to Club Hub</h1>
       <form style={{ marginTop: "20px" }}>
         <input
           className={`text-area`}
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email"
+          type="username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          placeholder="Username"
           style={{
             display: "block",
             margin: "10px auto",
@@ -81,48 +89,14 @@ function LoginPage() {
       >
         Sign Up
       </button>
+      {error && (
+          <div style={{ color: "red", marginTop: "10px" }}>
+            {error}
+          </div>
+      )}
       </form>
     </div>
   );
 }
 
 export default LoginPage;
-
-//Nathan's code #2
-// import React from "react";
-
-// function LoginPage() {
-//   return (
-//     <div style={styles.container}>
-//       <h1>Login Page</h1>
-//       <p>Welcome to the login page!</p>
-//     </div>
-//   );
-// }
-
-// const styles = {
-//   container: {
-//     textAlign: "center",
-//     padding: "20px",
-//     marginTop: "50px",
-//     backgroundColor: "#f4f4f4",
-//     borderRadius: "8px",
-//   },
-// };
-
-// export default LoginPage;
-
-
-// Nathan"s Old Code
-// import React, { useState, useRef } from "react";
-// import axiosInstance from "../axiosInstance";
-
-// export default function LoginPage() {
-//     const [email, setEmail] = useState("");
-//     const [password, setPassord] = useState("");
-    
-//     const handleSubmit = async (event) => {
-//         event.preventDefault();
-//         let response = await //post login function
-//     }
-// }

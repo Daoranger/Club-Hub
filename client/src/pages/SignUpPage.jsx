@@ -2,12 +2,14 @@
 // src/pages/SignUpPage.jsx
 import React from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function SignUpPage() {
   const [username, setUsername] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [error, setError] = React.useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -18,6 +20,7 @@ function SignUpPage() {
         setEmail("");
         setPassword("");
         setError(""); // Clear error on successful signup
+        navigate("/login");
       })
       .catch(err => {
         setError(`Error: ${err.response.data.errors[0].msg}`);
