@@ -23,7 +23,7 @@ function SignUpPage() {
         navigate("/login");
       })
       .catch(err => {
-        setError(`Error: ${err.response.data.errors[0].msg}`);
+        console.log(err.response.data);
       })
   }
 
