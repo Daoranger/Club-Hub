@@ -40,27 +40,6 @@ app.get("/", (req,res)=> {
   });
 });
 
-app.post("/login", (req,res)=> {
-  
-});
-
-app.post("/signup", (req,res)=> {
-  const username = req.body.username;
-  const email = req.body.email;
-  const password = req.body.password;
-  check_password_validity(password);
-
-  const hashedPassword = bcrypt.hashSync(password, 10);
-
-  dbCon.query("INSERT INTO users (username, email, password) VALUES (?, ?, ?)", [username, email, hashedPassword], (err, result)=> {
-    if(err) {
-      check_err_code(err);
-    } else {
-      res.send({username: username});
-    }
-  });
-});
-
 app.get("/messages", (req,res)=> {
   const sql = `
     SELECT 

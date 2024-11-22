@@ -22,7 +22,7 @@ function LoginPage() {
   }
 
   const handleSignUp = () => {
-    window.location.href = "/signup";
+    navigate("/signup");
   }
   return (
     <div style={{ padding: "20px", textAlign: "center" }}>
