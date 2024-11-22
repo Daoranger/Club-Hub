@@ -16,3 +16,12 @@
 5. **Test the backend server**  
    Open your browser and go to `localhost:8800`. The root page ("/" route) should load, displaying the message:  
    `"Hello! You are connected to the backend!"`
+
+6. **To Connect with MySQL Using .env**  
+   Create a .env file (this is only for you, it will be ignore when push to remote repo)
+   .env should have the following:
+      DB_HOST= localhost
+      DB_USER= root
+      DB_PASSWORD= 'your actual password for MySQL'
+      DB_NAME= 'the actual database name when you create'
+   Now when you do npm start, you should see a console log said 'DB Connection are good!, if not it will say 'DB Connection error!'
