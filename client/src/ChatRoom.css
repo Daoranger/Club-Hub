@@ -51,6 +51,20 @@ body.dark-mode .chatroom-messages {
   flex-direction: column;
 }
 
+.message-username {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #7289da;
+}
+
+body.dark-mode .message {
+  background-color: #3c3c3c;
+}
+
+body.dark-mode .message-username {
+  color: #b9bbbe;
+}
+
 body.dark-mode .message {
   background-color: #3c3c3c; /* Dark background for messages in dark mode */
   color: white;

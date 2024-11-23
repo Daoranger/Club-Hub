@@ -1,19 +1,22 @@
-import React from "react";
+import React, { useContext } from "react";
 import axios  from "axios";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../context/UserContext.js"
 
 function LoginPage() {
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [error, setError] = React.useState("");
   const navigate = useNavigate();
+  const { setUser } = useContext(UserContext);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     axios.post("http://localhost:8800/login", { username: username, password: password })
       .then(data => {
-        if (data){
-          navigate("/dashboard");
+        if (data) {
+          setUser(username);
+          navigate("/chatroom");
         }
       })
       .catch(err => {
@@ -24,6 +27,7 @@ function LoginPage() {
   const handleSignUp = () => {
     navigate("/signup");
   }
+
   return (
     <div style={{ padding: "20px", textAlign: "center" }}>
       <h1>Login to Club Hub</h1>
