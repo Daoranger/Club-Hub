@@ -40,11 +40,11 @@ app.get("/", (req,res)=> {
   });
 });
 
-app.get("/messages", (req,res)=> {
+app.get("/messages", (req, res)=> {
   const sql = `
     SELECT 
-      m1.id, m1.message, m1.reply_to, m1.timestamp, 
-      m2.message AS replied_message 
+      m1.username, m1.id, m1.message, m1.reply_to, m1.timestamp, 
+      m2.message AS replied_message, m2.username AS replied_user 
     FROM messages m1
     LEFT JOIN messages m2 ON m1.reply_to = m2.id
     ORDER BY m1.timestamp ASC;
@@ -98,9 +98,9 @@ app.post("/signup", (req,res)=> {
 });
 
 app.post("/messages", (req,res)=> {
-  const { message, reply_to } = req.body;
-  const sql = "INSERT INTO messages (message, reply_to) VALUES (?, ?)";
-  dbCon.query(sql, [message, reply_to || null], (err, result)=> {
+  const { username, message, reply_to } = req.body;
+  const sql = "INSERT INTO messages (username, message, reply_to) VALUES (?, ?, ?)";
+  dbCon.query(sql, [username, message, reply_to || null], (err, result)=> {
     if(err) {
       console.log("Error in inserting message!");
       console.log(err)

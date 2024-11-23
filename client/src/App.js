@@ -10,24 +10,27 @@ import CreateThreadPage from "./pages/CreateThreadPage";
 import ChatRoomPage from "./pages/ChatRoomPage";
 import Navbar from "./components/NavBar";
 import { ThemeProvider } from "./context/ThemeContext";
+import { UserProvider } from "./context/UserContext"
 import "./styles.css";
 
 function App() {
   return (
-    <ThemeProvider>
-      <Router>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignUpPage />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/thread" element={<ThreadPage />} />
-          <Route path="/create-thread" element={<CreateThreadPage />} />
-          <Route path="/chatroom" element={<ChatRoomPage />} />
-        </Routes>
-      </Router>
-    </ThemeProvider>
+    <UserProvider>
+      <ThemeProvider>
+        <Router>
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignUpPage />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/thread" element={<ThreadPage />} />
+            <Route path="/create-thread" element={<CreateThreadPage />} />
+            <Route path="/chatroom" element={<ChatRoomPage />} />
+          </Routes>
+        </Router>
+      </ThemeProvider>
+    </UserProvider>  
   );
 }
 
