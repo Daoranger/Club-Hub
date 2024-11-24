@@ -19,10 +19,6 @@ function CreateThreadPage() {
 
   const navigate = useNavigate(); // Get the navigate function
 
-  const handleCreateThreadClick = () => {
-    navigate("/thread"); // Navigate to the thread page
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     // Prepare the data to be sent to the backend
@@ -34,7 +30,7 @@ function CreateThreadPage() {
       .then((response) => {
         // You can handle success or redirect here
         console.log("New thread created:", response.data);
-        navigate("/threads"); // Navigate to the threads page after successful creation
+        navigate("/thread"); // Navigate to the threads page after successful creation
       })
       .catch((error) => {
         console.error("Error creating thread:", error);
@@ -100,7 +96,7 @@ function CreateThreadPage() {
           <button
             type="submit"
             style={styles.submitButton}
-            onClick={handleCreateThreadClick}
+            onClick={handleSubmit}
           >
             Create Thread
           </button>

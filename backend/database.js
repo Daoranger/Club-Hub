@@ -152,7 +152,7 @@ function check_err_code(err) {
 app.post("/create-thread", (req, res) => {
   const { threadTitle, threadContent, category } = req.body;
 
-  const sql = `INSERT INTO threads (title, content, category) VALUES ("Club Help!", "Dez", "Dez")`;
+  const sql = `INSERT INTO threads (title, content, category) VALUES (?, ?, ?)`;
   
   dbCon.query(sql, [threadTitle, threadContent, category], (err, result) => {
     if (err) {
