@@ -40,6 +40,16 @@ app.get("/", (req,res)=> {
   });
 });
 
+app.get("/clubs", (req, res) => {
+  dbCon.query(`SELECT * FROM clubs`, (err, result) => {
+    if (err){
+      console.log(err);
+    } else {
+      res.json(result);
+    }
+  })
+})
+
 app.get("/messages", (req, res)=> {
   const sql = `
     SELECT 
