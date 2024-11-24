@@ -1,9 +1,25 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
+import axios from "axios"; // Import axios for making HTTP requests
 
 function ThreadPage() {
-  const navigate = useNavigate(); // Get the navigate function
+  const [threads, setThreads] = useState([]); // State to hold threads data
+  const navigate = useNavigate();
+
+  // Fetch threads from the backend when the component mounts
+  useEffect(() => {
+    const fetchThreads = async () => {
+      try {
+        const response = await axios.get("http://localhost:8800/thread"); // Fetch threads from the backend
+        setThreads(response.data); // Update state with fetched threads
+      } catch (error) {
+        console.error("Error fetching threads:", error);
+      }
+    };
+
+    fetchThreads(); // Call the function to fetch threads
+  }, []); // Empty dependency array means this runs once when the component mounts
+
   const handleCreateThreadClick = () => {
     navigate("/create-thread"); // Navigate to the create thread page
   };
@@ -13,7 +29,7 @@ function ThreadPage() {
       <header style={styles.header}>
         <div style={styles.clubBanner}>
           <img
-            src="your-banner-url.png" // Replace with your banner image URL
+            src="your-banner-url.png"
             alt="Club Banner"
             style={styles.bannerImage}
           />
@@ -29,25 +45,24 @@ function ThreadPage() {
       <div style={styles.mainContent}>
         <div style={styles.ThreadsContainer}>
           <h2 style={styles.sectionHeading}>Latest Threads</h2>
-          <div style={styles.Thread}>
-            <h3 style={styles.ThreadTitle}>Welcome to Club Threads!</h3>
-            <p style={styles.ThreadText}>
-              This is a sample Thread. Use this area to start discussions.
-            </p>
-          </div>
-          <div style={styles.Thread}>
-            <h3 style={styles.ThreadTitle}>Upcoming Club Events</h3>
-            <p style={styles.ThreadText}>
-              Stay tuned for the latest updates on club activities and
-              announcements!
-            </p>
-          </div>
+          {/* Map over the threads and display them dynamically */}
+          {threads.length > 0 ? (
+            threads.map((thread) => (
+              <div key={thread.id} style={styles.Thread}>
+                <h3 style={styles.ThreadTitle}>{thread.title}</h3>
+                <p style={styles.ThreadText}>{thread.content}</p>
+              </div>
+            ))
+          ) : (
+            <p>No threads available</p>
+          )}
         </div>
         <aside style={styles.sidebar}>
           <h3 style={styles.sidebarHeading}>About this Thread Page</h3>
           <p style={styles.sidebarText}>
-            Have a question? Make a Thread! These threads connects students with clubs, events, and discussions in
-            one central platform. Make your threads and join the conversation!
+            Have a question? Make a Thread! These threads connect students
+            with clubs, events, and discussions in one central platform. Make
+            your threads and join the conversation!
           </p>
           <button onClick={handleCreateThreadClick} style={styles.createThreadButton}>
             Create Thread

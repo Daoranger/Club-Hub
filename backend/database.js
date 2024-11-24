@@ -148,7 +148,7 @@ function check_err_code(err) {
   // Add more error codes as needed
 }
 
-// Store Thread Info into DB
+// POST: Store Thread Info into DB
 app.post("/create-thread", (req, res) => {
   const { threadTitle, threadContent, category } = req.body;
 
@@ -163,6 +163,20 @@ app.post("/create-thread", (req, res) => {
     }
   });
 });
+
+// GET: Get the Threads Info in DB to display in ThreadPage
+app.get("/thread", (req, res) => {
+  const sql = "SELECT * FROM threads"; // Assuming you have a 'threads' table
+  dbCon.query(sql, (err, result) => {
+    if (err) {
+      console.log("Error fetching threads:", err);
+      res.status(500).json({ message: "Failed to fetch threads" });
+    } else {
+      res.json(result); // Send the threads data back to the frontend
+    }
+  });
+});
+
 
 // Start the backend server at localhost:8800
 app.listen(8800, ()=>{
