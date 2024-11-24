@@ -8,12 +8,14 @@ function Navbar() {
 
   return (
     <nav
-      className={`navbar`}
+      className="navbar"
       style={{
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
         padding: "10px 20px",
+        backgroundColor: darkMode ? "#333" : "#fff",
+        color: darkMode ? "white" : "black",
       }}
     >
       <h2
@@ -21,13 +23,15 @@ function Navbar() {
           margin: "0px",
         }}
       >
-        Club Hub</h2>
+        Club Hub
+      </h2>
       <div>
         <Link
           to="/"
           style={{
             textDecoration: "none",
             marginRight: "15px",
+            color: darkMode ? "white" : "black",
           }}
         >
           Home
@@ -37,6 +41,7 @@ function Navbar() {
           style={{
             textDecoration: "none",
             marginRight: "15px",
+            color: darkMode ? "white" : "black",
           }}
         >
           Dashboard
@@ -46,15 +51,26 @@ function Navbar() {
           style={{
             textDecoration: "none",
             marginRight: "15px",
+            color: darkMode ? "white" : "black",
           }}
         >
           Login
+        </Link>
+        <Link
+          to="/search"
+          style={{
+            textDecoration: "none",
+            marginRight: "15px",
+            color: darkMode ? "white" : "black",
+          }}
+        >
+          Search
         </Link>
         <button
           onClick={toggleDarkMode}
           style={{
             padding: "5px 10px",
-            backgroundColor: darkMode ? "white": "#3c3c3c",
+            backgroundColor: darkMode ? "white" : "#3c3c3c",
             color: darkMode ? "black" : "white",
             border: "none",
             borderRadius: "5px",
