@@ -40,32 +40,21 @@ app.get("/", (req,res)=> {
   });
 });
 
-app.post("/login", (req,res)=> {
-  
-});
-
-app.post("/signup", (req,res)=> {
-  const username = req.body.username;
-  const email = req.body.email;
-  const password = req.body.password;
-  check_password_validity(password);
-
-  const hashedPassword = bcrypt.hashSync(password, 10);
-
-  dbCon.query("INSERT INTO users (username, email, password) VALUES (?, ?, ?)", [username, email, hashedPassword], (err, result)=> {
-    if(err) {
-      check_err_code(err);
+app.get("/clubs", (req, res) => {
+  dbCon.query(`SELECT * FROM clubs`, (err, result) => {
+    if (err){
+      console.log(err);
     } else {
-      res.send({username: username});
+      res.json(result);
     }
-  });
-});
+  })
+})
 
-app.get("/messages", (req,res)=> {
+app.get("/messages", (req, res)=> {
   const sql = `
     SELECT 
-      m1.id, m1.message, m1.reply_to, m1.timestamp, 
-      m2.message AS replied_message 
+      m1.username, m1.id, m1.message, m1.reply_to, m1.timestamp, 
+      m2.message AS replied_message, m2.username AS replied_user 
     FROM messages m1
     LEFT JOIN messages m2 ON m1.reply_to = m2.id
     ORDER BY m1.timestamp ASC;
@@ -119,9 +108,9 @@ app.post("/signup", (req,res)=> {
 });
 
 app.post("/messages", (req,res)=> {
-  const { message, reply_to } = req.body;
-  const sql = "INSERT INTO messages (message, reply_to) VALUES (?, ?)";
-  dbCon.query(sql, [message, reply_to || null], (err, result)=> {
+  const { username, message, reply_to } = req.body;
+  const sql = "INSERT INTO messages (username, message, reply_to) VALUES (?, ?, ?)";
+  dbCon.query(sql, [username, message, reply_to || null], (err, result)=> {
     if(err) {
       console.log("Error in inserting message!");
       console.log(err)
@@ -158,6 +147,36 @@ function check_err_code(err) {
   }
   // Add more error codes as needed
 }
+
+// POST: Store Thread Info into DB
+app.post("/create-thread", (req, res) => {
+  const { threadTitle, threadContent, category } = req.body;
+
+  const sql = `INSERT INTO threads (title, content, category) VALUES (?, ?, ?)`;
+  
+  dbCon.query(sql, [threadTitle, threadContent, category], (err, result) => {
+    if (err) {
+      console.log("Error creating thread:", err);
+      res.status(500).json({ message: "Failed to create thread" });
+    } else {
+      res.status(201).json({ message: "Thread created successfully", threadId: result.insertId });
+    }
+  });
+});
+
+// GET: Get the Threads Info in DB to display in ThreadPage
+app.get("/thread", (req, res) => {
+  const sql = "SELECT * FROM threads"; // Assuming you have a 'threads' table
+  dbCon.query(sql, (err, result) => {
+    if (err) {
+      console.log("Error fetching threads:", err);
+      res.status(500).json({ message: "Failed to fetch threads" });
+    } else {
+      res.json(result); // Send the threads data back to the frontend
+    }
+  });
+});
+
 
 // Start the backend server at localhost:8800
 app.listen(8800, ()=>{

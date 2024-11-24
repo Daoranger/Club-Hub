@@ -11,6 +11,7 @@ import CreateThreadPage from "./pages/CreateThreadPage";
 import ChatRoomPage from "./pages/ChatRoomPage";
 import Navbar from "./components/NavBar";
 import { ThemeProvider } from "./context/ThemeContext";
+import { UserProvider } from "./context/UserContext"
 import "./styles.css";
 
 function App() {

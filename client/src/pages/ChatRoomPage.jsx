@@ -1,13 +1,16 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import axios from "axios";
 import "../ChatRoom.css";
+import { UserContext } from "../context/UserContext"
 
 function ChatRoomPage() {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
   const [replyTo, setReplyTo] = useState(null);
   const [replyToContent, setReplyToContent] = useState("");
+  const [replyToUser, setReplyToUser] = useState("");
   const inputRef = useRef(null);
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -29,7 +32,7 @@ function ChatRoomPage() {
   const sendMessage = async (e) => {
     e.preventDefault();
     if (message.trim()) {
-      await axios.post("http://localhost:8800/messages", {message: message, reply_to: replyTo})
+      await axios.post("http://localhost:8800/messages", {username: user, message: message, reply_to: replyTo})
       .then(data => {
         console.log(data);
         setMessage("");
@@ -58,9 +61,10 @@ function ChatRoomPage() {
     }
   };
 
-  const handleReply = (id, content) => {
+  const handleReply = (id, content, username) => {
     setReplyTo(id);
     setReplyToContent(content);
+    setReplyToUser(username);
     if (inputRef.current) {
       inputRef.current.focus();
     }
@@ -71,17 +75,18 @@ function ChatRoomPage() {
       <div className="chatroom-messages">
         {messages.map((msg) => (
           <div key={msg.id} className="message">
+            <span className="message-username">{msg.username}</span>
             {/* Display the replied-to message */}
             {msg.reply_to && (
               <div className="replied-message">
-                Replying to: {msg.replied_message || "Deleted Message"}
+                Replying to {msg.replied_user || "Unknown"}: {msg.replied_message || "Deleted Message"}
               </div>
             )}
             {/* Display the main message */}
             <div className="message-content">{msg.message}</div>
-            <button
+            <button 
               className="reply-button"
-              onClick={() => handleReply(msg.id, msg.message)}
+              onClick={() => handleReply(msg.id, msg.message, msg.username)}
             >
               Reply
             </button>
@@ -100,7 +105,7 @@ function ChatRoomPage() {
       >
         {replyTo && (
           <div className="reply-indicator">
-            Replying to: {replyToContent}{" "}
+            Replying to {replyToUser}: {replyToContent}{" "}
             <button onClick={() => setReplyTo(null)}>Cancel</button>
           </div>
         )}

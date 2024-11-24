@@ -51,6 +51,20 @@ body.dark-mode .chatroom-messages {
   flex-direction: column;
 }
 
+.message-username {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #7289da;
+}
+
+body.dark-mode .message {
+  background-color: #3c3c3c;
+}
+
+body.dark-mode .message-username {
+  color: #b9bbbe;
+}
+
 body.dark-mode .message {
   background-color: #3c3c3c; /* Dark background for messages in dark mode */
   color: white;
@@ -200,4 +214,41 @@ body.dark-mode .chatroom-input input::placeholder {
 
 .chatroom-input button:hover {
   background-color: #5b6eae;
+}
+
+/* Customize scrollbar for the chat messages container */
+.chatroom-messages::-webkit-scrollbar {
+  width: 8px; /* Width of the scrollbar */
+}
+
+.chatroom-messages::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Track background for light mode */
+}
+
+body.dark-mode .chatroom-messages::-webkit-scrollbar-track {
+  background: #3c3c3c; /* Track background for dark mode */
+}
+
+.chatroom-messages::-webkit-scrollbar-thumb {
+  background-color: #7289da; /* Thumb color */
+  border-radius: 4px; /* Rounded corners */
+}
+
+.chatroom-messages::-webkit-scrollbar-thumb:hover {
+  background-color: #5b6eae; /* Darker thumb color on hover */
+}
+
+/* Optional: Style scrollbar corner (useful for overflow content) */
+.chatroom-messages::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Firefox scrollbar customization */
+.chatroom-messages {
+  scrollbar-width: thin; /* Makes the scrollbar thinner */
+  scrollbar-color: #7289da #f1f1f1; /* Thumb and track colors */
+}
+
+body.dark-mode .chatroom-messages {
+  scrollbar-color: #7289da #3c3c3c; /* Dark mode colors */
 }
