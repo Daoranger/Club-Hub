@@ -3,9 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 
 function ThreadPage() {
-
   const navigate = useNavigate(); // Get the navigate function
-
   const handleCreateThreadClick = () => {
     navigate("/create-thread"); // Navigate to the create thread page
   };

@@ -148,6 +148,22 @@ function check_err_code(err) {
   // Add more error codes as needed
 }
 
+// Store Thread Info into DB
+app.post("/create-thread", (req, res) => {
+  const { threadTitle, threadContent, category } = req.body;
+
+  const sql = `INSERT INTO threads (title, content, category) VALUES ("Club Help!", "Dez", "Dez")`;
+  
+  dbCon.query(sql, [threadTitle, threadContent, category], (err, result) => {
+    if (err) {
+      console.log("Error creating thread:", err);
+      res.status(500).json({ message: "Failed to create thread" });
+    } else {
+      res.status(201).json({ message: "Thread created successfully", threadId: result.insertId });
+    }
+  });
+});
+
 // Start the backend server at localhost:8800
 app.listen(8800, ()=>{
   console.log("Connected to backend!");
