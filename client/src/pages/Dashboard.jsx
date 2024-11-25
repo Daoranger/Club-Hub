@@ -1,12 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 function Dashboard() {
 
   // State to store clubs
-  const [clubs, setClubs] = useState([
-    { name: "Photography Club", description: "Capture the world through your lens!" },
-    { name: "Chess Club", description: "Strategize and compete with fellow players." },
-  ]);
+  const [clubs, setClubs] = useState([]);
+
+  async function fetchData() {
+    axios.get("http://localhost:8800/clubs")
+    .then( function (response) {
+      setClubs(response.data);
+    })
+    .catch( (err) => {
+      console.log(err);
+    });
+  }
+
+  useEffect(() => {
+    fetchData();
+  })
 
   // State for the new club form
   const [newClub, setNewClub] = useState({ name: "", description: "" });

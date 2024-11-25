@@ -40,6 +40,16 @@ app.get("/", (req,res)=> {
   });
 });
 
+app.get("/clubs", (req, res) => {
+  dbCon.query(`SELECT * FROM clubs`, (err, result) => {
+    if (err){
+      console.log(err);
+    } else {
+      res.json(result);
+    }
+  })
+})
+
 app.get("/messages", (req, res)=> {
   const sql = `
     SELECT 
@@ -144,6 +154,36 @@ function check_err_code(err) {
   }
   // Add more error codes as needed
 }
+
+// POST: Store Thread Info into DB
+app.post("/create-thread", (req, res) => {
+  const { threadTitle, threadContent, category } = req.body;
+
+  const sql = `INSERT INTO threads (title, content, category) VALUES (?, ?, ?)`;
+  
+  dbCon.query(sql, [threadTitle, threadContent, category], (err, result) => {
+    if (err) {
+      console.log("Error creating thread:", err);
+      res.status(500).json({ message: "Failed to create thread" });
+    } else {
+      res.status(201).json({ message: "Thread created successfully", threadId: result.insertId });
+    }
+  });
+});
+
+// GET: Get the Threads Info in DB to display in ThreadPage
+app.get("/thread", (req, res) => {
+  const sql = "SELECT * FROM threads"; // Assuming you have a 'threads' table
+  dbCon.query(sql, (err, result) => {
+    if (err) {
+      console.log("Error fetching threads:", err);
+      res.status(500).json({ message: "Failed to fetch threads" });
+    } else {
+      res.json(result); // Send the threads data back to the frontend
+    }
+  });
+});
+
 
 // Start the backend server at localhost:8800
 app.listen(8800, ()=>{
