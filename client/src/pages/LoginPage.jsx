@@ -4,18 +4,18 @@ import { useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext.js"
 
 function LoginPage() {
-  const [username, setUsername] = React.useState("");
+  const [input, setInput] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [error, setError] = React.useState("");
   const navigate = useNavigate();
-  const { setUser } = useContext(UserContext);
+  const { setUserName } = useContext(UserContext);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post("http://localhost:8800/login", { username: username, password: password })
+    axios.post("http://localhost:8800/login", { username: input, password: password })
       .then(data => {
         if (data) {
-          setUser(username);
+          setUserName(input);
           navigate("/chatroom");
         }
       })
@@ -35,8 +35,8 @@ function LoginPage() {
         <input
           className={`text-area`}
           type="username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
           placeholder="Username"
           style={{
             display: "block",

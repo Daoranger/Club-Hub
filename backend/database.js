@@ -30,7 +30,7 @@ dbCon.connect(function(err) {
 
 // Backend connection
 app.get("/", (req,res)=> {
-  dbCon.query("SELECT * FROM users", (err, result)=> {
+  dbCon.query("SELECT * FROM User", (err, result)=> {
     if(err) {
       console.log("Error in fetching users!");
       console.log(err)
@@ -43,10 +43,17 @@ app.get("/", (req,res)=> {
 app.get("/messages", (req, res)=> {
   const sql = `
     SELECT 
-      m1.username, m1.id, m1.message, m1.reply_to, m1.timestamp, 
-      m2.message AS replied_message, m2.username AS replied_user 
-    FROM messages m1
-    LEFT JOIN messages m2 ON m1.reply_to = m2.id
+      m1.MID AS message_id,
+      u1.username AS sender_username,
+      m1.message,
+      m1.reply_to,
+      m1.timestamp,
+      m2.message AS replied_message,
+      u2.username AS replied_user
+    FROM Message m1
+    LEFT JOIN Message m2 ON m1.reply_to = m2.MID
+    LEFT JOIN User u1 ON m1.UID = u1.UID
+    LEFT JOIN User u2 ON m2.UID = u2.UID
     ORDER BY m1.timestamp ASC;
   `;
   dbCon.query(sql, (err, result)=> {
