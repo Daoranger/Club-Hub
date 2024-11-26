@@ -1,23 +1,21 @@
-import React, { useContext } from "react";
+import React from "react";
 import axios  from "axios";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from "../context/UserContext.js"
+import { useUserContext } from "../context/UserContext.js"
 
 function LoginPage() {
   const [input, setInput] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [error, setError] = React.useState("");
   const navigate = useNavigate();
-  const { setUserID } = useContext(UserContext);
-  const { setUserName } = useContext(UserContext);
+  const { login } = useUserContext();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     axios.post("http://localhost:8800/login", { username: input, password: password })
       .then(response => {
         if (response) {
-          setUserName(response.data.username)
-          setUserID(response.data.userID);
+          login(response.data.userID, response.data.username);
           navigate("/dashboard");
         }
       })

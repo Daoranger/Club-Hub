@@ -1,65 +1,57 @@
-import React, {
-    useState,
-    useEffect,
-    useRef,
-    useContext
-  } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import "../pages_css/ChatRoom.css";
-import { UserContext } from "../context/UserContext"
+import { useUserContext } from "../context/UserContext";
 
 function ChatRoomPage() {
-  const { CID, CRID } = useParams();
+  const { chatroomID: CRID } = useParams();
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
   const [replyTo, setReplyTo] = useState(null);
   const [replyToContent, setReplyToContent] = useState("");
   const [replyToUser, setReplyToUser] = useState("");
   const inputRef = useRef(null);
-  const { user } = useContext(UserContext);
-  const link = "http://localhost:8800/club=" + CID + "/chatroom=" + CRID;
+  const { userID } = useUserContext();
 
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const res = await axios.get(link);
-        setMessages(res.data);
-        console.log(messages.replied_message);
+        const response = await axios.get("http://localhost:8800/chatroom", {
+          params: { CRID },
+        });
+        setMessages(response.data);
       } catch (err) {
-        console.error(err);
+        console.error("Error fetching messages:", err);
       }
     };
 
     fetchMessages();
-
     const interval = setInterval(fetchMessages, 3000);
     return () => clearInterval(interval);
-  }, []);
+  }, [CRID]);
 
   const sendMessage = async (e) => {
     e.preventDefault();
     if (message.trim()) {
-      await axios.post(link, {userID: user.userID, message: message, reply_to: replyTo})
-      .then(data => {
-        console.log(data);
+      try {
+        await axios.post("http://localhost:8800/chatroom", {
+          CRID: CRID,
+          userID: userID,
+          message: message,
+          reply_to: replyTo,
+        });
         setMessage("");
         setReplyTo(null);
         setReplyToContent("");
-      })
-      .catch(err => {
-        console.log(`Error: ${err.response.data.errors[0].msg}`);
-      });
-
-      await axios.get("http://localhost:8800/messages")
-      .then(res => {
-        setMessages(res.data);
-        console.log(messages);
-      })
-      .catch(err => {
-        console.error(`Error: ${err.response.data.errors[0].msg}`);
-      });
-    };
+        const response = await axios.get("http://localhost:8800/chatroom", {
+          params: { CRID },
+        });
+        setMessages(response.data);
+      } catch (err) {
+        console.error("Error sending message:", err);
+      }
+    }
   };
 
   const handleKeyPress = (e) => {
@@ -70,31 +62,34 @@ function ChatRoomPage() {
   };
 
   const handleReply = (id, content, username) => {
-    setReplyTo(id);
+    setReplyTo(id); // Use the correct message ID (MID)
     setReplyToContent(content);
     setReplyToUser(username);
     if (inputRef.current) {
       inputRef.current.focus();
     }
-  }
+  };
 
   return (
     <div className="chatroom-container">
       <div className="chatroom-messages">
         {messages.map((msg) => (
-          <div key={msg.id} className="message">
+          <div key={msg.message_id} className="message">
             <span className="message-username">{msg.username}</span>
             {/* Display the replied-to message */}
             {msg.reply_to && (
               <div className="replied-message">
-                Replying to {msg.replied_user || "Unknown"}: {msg.replied_message || "Deleted Message"}
+                Replying to {msg.replied_user || "Unknown"}:{" "}
+                {msg.replied_message || "Deleted Message"}
               </div>
             )}
             {/* Display the main message */}
             <div className="message-content">{msg.message}</div>
-            <button 
+            <button
               className="reply-button"
-              onClick={() => handleReply(msg.id, msg.message, msg.username)}
+              onClick={() =>
+                handleReply(msg.message_id, msg.message, msg.username)
+              }
             >
               Reply
             </button>
@@ -107,10 +102,7 @@ function ChatRoomPage() {
           </div>
         ))}
       </div>
-      <form
-        onSubmit={sendMessage}
-        className="chatroom-input"
-      >
+      <form onSubmit={sendMessage} className="chatroom-input">
         {replyTo && (
           <div className="reply-indicator">
             Replying to {replyToUser}: {replyToContent}{" "}
@@ -131,6 +123,6 @@ function ChatRoomPage() {
       </form>
     </div>
   );
-};
+}
 
 export default ChatRoomPage;

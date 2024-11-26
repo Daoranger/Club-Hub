@@ -2,9 +2,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
+import { useUserContext } from "../context/UserContext";
 
 function Navbar() {
   const { darkMode, toggleDarkMode } = useTheme();
+  const { userID, username, logout } = useUserContext();
+
+  const handleLogout = () => {
+    logout();
+  };
 
   return (
     <nav
@@ -16,40 +22,64 @@ function Navbar() {
         padding: "10px 20px",
       }}
     >
-      <h2
+      <Link
+        to= {userID ? "/dashboard" : "/"}
         style={{
-          margin: "0px",
+          textDecoration: "none",
+          color: "inherit",
         }}
       >
-        Club Hub</h2>
+        <h2 style={{margin: "0px"}}>Club Hub{username ? ` for ${username}` : ""}</h2>
+      </Link>
       <div>
-        <Link
-          to="/"
-          style={{
-            textDecoration: "none",
-            marginRight: "15px",
-          }}
-        >
-          Home
-        </Link>
-        <Link
-          to="/dashboard"
-          style={{
-            textDecoration: "none",
-            marginRight: "15px",
-          }}
-        >
-          Dashboard
-        </Link>
-        <Link
-          to="/login"
-          style={{
-            textDecoration: "none",
-            marginRight: "15px",
-          }}
-        >
-          Login
-        </Link>
+        {!userID && (
+          <Link
+            to="/"
+            style={{
+              textDecoration: "none",
+              marginRight: "15px",
+            }}
+          >
+            Home
+          </Link>
+        )}
+        {userID && (
+          <Link
+            to="/dashboard"
+            style={{
+              textDecoration: "none",
+              marginRight: "15px",
+            }}
+          >
+            Dashboard
+          </Link>
+        )}
+        {userID ? (
+          <button
+              onClick={handleLogout}
+              style={{
+                  padding: "5px 10px",
+                  backgroundColor: "#ff6961", // soft red color
+                  color: "white",
+                  border: "none",
+                  borderRadius: "5px",
+                  cursor: "pointer",
+                  marginRight: "15px",
+              }}
+          >
+              Logout
+          </button>
+        ) : (
+          <Link
+              to="/login"
+              style={{
+                  textDecoration: "none",
+                  marginRight: "15px",
+              }}
+          >
+              Login
+          </Link>
+        )}
         <button
           onClick={toggleDarkMode}
           style={{
