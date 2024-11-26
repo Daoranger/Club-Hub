@@ -41,6 +41,47 @@ app.get("/", (req, res)=> {
   });
 });
 
+app.get("/roles", (req, res) => {
+  const { userID } = req.query;
+
+  const query = `
+    SELECT R.name
+    FROM Role R
+    JOIN ClubProfile CP ON R.RID = CP.RID
+    WHERE CP.UID = ?;
+  `;
+  dbCon.query(query, [userID], (err, result) => {
+    if (err) {
+      check_err_code(err, res);
+    } else {
+      res.send(result)
+    }
+  });
+});
+
+function create_role(userID, clubID, roleName, res, message="Role created successfully!") {
+  const query = `
+    INSERT INTO Role (CID, name) VALUES (?, ?);
+  `;
+  dbCon.query(query, [clubID, roleName], (err, result) => {
+    if (err) {
+      check_err_code(err, res);
+    } else {
+      const RID = result.insertId;
+      const query2 = `
+        INSERT INTO ClubProfile (UID, RID, CID) VALUES (?, ?, ?);
+      `;
+      dbCon.query(query2, [userID, RID, clubID], (err, result) => {
+        if (err) {
+          check_err_code(err, res);
+        } else {
+          res.send({ message: message });
+        }
+      });
+    }
+  });
+}
+
 app.get("/clubs", (req, res) => {
   const { userID } = req.query;
 
@@ -53,12 +94,35 @@ app.get("/clubs", (req, res) => {
 
   dbCon.query(query, [userID], (err, result) => {
     if (err){
-      console.log(err);
+      check_err_code(err, res);
     } else {
       res.json(result);
     }
   })
 })
+
+app.get("/club", (req, res) => {
+  const { CID } = req.query;
+
+  const query = `
+    SELECT *
+    FROM Club C
+    WHERE C.CID = ?;
+  `;
+  dbCon.query(query, [CID], (err, result) => {
+    if (err) {
+      check_err_code(err, res);
+    } else {
+      res.send(result);
+    }
+  });
+});
+
+app.post("/create-role", (req, res) => {
+  const { userID, clubID, roleName } = req.body;
+
+  create_role(userID, clubID, roleName, res);
+});
 
 app.post("/create-club", (req, res) => {
   const { userID, name, description } = req.body;
@@ -72,27 +136,28 @@ app.post("/create-club", (req, res) => {
       check_err_code(err, res);
     } else {
       const CID = result1.insertId;
-      const query2 = `
-        INSERT INTO Role (CID, name) VALUES (?, ?);
-      `;
-      dbCon.query(query2, [CID, "Owner"], (err, result2) => {
-        if (err) {
-          check_err_code(err, res);
-        } else {
-          const RID = result2.insertId;
-          const query3 = `
-            INSERT INTO ClubProfile (UID, RID, CID) VALUES (?, ?, ?);
-          `;
+      
+      create_role(userID, CID, "Owner", res, "Club created successfully!");
+    }
+  });
+});
 
-          dbCon.query(query3, [userID, RID, CID], (err, result3) => {
-            if (err) {
-              check_err_code(err, res);
-            } else {
-              res.send({ message: "Club created successfully!" });
-            }
-          });
-        }
-      });
+app.post("/create-chatroom", (req, res) => {
+  const { clubID, chatroomName } = req.body;
+
+  // Ensure chatroomName and clubID are provided
+  if (!clubID || !chatroomName) {
+    return res.status(400).json({ message: "Club ID and chatroom name are required." });
+  }
+
+  // Insert chatroom into the database
+  const query = `INSERT INTO ChatRoom (CID, name) VALUES (?, ?)`;
+  dbCon.query(query, [clubID, chatroomName], (err, result) => {
+    if (err) {
+      console.error("Error creating chatroom:", err);
+      res.status(500).json({ message: "Failed to create chatroom." });
+    } else {
+      res.status(201).json({ message: "Chatroom created successfully.", chatroomID: result.insertId });
     }
   });
 });
@@ -157,27 +222,45 @@ app.post("/signup", (req, res) => {
   });
 });
 
-app.post("/chatroom/:id", (req, res)=> {
-  const { userID, message, reply_to } = req.body;
+app.get("/chatrooms", (req, res) => {
+  const { CID } = req.query;
 
-  const sql = "INSERT INTO Message (UID, message, reply_to) VALUES (?, ?, ?)";
-  dbCon.query(sql, [userID, message, reply_to || null], (err, result)=> {
+  const query = `
+    SELECT *
+    FROM ChatRoom
+    WHERE CID = ?;
+  `;
+  dbCon.query(query, [CID], (err, result) => {
+    if (err) {
+      check_err_code(err, res);
+    } else {
+      res.send(result);
+    }
+  });
+});
+
+app.post("/chatroom", (req, res)=> {
+  const { CRID, userID, message, reply_to } = req.body;
+
+  const query = "INSERT INTO Message (CRID, reply_to, message, UID) VALUES (?, ?, ?, ?)";
+  dbCon.query(query, [CRID, reply_to || null, message, userID], (err, result)=> {
     if(err) {
-      console.log("Error in inserting message!");
-      console.log(err)
+      check_err_code(err, res);
     } else {
       res.send({message: message});
     }
   });
 });
 
-app.get("/club=:CID/chatroom=:CRID", (req, res)=> {
-  const { clubID } = req.params;
+app.get("/chatroom", (req, res)=> {
+  const { CRID } = req.query;
 
-  const sql = `
+  console.log(CRID)
+
+  const query = `
     SELECT 
       m1.MID AS message_id,
-      u1.username AS sender_username,
+      u1.username AS username,
       m1.message,
       m1.reply_to,
       m1.timestamp,
@@ -191,24 +274,17 @@ app.get("/club=:CID/chatroom=:CRID", (req, res)=> {
     ORDER BY m1.MID;
   `;
 
-  dbCon.query(sql, [clubID], (err, result) => {
+  dbCon.query(query, [CRID], (err, result) => {
     if (err) {
       check_err_code(err);
     } else {
-      res.json(result);
-    }
-  });
-  dbCon.query(sql, (err, result)=> {
-    if(err) {
-      check_err_code(err);
-    } else {
-      res.json(result);
+      res.send(result);
     }
   });
 });
 
 // POST: Store Thread Info into DB
-app.post("/create-thread/:id", (req, res) => {
+app.post("/create-thread/", (req, res) => {
   const { clubID } = req.params;
   const {
     threadTitle,
@@ -229,8 +305,8 @@ app.post("/create-thread/:id", (req, res) => {
 });
 
 // GET: Get the Threads Info in DB to display in ThreadPage
-app.get("/thread/:id", (req, res) => {
-  const { clubID } = req.params;
+app.get("/thread", (req, res) => {
+  const { CID, TID } = req.query;
 
   const sql = `
   SELECT *
@@ -245,6 +321,23 @@ app.get("/thread/:id", (req, res) => {
       res.status(500).json({ message: "Failed to fetch threads" });
     } else {
       res.json(result); // Send the threads data back to the frontend
+    }
+  });
+});
+
+app.get("/threads", (req, res) => {
+  const { CID } = req.query;
+
+  const query = `
+    SELECT TID, title
+    FROM Thread
+    WHERE CID = ?;
+  `;
+  dbCon.query(query, [CID], (err, result) => {
+    if (err) {
+      check_err_code(err, res);
+    } else {
+      res.send(result);
     }
   });
 });
