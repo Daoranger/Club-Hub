@@ -1,66 +1,98 @@
-import React, { useEffect, useState } from "react";
+import React, {
+    useState,
+    useEffect,
+    useContext
+  } from "react";
 import axios from "axios";
+import { UserContext } from "../context/UserContext";
+import { useNavigate } from "react-router-dom";
 
 function Dashboard() {
-
-  // State to store clubs
   const [clubs, setClubs] = useState([]);
+  const [newClub, setNewClub] = useState({ name: "", description: "" });
+  const { userID } = useContext(UserContext);
+  const navigate = useNavigate();
 
   async function fetchData() {
-    axios.get("http://localhost:8800/clubs")
-    .then( function (response) {
-      setClubs(response.data);
-    })
-    .catch( (err) => {
-      console.log(err);
-    });
+    axios
+      .get("http://localhost:8800/clubs", { params: { userID: userID } })
+      .then((response) => {
+        console.log(response);
+        setClubs(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   useEffect(() => {
     fetchData();
-  })
+    const interval = setInterval(fetchData, 3000);
+    return () => clearInterval(interval);
+  }, []);
 
-  // State for the new club form
-  const [newClub, setNewClub] = useState({ name: "", description: "" });
+  async function createClub() {
+    axios
+      .post("http://localhost:8800/create-club", {
+        userID: userID,
+        name: newClub.name,
+        description: newClub.description,
+      })
+      .then((response) => {
+        newClub.name = "";
+        newClub.description = "";
+        alert(response.message);
+        fetchData();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
-  // Handle form input changes
   const handleChange = (e) => {
+    e.preventDefault();
     const { name, value } = e.target;
     setNewClub((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
     if (newClub.name && newClub.description) {
-      setClubs((prev) => [...prev, newClub]); // Add new club to the list
-      setNewClub({ name: "", description: "" }); // Reset the form
+      createClub();
+      setNewClub({ name: "", description: "" });
     }
+  };
+
+  const navigateToClub = (clubID) => {
+    console.log(clubID);
+    navigate(`/club=${clubID}`); // Redirect to the club's page
   };
 
   return (
     <div style={{ padding: "20px" }}>
       <h1> My Clubs</h1>
-      {/* List of clubs */}
       <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
         {clubs.map((club, index) => (
-          <div
+          <button
             className={`club-card`}
             key={index}
+            onClick={() => navigateToClub(club.CID)} // Navigate on click
             style={{
               border: "1px solid #ddd",
               borderRadius: "10px",
               padding: "20px",
               width: "200px",
               boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
+              backgroundColor: "white",
+              cursor: "pointer",
+              textAlign: "left",
             }}
           >
             <h3>{club.name}</h3>
             <p>{club.description}</p>
-          </div>
+          </button>
         ))}
       </div>
-      {/* Form to add new club */}
       <form onSubmit={handleSubmit} style={{ marginTop: "20px" }}>
         <h2>Add a New Club</h2>
         <input

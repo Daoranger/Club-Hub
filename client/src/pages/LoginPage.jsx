@@ -8,15 +8,17 @@ function LoginPage() {
   const [password, setPassword] = React.useState("");
   const [error, setError] = React.useState("");
   const navigate = useNavigate();
+  const { setUserID } = useContext(UserContext);
   const { setUserName } = useContext(UserContext);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     axios.post("http://localhost:8800/login", { username: input, password: password })
-      .then(data => {
-        if (data) {
-          setUserName(input);
-          navigate("/chatroom");
+      .then(response => {
+        if (response) {
+          setUserName(response.data.username)
+          setUserID(response.data.userID);
+          navigate("/dashboard");
         }
       })
       .catch(err => {

@@ -1,9 +1,16 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
+import React, {
+    useState,
+    useEffect,
+    useRef,
+    useContext
+  } from "react";
+import { useParams } from "react-router-dom";
 import axios from "axios";
-import "../ChatRoom.css";
+import "../pages_css/ChatRoom.css";
 import { UserContext } from "../context/UserContext"
 
 function ChatRoomPage() {
+  const { CID, CRID } = useParams();
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
   const [replyTo, setReplyTo] = useState(null);
@@ -11,11 +18,12 @@ function ChatRoomPage() {
   const [replyToUser, setReplyToUser] = useState("");
   const inputRef = useRef(null);
   const { user } = useContext(UserContext);
+  const link = "http://localhost:8800/club=" + CID + "/chatroom=" + CRID;
 
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const res = await axios.get("http://localhost:8800/messages");
+        const res = await axios.get(link);
         setMessages(res.data);
         console.log(messages.replied_message);
       } catch (err) {
@@ -32,7 +40,7 @@ function ChatRoomPage() {
   const sendMessage = async (e) => {
     e.preventDefault();
     if (message.trim()) {
-      await axios.post("http://localhost:8800/messages", {username: user, message: message, reply_to: replyTo})
+      await axios.post(link, {userID: user.userID, message: message, reply_to: replyTo})
       .then(data => {
         console.log(data);
         setMessage("");
