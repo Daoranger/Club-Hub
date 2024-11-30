@@ -95,24 +95,24 @@ const ClubHomePage = () => {
         </section>
         <section>
           <h2>Club Threads</h2>
-          <nav>
-            <ul>
-              {clubThreads.map((thread) => (
-                <li key={thread.TID}>
-                  <a href={`/${CID}/threads/${thread.TID}`}>{thread.title}</a>
-                </li>
-              ))}
-            </ul>
-          </nav>
+          <a 
+            href={`/threads/${CID}`} 
+            style={styles.actionButton}
+          >
+            View All Threads
+          </a>
+
           <h2>Club ChatRooms</h2>
-          <nav>
-            <ul>
-              {clubChatrooms.map((chatroom) => (
-                <li key={chatroom.CRID}>
-                  <a href={`/chatroom/${chatroom.CRID}`}>{chatroom.name}</a>
-                </li>
-              ))}
-            </ul>
+          <nav style={styles.chatroomList}>
+            {clubChatrooms.map((chatroom) => (
+              <a 
+                key={chatroom.CRID}
+                href={`/chatroom/${chatroom.CRID}`}
+                style={styles.chatroomButton}
+              >
+                {chatroom.name}
+              </a>
+            ))}
           </nav>
 
           {isOwner && (
@@ -159,3 +159,42 @@ const ClubHomePage = () => {
 };
 
 export default ClubHomePage;
+
+// Add these styles at the bottom with your other styles
+const styles = {
+  actionButton: {
+    display: 'inline-block',
+    padding: '10px 20px',
+    backgroundColor: '#0079d3',
+    color: 'white',
+    textDecoration: 'none',
+    borderRadius: '5px',
+    marginBottom: '20px',
+    transition: 'background-color 0.2s ease',
+    cursor: 'pointer',
+    fontWeight: '500',
+    ':hover': {
+      backgroundColor: '#005fa3',
+    }
+  },
+  chatroomList: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '10px',
+    marginBottom: '20px'
+  },
+  chatroomButton: {
+    display: 'inline-block',
+    padding: '10px 20px',
+    backgroundColor: '#2c3e50',
+    color: 'white',
+    textDecoration: 'none',
+    borderRadius: '5px',
+    transition: 'background-color 0.2s ease',
+    cursor: 'pointer',
+    fontWeight: '500',
+    ':hover': {
+      backgroundColor: '#34495e',
+    }
+  }
+};

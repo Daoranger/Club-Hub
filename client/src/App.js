@@ -31,7 +31,7 @@ function App() {
             <Route element={<PrivateRoutes />}>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/club/:clubID" element={<ClubHomePage />}/>
-              <Route path="/threads/:threadID" element={<ThreadPage />} />
+              <Route path="/threads/:clubID" element={<ThreadPage />} />
               <Route path="/create-thread/:clubID" element={<CreateThreadPage />} />
               <Route path="/chatroom/:chatroomID" element={<ChatRoomPage />} />
               <Route path="/thread/:threadID" element={<IndividualThreadPage />} />

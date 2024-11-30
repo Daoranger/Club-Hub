@@ -1,28 +1,34 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios"; // Import axios for making HTTP requests
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
 
 function ThreadPage() {
-  const [threads, setThreads] = useState([]); // State to hold threads data
+  const [threads, setThreads] = useState([]);
+  const [clubName, setClubName] = useState("");
   const navigate = useNavigate();
-  const [clubID, setClubID] = useState(1); // You might want to get this from URL params or context
+  const { clubID } = useParams();
 
-  // Fetch threads from the backend when the component mounts
+  // Fetch threads and club info from the backend
   useEffect(() => {
-    const fetchThreads = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8800/thread?CID=${clubID}`); // Fetch threads from the backend
-        setThreads(response.data); // Update state with fetched threads
+        // Fetch club info
+        const clubResponse = await axios.get(`http://localhost:8800/club`, { params: { CID: clubID } });
+        setClubName(clubResponse.data[0].name);
+
+        // Fetch threads for this specific club
+        const threadsResponse = await axios.get(`http://localhost:8800/thread`, { params: { CID: clubID } });
+        setThreads(threadsResponse.data);
       } catch (error) {
-        console.error("Error fetching threads:", error);
+        console.error("Error fetching data:", error);
       }
     };
 
-    fetchThreads(); // Call the function to fetch threads
-  }, [clubID]); // Empty dependency array means this runs once when the component mounts
+    fetchData();
+  }, [clubID]);
 
   const handleCreateThreadClick = () => {
-    navigate(`/create-thread/${clubID}`); // Include clubID in the URL
+    navigate(`/create-thread/${clubID}`);
   };
 
   const handleThreadClick = (threadId) => {
@@ -33,15 +39,10 @@ function ThreadPage() {
     <div style={styles.pageContainer}>
       <header style={styles.header}>
         <div style={styles.clubBanner}>
-          <img
-            src="your-banner-url.png"
-            alt="Club Banner"
-            style={styles.bannerImage}
-          />
           <div style={styles.clubInfo}>
-            <h1 style={styles.clubName}>Club Name</h1>
+            <h1 style={styles.clubName}>{clubName} Discussions</h1>
             <p style={styles.clubDescription}>
-              A place for all your club discussions, events, and announcements.
+              Join the conversation in {clubName}
             </p>
           </div>
         </div>
@@ -50,7 +51,6 @@ function ThreadPage() {
       <div style={styles.mainContent}>
         <div style={styles.ThreadsContainer}>
           <h2 style={styles.sectionHeading}>Latest Threads</h2>
-          {/* Map over the threads and display them dynamically */}
           {threads.length > 0 ? (
             threads.map((thread) => (
               <div
@@ -62,21 +62,23 @@ function ThreadPage() {
               >
                 <h3 style={styles.ThreadTitle}>{thread.title}</h3>
                 <p style={styles.ThreadText}>{thread.content}</p>
+                <div style={styles.threadMeta}>
+                  <span style={styles.category}>{thread.category}</span>
+                </div>
               </div>
             ))
           ) : (
-            <p>No threads available</p>
+            <p>No threads available in this club yet</p>
           )}
         </div>
         <aside style={styles.sidebar}>
-          <h3 style={styles.sidebarHeading}>About this Thread Page</h3>
+          <h3 style={styles.sidebarHeading}>About {clubName} Threads</h3>
           <p style={styles.sidebarText}>
-            Have a question? Make a Thread! These threads connect students
-            with clubs, events, and discussions in one central platform. Make
-            your threads and join the conversation!
+            Join the discussion in {clubName}! Create threads to ask questions,
+            share updates, or start conversations with other club members.
           </p>
           <button onClick={handleCreateThreadClick} style={styles.createThreadButton}>
-            Create Thread
+            Create New Thread
           </button>
         </aside>
       </div>
@@ -180,6 +182,19 @@ const styles = {
     cursor: "pointer",
     fontWeight: "bold",
     width: "100%",
+  },
+  threadMeta: {
+    marginTop: '10px',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '10px',
+  },
+  category: {
+    backgroundColor: '#e9ecef',
+    padding: '4px 8px',
+    borderRadius: '4px',
+    fontSize: '12px',
+    color: '#495057',
   },
 };
 
