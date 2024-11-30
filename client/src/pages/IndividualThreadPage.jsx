@@ -67,7 +67,7 @@ function IndividualThreadPage() {
             <div style={styles.replyForm}>
               <textarea 
                 style={styles.replyInput} 
-                placeholder="Write your reply..."
+                placeholder="Share your thoughts..."
                 value={replyContent}
                 onChange={(e) => setReplyContent(e.target.value)}
               />
@@ -75,7 +75,7 @@ function IndividualThreadPage() {
                 style={styles.replyButton}
                 onClick={handleReplySubmit}
               >
-                Post Reply
+                Comment
               </button>
             </div>
 
