@@ -34,10 +34,18 @@ function IndividualThreadPage() {
             <p style={styles.content}>{thread.content}</p>
           </div>
           
-          {/* Comments section can be added here later */}
           <div style={styles.commentsSection}>
             <h3>Comments</h3>
-            <p>Comments feature coming soon...</p>
+            {/* Add reply form */}
+            <div style={styles.replyForm}>
+              <textarea 
+                style={styles.replyInput} 
+                placeholder="Write your reply..."
+              />
+              <button style={styles.replyButton}>
+                Post Reply
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -88,6 +96,40 @@ const styles = {
   },
   commentsSection: {
     marginTop: "20px",
+  },
+  commentsSection: {
+    marginTop: "20px",
+  },
+  replyForm: {
+    marginTop: "15px",
+    marginBottom: "20px",
+    marginLeft: "10px",
+    marginRight: "35px",
+  },
+  replyInput: {
+    width: "100%",
+    minHeight: "100px",
+    padding: "12px",
+    borderRadius: "4px",
+    border: "1px solid #ddd",
+    marginBottom: "10px",
+    fontSize: "14px",
+    resize: "vertical",
+    fontFamily: "inherit",
+  },
+  replyButton: {
+    backgroundColor: "#0079d3",
+    color: "white",
+    border: "none",
+    borderRadius: "4px",
+    padding: "8px 16px",
+    fontSize: "14px",
+    fontWeight: "600",
+    cursor: "pointer",
+    transition: "background-color 0.2s",
+    ":hover": {
+      backgroundColor: "#005fa3",
+    },
   },
 };
 
