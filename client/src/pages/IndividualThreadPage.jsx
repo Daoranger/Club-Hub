@@ -4,43 +4,50 @@ import axios from "axios";
 
 function IndividualThreadPage() {
   const [thread, setThread] = useState(null);
+  const [replies, setReplies] = useState([]);
+  const [replyContent, setReplyContent] = useState("");
   const { threadID } = useParams();
-  const [replyContent, setReplyContent] = useState(""); // State for reply content
-  const userID = 1;
+  const userID = 1; // Replace with actual user ID from your auth system
 
-  // Fetch thread data from the server
+  // Fetch thread and replies
+  const fetchThreadAndReplies = async () => {
+    try {
+      // Fetch thread
+      const threadResponse = await axios.get(`http://localhost:8800/thread/${threadID}`);
+      setThread(threadResponse.data);
+
+      // Fetch replies
+      const repliesResponse = await axios.get(`http://localhost:8800/thread-replies/${threadID}`);
+      console.log("Replies:", repliesResponse.data); // Debug log
+      setReplies(repliesResponse.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
   useEffect(() => {
-    const fetchThread = async () => {
-      try {
-        const response = await axios.get(`http://localhost:8800/thread/${threadID}`);
-        setThread(response.data);
-      } catch (error) {
-        console.error("Error fetching thread:", error);
-      }
-    };
-    fetchThread();
+    fetchThreadAndReplies();
   }, [threadID]);
 
-  // If thread is not loaded, show loading message
-  if (!thread) return <div>Loading...</div>;  
-
-  // Function to handle reply submission
   const handleReplySubmit = async () => {
-    if (!replyContent.trim()) return; // Don't submit empty replies
+    if (!replyContent.trim()) return;
+
     try {
-      //console.log("Submitting reply:", replyContent); // Debugging line
       await axios.post("http://localhost:8800/thread-reply", {
         threadID,
         userID,
         content: replyContent
       });
-      // Clear the input after successful submission
+      
+      // Clear the input and refresh replies
       setReplyContent("");
-      // You might want to refresh the thread/comments here
+      fetchThreadAndReplies(); // Refresh the replies after posting
     } catch (error) {
       console.error("Error posting reply:", error);
     }
   };
+
+  if (!thread) return <div>Loading...</div>;
 
   return (
     <div style={styles.pageContainer}>
@@ -56,8 +63,7 @@ function IndividualThreadPage() {
           </div>
           
           <div style={styles.commentsSection}>
-            <h3>Comments</h3>
-            {/* Add reply form */}
+            <h3>Comments ({replies.length})</h3>
             <div style={styles.replyForm}>
               <textarea 
                 style={styles.replyInput} 
@@ -65,9 +71,31 @@ function IndividualThreadPage() {
                 value={replyContent}
                 onChange={(e) => setReplyContent(e.target.value)}
               />
-              <button style={styles.replyButton} onClick={handleReplySubmit}>
+              <button 
+                style={styles.replyButton}
+                onClick={handleReplySubmit}
+              >
                 Post Reply
               </button>
+            </div>
+
+            {/* Display replies */}
+            <div style={styles.repliesList}>
+              {replies.length > 0 ? (
+                replies.map((reply) => (
+                  <div key={reply.TRID} style={styles.replyItem}>
+                    <div style={styles.replyHeader}>
+                      <span style={styles.replyUsername}>{reply.username}</span>
+                      <span style={styles.replyTimestamp}>
+                        {new Date(reply.timestamp).toLocaleString()}
+                      </span>
+                    </div>
+                    <p style={styles.replyContent}>{reply.content}</p>
+                  </div>
+                ))
+              ) : (
+                <p style={styles.noReplies}>No replies yet. Be the first to reply!</p>
+              )}
             </div>
           </div>
         </div>
@@ -120,9 +148,6 @@ const styles = {
   commentsSection: {
     marginTop: "20px",
   },
-  commentsSection: {
-    marginTop: "20px",
-  },
   replyForm: {
     marginTop: "15px",
     marginBottom: "20px",
@@ -154,6 +179,41 @@ const styles = {
       backgroundColor: "#005fa3",
     },
   },
+  repliesList: {
+    marginTop: "20px",
+  },
+  replyItem: {
+    padding: "15px",
+    borderBottom: "1px solid #eee",
+    marginBottom: "10px",
+    backgroundColor: "#f8f9fa",
+    borderRadius: "4px",
+  },
+  replyHeader: {
+    display: "flex",
+    justifyContent: "space-between",
+    marginBottom: "8px",
+  },
+  replyUsername: {
+    fontWeight: "600",
+    color: "#1a1a1b",
+  },
+  replyTimestamp: {
+    color: "#787c7e",
+    fontSize: "12px",
+  },
+  replyContent: {
+    fontSize: "14px",
+    lineHeight: "1.5",
+    color: "#1a1a1b",
+    margin: 0,
+  },
+  noReplies: {
+    textAlign: "center",
+    color: "#787c7e",
+    fontStyle: "italic",
+    padding: "20px 0",
+  }
 };
 
 export default IndividualThreadPage; 
