@@ -85,6 +85,41 @@ function IndividualThreadPage() {
           <div style={styles.threadContent}>
             <p style={styles.content}>{thread.content}</p>
           </div>
+
+          {/* Add Comments Section Here */}
+          <div style={styles.commentsSection}>
+            {/* Comment Form */}
+            <form onSubmit={handleCommentSubmit} style={styles.commentForm}>
+              <textarea
+                style={styles.commentInput}
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+                placeholder="What are your thoughts?"
+              />
+              <button type="submit" style={styles.submitButton}>
+                Comment
+              </button>
+            </form>
+
+            {/* Comments List */}
+            <div style={styles.commentsList}>
+              {comments.map((comment) => (
+                <div 
+                  key={comment._id} 
+                  style={styles.commentItem}
+                  onClick={() => handleCommentClick(comment)}
+                >
+                  <p>{comment.content}</p>
+                  <button 
+                    style={styles.replyButton}
+                    onClick={(e) => handleRepliesClick(e)}
+                  >
+                    Reply
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 
@@ -252,6 +287,59 @@ const styles = {
     marginTop: '15px',
     paddingTop: '15px',
     borderTop: '1px solid #eee',
+  },
+  commentsSection: {
+    marginTop: '20px',
+    borderTop: '1px solid #eee',
+    paddingTop: '20px',
+  },
+  commentForm: {
+    marginBottom: '20px',
+  },
+  commentInput: {
+    width: '100%',
+    minHeight: '100px',
+    padding: '10px',
+    borderRadius: '4px',
+    border: '1px solid #ccc',
+    marginBottom: '10px',
+    resize: 'vertical',
+    fontFamily: 'inherit',
+  },
+  submitButton: {
+    backgroundColor: '#0079d3',
+    color: 'white',
+    border: 'none',
+    padding: '8px 16px',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    fontSize: '14px',
+    fontWeight: '600',
+  },
+  commentsList: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '15px',
+  },
+  commentItem: {
+    padding: '10px',
+    borderRadius: '4px',
+    backgroundColor: '#f8f9fa',
+    cursor: 'pointer',
+    '&:hover': {
+      backgroundColor: '#f0f1f2',
+    },
+  },
+  replyButton: {
+    backgroundColor: 'transparent',
+    color: '#878A8C',
+    border: 'none',
+    cursor: 'pointer',
+    fontSize: '12px',
+    padding: '4px 8px',
+    '&:hover': {
+      backgroundColor: '#e9ecef',
+    },
   },
 };
 
