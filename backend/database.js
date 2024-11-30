@@ -386,6 +386,52 @@ app.get("/thread/:id", (req, res) => {
   });
 });
 
+// Add this new endpoint for thread replies
+app.post("/thread-reply", (req, res) => {
+  const { threadID, userID, content } = req.body;
+
+  const query = `
+    INSERT INTO ThreadReply (TID, UID, content)
+    VALUES (?, ?, ?);
+  `;
+
+  dbCon.query(query, [threadID, userID, content], (err, result) => {
+    if (err) {
+      console.error("Error creating thread reply:", err);
+      res.status(500).json({ message: "Failed to create reply" });
+    } else {
+      res.status(201).json({ 
+        message: "Reply created successfully",
+        replyId: result.insertId 
+      });
+    }
+  });
+});
+
+// Add this endpoint to fetch replies for a thread
+app.get("/thread-replies/:threadId", (req, res) => {
+  const threadId = req.params.threadId;
+
+  const query = `
+    SELECT 
+      TR.*,
+      U.username
+    FROM ThreadReply TR
+    JOIN User U ON TR.UID = U.UID
+    WHERE TR.TID = ?
+    ORDER BY TR.timestamp DESC
+  `;
+
+  dbCon.query(query, [threadId], (err, result) => {
+    if (err) {
+      console.error("Error fetching thread replies:", err);
+      res.status(500).json({ message: "Failed to fetch replies" });
+    } else {
+      res.json(result);
+    }
+  });
+}); 
+
 // Start the backend server at localhost:8800
 app.listen(8800, ()=>{
   console.log("Connected to backend!");

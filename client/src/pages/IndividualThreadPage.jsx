@@ -5,7 +5,10 @@ import axios from "axios";
 function IndividualThreadPage() {
   const [thread, setThread] = useState(null);
   const { threadID } = useParams();
+  const [replyContent, setReplyContent] = useState(""); // State for reply content
+  const userID = 1;
 
+  // Fetch thread data from the server
   useEffect(() => {
     const fetchThread = async () => {
       try {
@@ -15,11 +18,29 @@ function IndividualThreadPage() {
         console.error("Error fetching thread:", error);
       }
     };
-
     fetchThread();
   }, [threadID]);
 
-  if (!thread) return <div>Loading...</div>;
+  // If thread is not loaded, show loading message
+  if (!thread) return <div>Loading...</div>;  
+
+  // Function to handle reply submission
+  const handleReplySubmit = async () => {
+    if (!replyContent.trim()) return; // Don't submit empty replies
+    try {
+      //console.log("Submitting reply:", replyContent); // Debugging line
+      await axios.post("http://localhost:8800/thread-reply", {
+        threadID,
+        userID,
+        content: replyContent
+      });
+      // Clear the input after successful submission
+      setReplyContent("");
+      // You might want to refresh the thread/comments here
+    } catch (error) {
+      console.error("Error posting reply:", error);
+    }
+  };
 
   return (
     <div style={styles.pageContainer}>
@@ -41,8 +62,10 @@ function IndividualThreadPage() {
               <textarea 
                 style={styles.replyInput} 
                 placeholder="Write your reply..."
+                value={replyContent}
+                onChange={(e) => setReplyContent(e.target.value)}
               />
-              <button style={styles.replyButton}>
+              <button style={styles.replyButton} onClick={handleReplySubmit}>
                 Post Reply
               </button>
             </div>
