@@ -104,3 +104,19 @@ body.dark-mode .text-area::placeholder {
   margin: 0;
   padding: 0;
 }
+
+.thread-item {
+    position: relative;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.thread-item:hover {
+    border-color: #898989;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.thread-item:active {
+    transform: translateY(0px);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}

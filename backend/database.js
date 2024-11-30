@@ -362,6 +362,30 @@ function hashPassword(password) {
   return bcrypt.hashSync(password, 10);
 }
 
+// New endpoint to get a single thread
+app.get("/thread/:id", (req, res) => {
+  const threadId = req.params.id;
+
+  const sql = `
+    SELECT *
+    FROM Thread
+    WHERE TID = ?
+  `;
+
+  dbCon.query(sql, [threadId], (err, result) => {
+    if (err) {
+      console.log("Error fetching thread:", err);
+      res.status(500).json({ message: "Failed to fetch thread" });
+    } else {
+      if (result.length === 0) {
+        res.status(404).json({ message: "Thread not found" });
+      } else {
+        res.json(result[0]);
+      }
+    }
+  });
+});
+
 // Start the backend server at localhost:8800
 app.listen(8800, ()=>{
   console.log("Connected to backend!");

@@ -25,6 +25,10 @@ function ThreadPage() {
     navigate(`/create-thread/${clubID}`); // Include clubID in the URL
   };
 
+  const handleThreadClick = (threadId) => {
+    navigate(`/thread/${threadId}`);
+  };
+
   return (
     <div style={styles.pageContainer}>
       <header style={styles.header}>
@@ -49,7 +53,13 @@ function ThreadPage() {
           {/* Map over the threads and display them dynamically */}
           {threads.length > 0 ? (
             threads.map((thread) => (
-              <div key={thread.id} style={styles.Thread}>
+              <div
+                key={thread.TID}
+                onClick={() => handleThreadClick(thread.TID)}
+                style={{...styles.Thread, cursor: 'pointer'}}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f5f5f5'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'white'}
+              >
                 <h3 style={styles.ThreadTitle}>{thread.title}</h3>
                 <p style={styles.ThreadText}>{thread.content}</p>
               </div>
@@ -130,15 +140,21 @@ const styles = {
     borderBottom: "1px solid #e0e0e0",
     paddingBottom: "15px",
     marginBottom: "15px",
+    padding: "15px",
+    borderRadius: "4px",
+    transition: "background-color 0.2s ease",
+    cursor: "pointer",
   },
   ThreadTitle: {
     fontSize: "1.1rem",
     margin: "0 0 5px",
     color: "#0079d3",
+    fontWeight: "600",
   },
   ThreadText: {
     fontSize: "0.9rem",
     margin: "0",
+    color: "#1a1a1b",
   },
   sidebar: {
     flex: 1,

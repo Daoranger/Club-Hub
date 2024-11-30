@@ -15,6 +15,7 @@ import ThreadPage from "./pages/ThreadPage";
 import CreateThreadPage from "./pages/CreateThreadPage";
 import ChatRoomPage from "./pages/ChatRoomPage";
 import Navbar from "./components/NavBar";
+import IndividualThreadPage from "./pages/IndividualThreadPage";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
               <Route path="/threads/:threadID" element={<ThreadPage />} />
               <Route path="/create-thread/:clubID" element={<CreateThreadPage />} />
               <Route path="/chatroom/:chatroomID" element={<ChatRoomPage />} />
+              <Route path="/thread/:threadID" element={<IndividualThreadPage />} />
             </Route>
           </Routes>
         </Router>
