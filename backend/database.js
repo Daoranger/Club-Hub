@@ -284,13 +284,13 @@ app.get("/chatroom", (req, res)=> {
 });
 
 // POST: Store Thread Info into DB
-app.post("/create-thread/", (req, res) => {
-  const { clubID } = req.params;
+app.post("/create-thread", (req, res) => {
   const {
     threadTitle,
     threadContent,
-    category
-    } = req.body;
+    category,
+    clubID
+  } = req.body;
 
   const sql = `INSERT INTO Thread (title, content, category, CID) VALUES (?, ?, ?, ?)`;
   
@@ -304,23 +304,23 @@ app.post("/create-thread/", (req, res) => {
   });
 });
 
-// GET: Get the Threads Info in DB to display in ThreadPage
+// GET: Get the Threads Info for a specific club
 app.get("/thread", (req, res) => {
-  const { CID, TID } = req.query;
+  const { CID } = req.query;
 
   const sql = `
-  SELECT *
-  FROM Thread t
-  WHERE t.CID = ?
-  ORDER BY t.TID;
-  `; // Assuming you have a 'threads' table
+    SELECT *
+    FROM Thread
+    WHERE CID = ?
+    ORDER BY TID DESC
+  `;
 
-  dbCon.query(sql, (err, result) => {
+  dbCon.query(sql, [CID], (err, result) => {
     if (err) {
       console.log("Error fetching threads:", err);
       res.status(500).json({ message: "Failed to fetch threads" });
     } else {
-      res.json(result); // Send the threads data back to the frontend
+      res.json(result);
     }
   });
 });

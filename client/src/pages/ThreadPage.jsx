@@ -5,12 +5,13 @@ import axios from "axios"; // Import axios for making HTTP requests
 function ThreadPage() {
   const [threads, setThreads] = useState([]); // State to hold threads data
   const navigate = useNavigate();
+  const [clubID, setClubID] = useState(1); // You might want to get this from URL params or context
 
   // Fetch threads from the backend when the component mounts
   useEffect(() => {
     const fetchThreads = async () => {
       try {
-        const response = await axios.get("http://localhost:8800/thread"); // Fetch threads from the backend
+        const response = await axios.get(`http://localhost:8800/thread?CID=${clubID}`); // Fetch threads from the backend
         setThreads(response.data); // Update state with fetched threads
       } catch (error) {
         console.error("Error fetching threads:", error);
@@ -18,10 +19,10 @@ function ThreadPage() {
     };
 
     fetchThreads(); // Call the function to fetch threads
-  }, []); // Empty dependency array means this runs once when the component mounts
+  }, [clubID]); // Empty dependency array means this runs once when the component mounts
 
   const handleCreateThreadClick = () => {
-    navigate("/create-thread"); // Navigate to the create thread page
+    navigate(`/create-thread/${clubID}`); // Include clubID in the URL
   };
 
   return (

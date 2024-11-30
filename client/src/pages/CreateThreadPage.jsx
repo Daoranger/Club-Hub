@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";  // Import axios
 
 function CreateThreadPage() {
   const [threadTitle, setThreadTitle] = useState("");
   const [threadContent, setThreadContent] = useState("");
   const [category, setCategory] = useState("");
+  const { clubID } = useParams(); // Add this to get clubID from URL
 
   const categories = [
     "Question",
@@ -19,23 +20,26 @@ function CreateThreadPage() {
 
   const navigate = useNavigate(); // Get the navigate function
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Prepare the data to be sent to the backend
-    const threadData = { threadTitle, threadContent, category };
+    console.log("Submitting form with data:", { threadTitle, threadContent, category, clubID }); // Debug log
 
-    // Use axios to send the POST request
-    axios
-      .post("http://localhost:8800/create-thread", threadData)  // Send data to your backend
-      .then((response) => {
-        // You can handle success or redirect here
-        console.log("New thread created:", response.data);
-        navigate("/thread"); // Navigate to the threads page after successful creation
-      })
-      .catch((error) => {
-        console.error("Error creating thread:", error);
-      });
+    const threadData = { 
+      threadTitle, 
+      threadContent, 
+      category,
+      clubID: parseInt(clubID) // Ensure clubID is a number
+    };
+
+    try {
+      const response = await axios.post("http://localhost:8800/create-thread", threadData);
+      console.log("New thread created:", response.data);
+      navigate(`/club/${clubID}`);
+    } catch (error) {
+      console.error("Error creating thread:", error);
+    }
   };
+
   return (
     <div style={styles.pageContainer}>
       <header style={styles.header}>
@@ -96,7 +100,6 @@ function CreateThreadPage() {
           <button
             type="submit"
             style={styles.submitButton}
-            onClick={handleSubmit}
           >
             Create Thread
           </button>
