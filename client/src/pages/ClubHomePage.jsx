@@ -94,13 +94,21 @@ const ClubHomePage = () => {
           <p>{clubDesc}</p>
         </section>
         <section>
-          <h2>Club Threads</h2>
-          <a 
-            href={`/threads/${CID}`} 
-            style={styles.actionButton}
-          >
-            View All Threads
-          </a>
+          <h2>Club Content</h2>
+          <div style={styles.buttonContainer}>
+            <a 
+              href={`/threads/${CID}`} 
+              style={styles.actionButton}
+            >
+              View All Threads
+            </a>
+            <a 
+              href={`/posts/${CID}`} 
+              style={styles.actionButton}
+            >
+              View All Posts
+            </a>
+          </div>
 
           <h2>Club ChatRooms</h2>
           <nav style={styles.chatroomList}>
@@ -147,14 +155,6 @@ const ClubHomePage = () => {
               {message && <p style={{ marginTop: "10px" }}>{message}</p>}
             </form>
           )}
-
-          <h2>Club Posts</h2>
-          <a 
-            href={`/posts/${CID}`} 
-            style={styles.actionButton}
-          >
-            View All Posts
-          </a>
 
           <Outlet />
         </section>
@@ -203,6 +203,28 @@ const styles = {
     fontWeight: '500',
     ':hover': {
       backgroundColor: '#34495e',
+    }
+  },
+  buttonContainer: {
+    display: 'flex',
+    gap: '15px',
+    marginBottom: '20px'
+  },
+  actionButton: {
+    display: 'inline-block',
+    padding: '10px 20px',
+    backgroundColor: '#0079d3',
+    color: 'white',
+    textDecoration: 'none',
+    borderRadius: '5px',
+    transition: 'background-color 0.2s ease',
+    cursor: 'pointer',
+    fontWeight: '500',
+    flex: '1',
+    textAlign: 'center',
+    maxWidth: '200px',
+    ':hover': {
+      backgroundColor: '#005fa3',
     }
   }
 };
