@@ -441,3 +441,47 @@ app.get("/thread-replies/:threadId", (req, res) => {
 app.listen(8800, ()=>{
   console.log("Connected to backend!");
 }); 
+
+// Get posts for a specific club
+app.get("/posts", (req, res) => {
+  const { CID } = req.query;
+
+  const query = `
+    SELECT P.*, U.username
+    FROM Post P
+    JOIN User U ON P.UID = U.UID
+    WHERE P.CID = ?
+    ORDER BY P.timestamp DESC
+  `;
+
+  dbCon.query(query, [CID], (err, result) => {
+    if (err) {
+      console.error("Error fetching posts:", err);
+      res.status(500).json({ message: "Failed to fetch posts" });
+    } else {
+      res.json(result);
+    }
+  });
+});
+
+// Create a new post
+app.post("/create-post", (req, res) => {
+  const { clubID, userID, caption, mediaURL } = req.body;
+
+  const query = `
+    INSERT INTO Post (CID, UID, caption, mediaURL)
+    VALUES (?, ?, ?, ?)
+  `;
+
+  dbCon.query(query, [clubID, userID, caption, mediaURL], (err, result) => {
+    if (err) {
+      console.error("Error creating post:", err);
+      res.status(500).json({ message: "Failed to create post" });
+    } else {
+      res.status(201).json({ 
+        message: "Post created successfully",
+        postId: result.insertId 
+      });
+    }
+  });
+}); 

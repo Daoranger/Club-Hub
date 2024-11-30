@@ -148,6 +148,14 @@ const ClubHomePage = () => {
             </form>
           )}
 
+          <h2>Club Posts</h2>
+          <a 
+            href={`/posts/${CID}`} 
+            style={styles.actionButton}
+          >
+            View All Posts
+          </a>
+
           <Outlet />
         </section>
       </main>
