@@ -292,12 +292,17 @@ app.post("/create-thread", (req, res) => {
     clubID
   } = req.body;
 
+  console.log("Received thread data:", { threadTitle, threadContent, category, clubID });
+
   const sql = `INSERT INTO Thread (title, content, category, CID) VALUES (?, ?, ?, ?)`;
   
   dbCon.query(sql, [threadTitle, threadContent, category, clubID], (err, result) => {
     if (err) {
-      console.log("Error creating thread:", err);
-      res.status(500).json({ message: "Failed to create thread" });
+      console.log("Database error:", err);
+      res.status(500).json({ 
+        message: "Failed to create thread",
+        error: err.message
+      });
     } else {
       res.status(201).json({ message: "Thread created successfully", threadId: result.insertId });
     }

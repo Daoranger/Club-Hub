@@ -114,12 +114,15 @@ const styles = {
     fontFamily: "Arial, sans-serif",
     backgroundColor: "#f6f7f8",
     color: "#1a1a1b",
+    minHeight: "100vh",
+    padding: "20px",
   },
   header: {
     backgroundColor: "#0079d3",
     color: "white",
     padding: "20px",
     textAlign: "center",
+    marginBottom: "20px",
   },
   headerText: {
     fontSize: "32px",
@@ -128,11 +131,13 @@ const styles = {
   },
   mainContent: {
     maxWidth: "800px",
-    margin: "20px auto",
+    width: "100%",
+    margin: "0 auto",
     padding: "20px",
     backgroundColor: "white",
     borderRadius: "8px",
     boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+    boxSizing: "border-box",
   },
   form: {
     display: "flex",
@@ -155,6 +160,7 @@ const styles = {
     borderRadius: "8px",
     backgroundColor: "#fff",
     color: "#333",
+    boxSizing: "border-box",
   },
   textareaField: {
     width: "100%",
@@ -166,6 +172,7 @@ const styles = {
     backgroundColor: "#fff",
     color: "#333",
     resize: "vertical",
+    boxSizing: "border-box",
   },
   submitButton: {
     backgroundColor: "#0079d3",
