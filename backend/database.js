@@ -437,11 +437,6 @@ app.get("/thread-replies/:threadId", (req, res) => {
   });
 }); 
 
-// Start the backend server at localhost:8800
-app.listen(8800, ()=>{
-  console.log("Connected to backend!");
-}); 
-
 // Get posts for a specific club
 app.get("/posts", (req, res) => {
   const { CID } = req.query;
@@ -601,3 +596,8 @@ app.post("/join-club", (req, res) => {
   // Create a default "Member" role for the user
   create_role(userID, clubID, "Member", res, "Successfully joined the club!");
 });
+
+// Start the backend server at localhost:8800
+app.listen(8800, ()=>{
+  console.log("Connected to backend!");
+}); 
