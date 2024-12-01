@@ -83,23 +83,17 @@ function create_role(userID, clubID, roleName, res, message="Role created succes
 }
 
 app.get("/clubs", (req, res) => {
-  const { userID } = req.query;
+  const query = "SELECT * FROM Club";
 
-  const query = `
-    SELECT C.*
-    FROM Club C
-    JOIN ClubProfile CP ON C.CID = CP.CID
-    WHERE CP.UID = ?;
-  `;
-
-  dbCon.query(query, [userID], (err, result) => {
-    if (err){
-      check_err_code(err, res);
+  dbCon.query(query, (err, result) => {
+    if (err) {
+      console.error("Error fetching clubs:", err);
+      res.status(500).json({ message: "Failed to fetch clubs" });
     } else {
       res.json(result);
     }
-  })
-})
+  });
+});
 
 app.get("/club", (req, res) => {
   const { CID } = req.query;
@@ -578,4 +572,4 @@ app.post("/unregister-event", (req, res) => {
       res.status(200).json({ message: "Successfully unregistered from event" });
     }
   });
-}); 
+});
