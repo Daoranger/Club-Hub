@@ -89,8 +89,11 @@ function ThreadPage() {
 const styles = {
   pageContainer: {
     fontFamily: "Arial, sans-serif",
-    backgroundColor: "#f6f7f8",
+    backgroundColor: "#f0f2f5",
     color: "#1a1a1b",
+    minHeight: "100vh",
+    margin: 0,
+    padding: 0,
   },
   header: {
     backgroundColor: "#0079d3",
