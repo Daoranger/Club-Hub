@@ -8,8 +8,8 @@ const SearchPage = () => {
   const { userID } = useUserContext();
 
   useEffect(() => {
-    // Fetch clubs from the backend
-    axios.get("http://localhost:8800/clubs")
+    // Use the new search-clubs endpoint
+    axios.get("http://localhost:8800/search-clubs")
       .then(response => {
         setClubs(response.data);
       })
