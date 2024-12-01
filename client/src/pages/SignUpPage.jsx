@@ -80,7 +80,7 @@ function SignUpPage() {
         major: major || null,
         gradYear: gradYear || null,
       })
-      .then((data) => {
+      .then((response) => {
         setUsername("");
         setEmail("");
         setPassword("");
@@ -89,7 +89,7 @@ function SignUpPage() {
         setMajor("");
         setGradYear("");
         setError("");
-        alert(data.response.message);
+        alert(response.data.message);
         navigate("/login");
       })
       .catch((err) => {
