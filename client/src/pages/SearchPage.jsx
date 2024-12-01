@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useUserContext } from "../context/UserContext";
 
 const SearchPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [clubs, setClubs] = useState([]);
+  const { userID } = useUserContext();
 
   useEffect(() => {
     // Fetch clubs from the backend
@@ -18,6 +20,18 @@ const SearchPage = () => {
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
+  };
+
+  const handleJoinClub = (clubID) => {
+    axios.post("http://localhost:8800/join-club", { userID, clubID })
+      .then(response => {
+        alert(response.data.message);
+        // Refresh the dashboard
+        window.location.reload();
+      })
+      .catch(error => {
+        console.error("Error joining club:", error);
+      });
   };
 
   const filteredClubs = clubs.filter((club) =>
@@ -36,7 +50,10 @@ const SearchPage = () => {
       {searchTerm && (
         <ul>
           {filteredClubs.map((club) => (
-            <li key={club.CID}>{club.name}</li>
+            <li key={club.CID}>
+              {club.name}
+              <button onClick={() => handleJoinClub(club.CID)}>Join Club</button>
+            </li>
           ))}
         </ul>
       )}
