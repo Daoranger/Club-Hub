@@ -108,6 +108,12 @@ const ClubHomePage = () => {
             >
               View All Posts
             </a>
+            <a 
+              href={`/events/${CID}`} 
+              style={styles.actionButton}
+            >
+              View Events
+            </a>
           </div>
 
           <h2>Club ChatRooms</h2>

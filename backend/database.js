@@ -485,3 +485,97 @@ app.post("/create-post", (req, res) => {
     }
   });
 }); 
+
+// Get events for a club
+app.get("/events", (req, res) => {
+  const { clubID } = req.query;
+
+  const query = `
+    SELECT 
+      E.*,
+      COUNT(DISTINCT ER.UID) as registered_count,
+      EXISTS(
+        SELECT 1 
+        FROM EventRegistration ER2 
+        WHERE ER2.EID = E.EID AND ER2.UID = ?
+      ) as is_registered
+    FROM Event E
+    LEFT JOIN EventRegistration ER ON E.EID = ER.EID
+    WHERE E.CID = ?
+    GROUP BY E.EID
+    ORDER BY E.date ASC
+  `;
+
+  dbCon.query(query, [req.query.userID, clubID], (err, result) => {
+    if (err) {
+      console.error("Error fetching events:", err);
+      res.status(500).json({ message: "Failed to fetch events" });
+    } else {
+      res.json(result);
+    }
+  });
+});
+
+// Create a new event
+app.post("/create-event", (req, res) => {
+  const { name, date, street, city, zipcode, limit, clubID } = req.body;
+
+  const query = `
+    INSERT INTO Event (name, date, street, city, zipcode, \`limit\`, CID)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+  `;
+
+  dbCon.query(
+    query, 
+    [name, date, street, city, zipcode, limit || null, clubID],
+    (err, result) => {
+      if (err) {
+        console.error("Error creating event:", err);
+        res.status(500).json({ message: "Failed to create event" });
+      } else {
+        res.status(201).json({ 
+          message: "Event created successfully",
+          eventId: result.insertId 
+        });
+      }
+    }
+  );
+});
+
+// Register for an event
+app.post("/register-event", (req, res) => {
+  const { eventID, userID } = req.body;
+
+  const query = `
+    INSERT INTO EventRegistration (UID, EID, date, status)
+    VALUES (?, ?, CURDATE(), 'registered')
+  `;
+
+  dbCon.query(query, [userID, eventID], (err, result) => {
+    if (err) {
+      console.error("Error registering for event:", err);
+      res.status(500).json({ message: "Failed to register for event" });
+    } else {
+      res.status(201).json({ message: "Successfully registered for event" });
+    }
+  });
+});
+
+// Unregister from an event
+app.post("/unregister-event", (req, res) => {
+  const { eventID, userID } = req.body;
+
+  const query = `
+    DELETE FROM EventRegistration 
+    WHERE UID = ? AND EID = ?
+  `;
+
+  dbCon.query(query, [userID, eventID], (err, result) => {
+    if (err) {
+      console.error("Error unregistering from event:", err);
+      res.status(500).json({ message: "Failed to unregister from event" });
+    } else {
+      res.status(200).json({ message: "Successfully unregistered from event" });
+    }
+  });
+}); 
