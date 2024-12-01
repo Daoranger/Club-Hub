@@ -7,6 +7,7 @@ function PostPage() {
   const [posts, setPosts] = useState([]);
   const [clubName, setClubName] = useState("");
   const [newPost, setNewPost] = useState({ caption: "", mediaURL: "" });
+  const [error, setError] = useState("");
   const { clubID } = useParams();
   const { userID } = useUserContext();
   const [isOwner, setIsOwner] = useState(false);
@@ -42,14 +43,31 @@ function PostPage() {
 
   const handleCreatePost = async (e) => {
     e.preventDefault();
+    
+    // Validate URL
+    if (!newPost.mediaURL) {
+      setError("Image URL is required!");
+      return;
+    }
+
     try {
+      // Validate if the URL is accessible
+      const urlPattern = /^(https?:\/\/)/i;
+      if (!urlPattern.test(newPost.mediaURL)) {
+        setError("Please enter a valid URL starting with http:// or https://");
+        return;
+      }
+
       await axios.post("http://localhost:8800/create-post", {
         ...newPost,
         clubID,
         userID
       });
-      // Reset form and refresh posts
+
+      // Reset form and error
       setNewPost({ caption: "", mediaURL: "" });
+      setError("");
+
       // Refresh posts
       const postsResponse = await axios.get(`http://localhost:8800/posts`, { 
         params: { CID: clubID } 
@@ -57,6 +75,7 @@ function PostPage() {
       setPosts(postsResponse.data);
     } catch (error) {
       console.error("Error creating post:", error);
+      setError("Failed to create post. Please try again.");
     }
   };
 
@@ -69,15 +88,17 @@ function PostPage() {
       {isOwner && (
         <div style={styles.createPostSection}>
           <form onSubmit={handleCreatePost}>
+            {error && <div style={styles.errorMessage}>{error}</div>}
             <input
               type="text"
-              placeholder="Image URL"
+              placeholder="Image URL (required)"
               value={newPost.mediaURL}
               onChange={(e) => setNewPost({...newPost, mediaURL: e.target.value})}
               style={styles.input}
+              required
             />
             <textarea
-              placeholder="Write a caption..."
+              placeholder="Write a caption... (optional)"
               value={newPost.caption}
               onChange={(e) => setNewPost({...newPost, caption: e.target.value})}
               style={styles.textarea}
@@ -138,6 +159,10 @@ const styles = {
     marginBottom: "10px",
     border: "1px solid #dbdbdb",
     borderRadius: "4px",
+    fontSize: "14px",
+    '&:required': {
+      borderColor: "#0095f6",
+    },
   },
   textarea: {
     width: "100%",
@@ -194,6 +219,14 @@ const styles = {
     margin: "0",
     fontSize: "14px",
     lineHeight: "1.5",
+  },
+  errorMessage: {
+    color: "red",
+    marginBottom: "10px",
+    padding: "10px",
+    backgroundColor: "#ffebee",
+    borderRadius: "4px",
+    fontSize: "14px",
   },
 };
 
