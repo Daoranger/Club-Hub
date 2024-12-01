@@ -18,7 +18,7 @@ import Navbar from "./components/NavBar";
 import IndividualThreadPage from "./pages/IndividualThreadPage";
 import PostPage from "./pages/PostPage";
 import EventPage from "./pages/EventPage";
-import Searchpage from "./pages/SearchPage";
+import SearchPage from "./pages/SearchPage";
 
 function App() {
   return (
@@ -33,6 +33,7 @@ function App() {
 
             <Route element={<PrivateRoutes />}>
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/search" element={<SearchPage />} />
               <Route path="/club/:clubID" element={<ClubHomePage />}/>
               <Route path="/threads/:clubID" element={<ThreadPage />} />
               <Route path="/create-thread/:clubID" element={<CreateThreadPage />} />
@@ -40,7 +41,6 @@ function App() {
               <Route path="/thread/:threadID" element={<IndividualThreadPage />} />
               <Route path="/posts/:clubID" element={<PostPage />} />
               <Route path="/events/:clubID" element={<EventPage />} />
-              <Route path="/search" element={<Searchpage />} />
             </Route>
           </Routes>
         </Router>

@@ -84,18 +84,17 @@ function create_role(userID, clubID, roleName, res, message="Role created succes
 
 app.get("/clubs", (req, res) => {
   const { userID } = req.query;
-  
+
   const query = `
     SELECT DISTINCT C.*
     FROM Club C
     JOIN ClubProfile CP ON C.CID = CP.CID
-    WHERE CP.UID = ?
+    WHERE CP.UID = ?;
   `;
 
   dbCon.query(query, [userID], (err, result) => {
     if (err) {
-      console.error("Error fetching clubs:", err);
-      res.status(500).json({ message: "Failed to fetch clubs" });
+      check_err_code(err, res);
     } else {
       res.json(result);
     }

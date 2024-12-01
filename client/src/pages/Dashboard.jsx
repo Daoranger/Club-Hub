@@ -74,7 +74,28 @@ function Dashboard() {
 
   return (
     <div style={{ padding: "20px" }}>
-      <h1> My Clubs</h1>
+      <div style={{ 
+        display: "flex", 
+        justifyContent: "space-between", 
+        alignItems: "center",
+        marginBottom: "20px"
+      }}>
+        <h1>My Clubs</h1>
+        <button
+          onClick={() => navigate('/search')}
+          style={{
+            padding: "10px 20px",
+            backgroundColor: "#2c3e50",
+            color: "white",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+          }}
+        >
+          Search Clubs
+        </button>
+      </div>
+
       <div
         style={{
           display: "flex",
