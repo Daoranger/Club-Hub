@@ -84,22 +84,23 @@ function create_role(userID, clubID, roleName, res, message="Role created succes
 
 app.get("/clubs", (req, res) => {
   const { userID } = req.query;
-
+  
   const query = `
-    SELECT C.*
+    SELECT DISTINCT C.*
     FROM Club C
     JOIN ClubProfile CP ON C.CID = CP.CID
-    WHERE CP.UID = ?;
+    WHERE CP.UID = ?
   `;
 
   dbCon.query(query, [userID], (err, result) => {
-    if (err){
-      check_err_code(err, res);
+    if (err) {
+      console.error("Error fetching clubs:", err);
+      res.status(500).json({ message: "Failed to fetch clubs" });
     } else {
       res.json(result);
     }
-  })
-})
+  });
+});
 
 app.get("/club", (req, res) => {
   const { CID } = req.query;
@@ -578,4 +579,26 @@ app.post("/unregister-event", (req, res) => {
       res.status(200).json({ message: "Successfully unregistered from event" });
     }
   });
-}); 
+});
+
+// Add a new endpoint for searching all clubs
+app.get("/search-clubs", (req, res) => {
+  const query = "SELECT * FROM Club";
+
+  dbCon.query(query, (err, result) => {
+    if (err) {
+      console.error("Error fetching clubs:", err);
+      res.status(500).json({ message: "Failed to fetch clubs" });
+    } else {
+      res.json(result);
+    }
+  });
+});
+
+// Add endpoint to join a club
+app.post("/join-club", (req, res) => {
+  const { userID, clubID } = req.body;
+
+  // Create a default "Member" role for the user
+  create_role(userID, clubID, "Member", res, "Successfully joined the club!");
+});
