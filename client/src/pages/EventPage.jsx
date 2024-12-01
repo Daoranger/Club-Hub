@@ -157,9 +157,14 @@ function EventPage() {
             />
             <input
               type="number"
+              min="0"
               placeholder="Participant Limit"
-              value={newEvent.limit}
-              onChange={(e) => setNewEvent({...newEvent, limit: e.target.value})}
+              value={newEvent.limit === 0 ? "" : newEvent.limit} // Show empty string if value is 0
+              onChange={(e) => {
+                // If empty, set to empty string, otherwise set to non-negative number
+                const value = e.target.value === "" ? "" : Math.max(0, parseInt(e.target.value) || 0);
+                setNewEvent({...newEvent, limit: value})
+              }}
               style={styles.input}
             />
             <button type="submit" style={styles.createButton}>
@@ -218,17 +223,106 @@ function EventPage() {
 }
 
 const styles = {
-  // ... (previous styles remain the same) ...
-  error: {
-    color: '#f04747',
-    padding: '20px',
+  container: {
+    maxWidth: '1000px',
+    margin: '0 auto',
+    padding: '40px 20px',
+    minHeight: '100vh', // Added to ensure full height
+    background: 'linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%)', // Subtle gradient
+    background: 'linear-gradient(to right, #f8f9fa, #e9ecef)',
+    background: 'linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%)',
+    background: 'linear-gradient(to bottom, #ffffff 0%, #f5f7fa 100%)',
+  },
+  title: {
+    fontSize: '2.5rem',
+    color: '#000000',
     textAlign: 'center',
-    fontSize: '16px',
+    marginBottom: '40px',
+  },
+  createEventSection: {
+    backgroundColor: 'white',
+    padding: '30px',
+    borderRadius: '10px',
+    marginBottom: '30px',
+    boxShadow: '0 1px 2px rgba(0,0,0,0.1)',
+  },
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '15px',
+  },
+  input: {
+    width: '96%',
+    padding: '10px 15px',
+    border: '1px solid #ddd',
+    borderRadius: '5px',
+    fontSize: '1rem',
+  },
+  createButton: {
+    backgroundColor: '#1a73e8',
+    color: 'white',
+    padding: '10px',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    fontSize: '1rem',
+  },
+  eventsList: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '15px',
+  },
+  eventCard: {
+    backgroundColor: 'white',
+    padding: '20px',
+    borderRadius: '10px',
+    boxShadow: '0 1px 2px rgba(0,0,0,0.1)',
+  },
+  eventName: {
+    fontSize: '1.3rem',
+    color: '#000000',
+    marginBottom: '10px',
+  },
+  eventDate: {
+    fontSize: '1rem',
+    color: '#000000',
+    marginBottom: '5px',
+  },
+  eventLocation: {
+    fontSize: '1rem',
+    color: '#000000',
+    marginBottom: '5px',
+  },
+  eventParticipants: {
+    fontSize: '0.9rem',
+    color: '#000000',
+    marginBottom: '15px',
+  },
+  registerButton: {
+    backgroundColor: '#1a73e8',
+    color: 'white',
+    padding: '8px 16px',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+  },
+  unregisterButton: {
+    backgroundColor: '#dc3545',
+    color: 'white',
+    padding: '8px 16px',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+  },
+  error: {
+    color: '#dc3545',
+    padding: '10px',
+    marginBottom: '20px',
+    textAlign: 'center',
   },
   noEvents: {
     textAlign: 'center',
-    color: '#666',
-    fontSize: '16px',
+    color: '#000000',
     padding: '20px',
   }
 };
