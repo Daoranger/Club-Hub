@@ -1,23 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { useUserContext } from "../context/UserContext";
 
 function IndividualThreadPage() {
   const [thread, setThread] = useState(null);
   const [replies, setReplies] = useState([]);
   const [replyContent, setReplyContent] = useState("");
   const { threadID } = useParams();
-  const userID = 1; // Replace with actual user ID from your auth system
+  const { userID } = useUserContext(); // Replace with actual user ID from your auth system
 
   // Fetch thread and replies
   const fetchThreadAndReplies = async () => {
     try {
       // Fetch thread
-      const threadResponse = await axios.get(`http://localhost:8800/thread/${threadID}`);
+      const threadResponse = await axios.get(
+        `http://localhost:8800/thread/${threadID}`
+      );
       setThread(threadResponse.data);
 
       // Fetch replies
-      const repliesResponse = await axios.get(`http://localhost:8800/thread-replies/${threadID}`);
+      const repliesResponse = await axios.get(
+        `http://localhost:8800/thread-replies/${threadID}`
+      );
       console.log("Replies:", repliesResponse.data); // Debug log
       setReplies(repliesResponse.data);
     } catch (error) {
@@ -36,9 +41,9 @@ function IndividualThreadPage() {
       await axios.post("http://localhost:8800/thread-reply", {
         threadID,
         userID,
-        content: replyContent
+        content: replyContent,
       });
-      
+
       // Clear the input and refresh replies
       setReplyContent("");
       fetchThreadAndReplies(); // Refresh the replies after posting
@@ -57,24 +62,21 @@ function IndividualThreadPage() {
             <span style={styles.category}>{thread.category}</span>
             <h1 style={styles.title}>{thread.title}</h1>
           </div>
-          
+
           <div style={styles.threadContent}>
             <p style={styles.content}>{thread.content}</p>
           </div>
-          
+
           <div style={styles.commentsSection}>
             <h3>Comments ({replies.length})</h3>
             <div style={styles.replyForm}>
-              <textarea 
-                style={styles.replyInput} 
+              <textarea
+                style={styles.replyInput}
                 placeholder="Share your thoughts..."
                 value={replyContent}
                 onChange={(e) => setReplyContent(e.target.value)}
               />
-              <button 
-                style={styles.replyButton}
-                onClick={handleReplySubmit}
-              >
+              <button style={styles.replyButton} onClick={handleReplySubmit}>
                 Comment
               </button>
             </div>
@@ -94,7 +96,9 @@ function IndividualThreadPage() {
                   </div>
                 ))
               ) : (
-                <p style={styles.noReplies}>No replies yet. Be the first to reply!</p>
+                <p style={styles.noReplies}>
+                  No replies yet. Be the first to reply!
+                </p>
               )}
             </div>
           </div>
@@ -213,7 +217,7 @@ const styles = {
     color: "#787c7e",
     fontStyle: "italic",
     padding: "20px 0",
-  }
+  },
 };
 
-export default IndividualThreadPage; 
+export default IndividualThreadPage;
