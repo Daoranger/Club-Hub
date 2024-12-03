@@ -421,40 +421,50 @@ app.get("/thread/:id", (req, res) => {
   });
 });
 
-// Add this new endpoint for thread replies
+// Update the thread-reply endpoint to handle parent replies
 app.post("/thread-reply", (req, res) => {
-  const { threadID, userID, content } = req.body;
+  const { threadID, userID, content, parentReplyID } = req.body;
 
   const query = `
-    INSERT INTO ThreadReply (TID, UID, content)
-    VALUES (?, ?, ?);
+    INSERT INTO ThreadReply (TID, UID, content, parent_reply)
+    VALUES (?, ?, ?, ?);
   `;
 
-  dbCon.query(query, [threadID, userID, content], (err, result) => {
-    if (err) {
-      console.error("Error creating thread reply:", err);
-      res.status(500).json({ message: "Failed to create reply" });
-    } else {
-      res.status(201).json({
-        message: "Reply created successfully",
-        replyId: result.insertId,
-      });
+  dbCon.query(
+    query,
+    [threadID, userID, content, parentReplyID || null],
+    (err, result) => {
+      if (err) {
+        console.error("Error creating thread reply:", err);
+        res.status(500).json({ message: "Failed to create reply" });
+      } else {
+        res.status(201).json({
+          message: "Reply created successfully",
+          replyId: result.insertId,
+        });
+      }
     }
-  });
+  );
 });
 
-// Add this endpoint to fetch replies for a thread
+// Update the thread-replies endpoint to include nested structure
 app.get("/thread-replies/:threadId", (req, res) => {
   const threadId = req.params.threadId;
 
   const query = `
     SELECT 
       TR.*,
-      U.username
+      U.username,
+      PR.content as parent_content,
+      PU.username as parent_username
     FROM ThreadReply TR
     JOIN User U ON TR.UID = U.UID
+    LEFT JOIN ThreadReply PR ON TR.parent_reply = PR.TRID
+    LEFT JOIN User PU ON PR.UID = PU.UID
     WHERE TR.TID = ?
-    ORDER BY TR.timestamp DESC
+    ORDER BY 
+      CASE WHEN TR.parent_reply IS NULL THEN TR.TRID ELSE TR.parent_reply END,
+      TR.timestamp ASC
   `;
 
   dbCon.query(query, [threadId], (err, result) => {
@@ -462,7 +472,25 @@ app.get("/thread-replies/:threadId", (req, res) => {
       console.error("Error fetching thread replies:", err);
       res.status(500).json({ message: "Failed to fetch replies" });
     } else {
-      res.json(result);
+      // Transform the flat structure into a nested one
+      const nestedReplies = result.reduce((acc, reply) => {
+        if (!reply.parent_reply) {
+          // This is a top-level reply
+          reply.replies = [];
+          acc[reply.TRID] = reply;
+          return acc;
+        }
+        // This is a nested reply
+        if (acc[reply.parent_reply]) {
+          if (!acc[reply.parent_reply].replies) {
+            acc[reply.parent_reply].replies = [];
+          }
+          acc[reply.parent_reply].replies.push(reply);
+        }
+        return acc;
+      }, {});
+
+      res.json(Object.values(nestedReplies));
     }
   });
 });
