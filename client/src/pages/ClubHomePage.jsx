@@ -31,7 +31,6 @@ const ClubHomePage = () => {
     axios
     .get("http://localhost:8800/threads", { params: { CID } })
     .then((response) => {
-      console.log(response.data);
       setClubThreads(response.data);
     })
     .catch((err) => {
