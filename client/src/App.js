@@ -40,12 +40,12 @@ function App() {
               {/* Sidebar Layout for Club Pages */}
               <Route element={<LayoutWithSidebar />}>
                 <Route path="/club/:clubID" element={<ClubHomePage />} />
-                <Route path="/threads/:clubID" element={<ThreadPage />} />
-                <Route path="/create-thread/:clubID" element={<CreateThreadPage />} />
-                <Route path="/chatroom/:chatroomID" element={<ChatRoomPage />} />
-                <Route path="/thread/:threadID" element={<IndividualThreadPage />} />
-                <Route path="/posts/:clubID" element={<PostPage />} />
-                <Route path="/events/:clubID" element={<EventPage />} />
+                <Route path="/club/:clubID/threads" element={<ThreadPage />} />
+                <Route path="/club/:clubID/threads/create-thread" element={<CreateThreadPage />} />
+                <Route path="/club/:clubID/chatroom/:chatroomID" element={<ChatRoomPage />} />
+                <Route path="/club/:clubID/threads/thread/:threadID" element={<IndividualThreadPage />} />
+                <Route path="/club/:clubID/posts" element={<PostPage />} />
+                <Route path="/club/:clubID/events" element={<EventPage />} />
               </Route>
             </Route>
           </Routes>
