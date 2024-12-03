@@ -255,8 +255,6 @@ app.post("/chatroom", (req, res)=> {
 app.get("/chatroom", (req, res)=> {
   const { CRID } = req.query;
 
-  console.log(CRID)
-
   const query = `
     SELECT 
       m1.MID AS message_id,
