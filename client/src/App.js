@@ -2,7 +2,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "./context/ThemeContext";
-import { UserProvider } from "./context/UserContext"
+import { UserProvider } from "./context/UserContext";
 import PrivateRoutes from "./utils/PrivateRoutes";
 import "./styles.css";
 
@@ -34,18 +34,24 @@ function App() {
             <Route element={<PrivateRoutes />}>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/search" element={<SearchPage />} />
-              <Route path="/club/:clubID" element={<ClubHomePage />}/>
+              <Route path="/club/:clubID" element={<ClubHomePage />} />
               <Route path="/threads/:clubID" element={<ThreadPage />} />
-              <Route path="/create-thread/:clubID" element={<CreateThreadPage />} />
+              <Route
+                path="/create-thread/:clubID"
+                element={<CreateThreadPage />}
+              />
               <Route path="/chatroom/:chatroomID" element={<ChatRoomPage />} />
-              <Route path="/thread/:threadID" element={<IndividualThreadPage />} />
+              <Route
+                path="/thread/:threadID"
+                element={<IndividualThreadPage />}
+              />
               <Route path="/posts/:clubID" element={<PostPage />} />
               <Route path="/events/:clubID" element={<EventPage />} />
             </Route>
           </Routes>
         </Router>
       </ThemeProvider>
-    </UserProvider>  
+    </UserProvider>
   );
 }
 

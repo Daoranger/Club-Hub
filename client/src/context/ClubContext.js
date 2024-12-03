@@ -3,18 +3,22 @@ import { createContext, useState, useContext } from "react";
 const ClubContext = createContext(null);
 
 const ClubProvider = ({ children }) => {
-    const [clubID, setClubID] = useState("");
-    const [clubName, setClubName] = useState("");
+  const [clubID, setClubID] = useState("");
+  const [clubName, setClubName] = useState("");
 
-    return (
-        <ClubContext.Provider value={{
-          clubID: clubID, setClubID: setClubID,
-          clubName: clubName, setClubName: setClubName
-          }}>
-          {children}
-        </ClubContext.Provider>
-    );
-}
+  return (
+    <ClubContext.Provider
+      value={{
+        clubID: clubID,
+        setClubID: setClubID,
+        clubName: clubName,
+        setClubName: setClubName,
+      }}
+    >
+      {children}
+    </ClubContext.Provider>
+  );
+};
 
 function useClubContext() {
   const context = useContext(ClubContext);

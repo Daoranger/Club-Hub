@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useUserContext } from "../context/UserContext";
+import { useTheme } from "../context/ThemeContext";
 
 function EventPage() {
   const { clubID } = useParams();
   const { userID } = useUserContext();
+  const { darkMode } = useTheme();
   const [events, setEvents] = useState([]);
   const [isOwner, setIsOwner] = useState(false);
   const [newEvent, setNewEvent] = useState({
@@ -22,20 +24,18 @@ function EventPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch events
         const eventsResponse = await axios.get(`http://localhost:8800/events`, {
-          params: { clubID, userID }  // Added userID here
+          params: { clubID, userID },
         });
-        console.log("Events data:", eventsResponse.data);  // Debug log
         setEvents(eventsResponse.data);
 
-        // Check if user is owner
         const rolesResponse = await axios.get(`http://localhost:8800/roles`, {
-          params: { userID }
+          params: { userID },
         });
-        setIsOwner(rolesResponse.data.map(role => role.name).includes("Owner"));
+        setIsOwner(
+          rolesResponse.data.map((role) => role.name).includes("Owner")
+        );
       } catch (error) {
-        console.error("Error fetching data:", error);
         setError("Failed to load events. Please try again later.");
       }
     };
@@ -46,13 +46,10 @@ function EventPage() {
   const handleCreateEvent = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:8800/create-event", {
+      await axios.post("http://localhost:8800/create-event", {
         ...newEvent,
-        clubID
+        clubID,
       });
-      console.log("Create event response:", response.data);  // Debug log
-
-      // Reset form
       setNewEvent({
         name: "",
         date: "",
@@ -62,13 +59,11 @@ function EventPage() {
         limit: "",
       });
 
-      // Refresh events
       const eventsResponse = await axios.get(`http://localhost:8800/events`, {
-        params: { clubID, userID }
+        params: { clubID, userID },
       });
       setEvents(eventsResponse.data);
     } catch (error) {
-      console.error("Error creating event:", error);
       setError("Failed to create event. Please try again.");
     }
   };
@@ -79,13 +74,11 @@ function EventPage() {
         eventID: eventId,
         userID,
       });
-      // Refresh events
       const response = await axios.get(`http://localhost:8800/events`, {
-        params: { clubID, userID }
+        params: { clubID, userID },
       });
       setEvents(response.data);
     } catch (error) {
-      console.error("Error registering for event:", error);
       setError("Failed to register for event. Please try again.");
     }
   };
@@ -96,14 +89,12 @@ function EventPage() {
         eventID: eventId,
         userID,
       });
-      // Refresh events
       const response = await axios.get(`http://localhost:8800/events`, {
-        params: { clubID, userID }
+        params: { clubID, userID },
       });
       setEvents(response.data);
     } catch (error) {
-      console.error("Error unregistering from event:", error);
-      setError("Failed to unregister from event. Please try again.");
+      setError("Failed to unregister for event. Please try again.");
     }
   };
 
@@ -112,62 +103,117 @@ function EventPage() {
   }
 
   return (
-    <div style={styles.container}>
+    <div
+      style={{
+        ...styles.container,
+        backgroundColor: darkMode ? "#121212" : "#ffffff",
+        color: darkMode ? "#ffffff" : "#000000",
+      }}
+    >
       <h1 style={styles.title}>Upcoming Events</h1>
 
       {isOwner && (
-        <div style={styles.createEventSection}>
+        <div
+          className="createEventSection"
+          style={{
+            ...styles.createEventSection,
+            backgroundColor: darkMode ? "#1e1e1e" : "#ffffff",
+            color: darkMode ? "#ffffff" : "#000000",
+          }}
+        >
           <h2>Create New Event</h2>
           <form onSubmit={handleCreateEvent} style={styles.form}>
             <input
               type="text"
               placeholder="Event Name"
               value={newEvent.name}
-              onChange={(e) => setNewEvent({...newEvent, name: e.target.value})}
-              style={styles.input}
+              onChange={(e) =>
+                setNewEvent({ ...newEvent, name: e.target.value })
+              }
+              style={{
+                ...styles.input,
+                backgroundColor: darkMode ? "#2c2c2c" : "#ffffff",
+                color: darkMode ? "#ffffff" : "#000000",
+              }}
               required
             />
             <input
               type="datetime-local"
               value={newEvent.date}
-              onChange={(e) => setNewEvent({...newEvent, date: e.target.value})}
-              style={styles.input}
+              onChange={(e) =>
+                setNewEvent({ ...newEvent, date: e.target.value })
+              }
+              style={{
+                ...styles.input,
+                backgroundColor: darkMode ? "#2c2c2c" : "#ffffff",
+                color: darkMode ? "#ffffff" : "#000000",
+              }}
               required
             />
             <input
               type="text"
               placeholder="Street Address"
               value={newEvent.street}
-              onChange={(e) => setNewEvent({...newEvent, street: e.target.value})}
-              style={styles.input}
+              onChange={(e) =>
+                setNewEvent({ ...newEvent, street: e.target.value })
+              }
+              style={{
+                ...styles.input,
+                backgroundColor: darkMode ? "#2c2c2c" : "#ffffff",
+                color: darkMode ? "#ffffff" : "#000000",
+              }}
             />
             <input
               type="text"
               placeholder="City"
               value={newEvent.city}
-              onChange={(e) => setNewEvent({...newEvent, city: e.target.value})}
-              style={styles.input}
+              onChange={(e) =>
+                setNewEvent({ ...newEvent, city: e.target.value })
+              }
+              style={{
+                ...styles.input,
+                backgroundColor: darkMode ? "#2c2c2c" : "#ffffff",
+                color: darkMode ? "#ffffff" : "#000000",
+              }}
             />
             <input
               type="text"
               placeholder="Zipcode"
               value={newEvent.zipcode}
-              onChange={(e) => setNewEvent({...newEvent, zipcode: e.target.value})}
-              style={styles.input}
+              onChange={(e) =>
+                setNewEvent({ ...newEvent, zipcode: e.target.value })
+              }
+              style={{
+                ...styles.input,
+                backgroundColor: darkMode ? "#2c2c2c" : "#ffffff",
+                color: darkMode ? "#ffffff" : "#000000",
+              }}
             />
             <input
               type="number"
               min="0"
               placeholder="Participant Limit"
-              value={newEvent.limit === 0 ? "" : newEvent.limit} // Show empty string if value is 0
+              value={newEvent.limit === 0 ? "" : newEvent.limit}
               onChange={(e) => {
-                // If empty, set to empty string, otherwise set to non-negative number
-                const value = e.target.value === "" ? "" : Math.max(0, parseInt(e.target.value) || 0);
-                setNewEvent({...newEvent, limit: value})
+                const value =
+                  e.target.value === ""
+                    ? ""
+                    : Math.max(0, parseInt(e.target.value) || 0);
+                setNewEvent({ ...newEvent, limit: value });
               }}
-              style={styles.input}
+              style={{
+                ...styles.input,
+                backgroundColor: darkMode ? "#2c2c2c" : "#ffffff",
+                color: darkMode ? "#ffffff" : "#000000",
+              }}
             />
-            <button type="submit" style={styles.createButton}>
+            <button
+              type="submit"
+              style={{
+                ...styles.createButton,
+                backgroundColor: darkMode ? "#3f51b5" : "#1a73e8",
+              }}
+            >
               Create Event
             </button>
           </form>
@@ -179,7 +225,14 @@ function EventPage() {
           <p style={styles.noEvents}>No upcoming events</p>
         ) : (
           events.map((event) => (
-            <div key={event.EID} style={styles.eventCard}>
+            <div
+              key={event.EID}
+              style={{
+                ...styles.eventCard,
+                backgroundColor: darkMode ? "#1e1e1e" : "#ffffff",
+                color: darkMode ? "#ffffff" : "#000000",
+              }}
+            >
               <div style={styles.eventInfo}>
                 <h3 style={styles.eventName}>{event.name}</h3>
                 <p style={styles.eventDate}>
@@ -191,25 +244,34 @@ function EventPage() {
                   {event.zipcode}
                 </p>
                 <p style={styles.eventParticipants}>
-                  {event.registered_count || 0} / {event.limit || '∞'} participants
+                  {event.registered_count || 0} / {event.limit || "∞"}{" "}
+                  participants
                 </p>
               </div>
               <div style={styles.buttonGroup}>
                 {event.is_registered ? (
                   <button
                     onClick={() => handleUnregister(event.EID)}
-                    style={styles.unregisterButton}
+                    style={{
+                      ...styles.unregisterButton,
+                      backgroundColor: darkMode ? "#b00020" : "#dc3545",
+                    }}
                   >
                     Unregister
                   </button>
                 ) : (
                   <button
                     onClick={() => handleRegister(event.EID)}
-                    style={styles.registerButton}
-                    disabled={event.limit && event.registered_count >= event.limit}
+                    style={{
+                      ...styles.registerButton,
+                      backgroundColor: darkMode ? "#3f51b5" : "#1a73e8",
+                    }}
+                    disabled={
+                      event.limit && event.registered_count >= event.limit
+                    }
                   >
-                    {event.limit && event.registered_count >= event.limit 
-                      ? "Event Full" 
+                    {event.limit && event.registered_count >= event.limit
+                      ? "Event Full"
                       : "Register"}
                   </button>
                 )}
@@ -224,107 +286,89 @@ function EventPage() {
 
 const styles = {
   container: {
-    maxWidth: '1000px',
-    margin: '0 auto',
-    padding: '40px 20px',
-    minHeight: '100vh', // Added to ensure full height
-    background: 'linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%)', // Subtle gradient
-    background: 'linear-gradient(to right, #f8f9fa, #e9ecef)',
-    background: 'linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%)',
-    background: 'linear-gradient(to bottom, #ffffff 0%, #f5f7fa 100%)',
+    maxWidth: "1000px",
+    margin: "0 auto",
+    padding: "40px 20px",
+    minHeight: "100vh",
   },
   title: {
-    fontSize: '2.5rem',
-    color: '#000000',
-    textAlign: 'center',
-    marginBottom: '40px',
+    fontSize: "2.5rem",
+    textAlign: "center",
+    marginBottom: "40px",
   },
   createEventSection: {
-    backgroundColor: 'white',
-    padding: '30px',
-    borderRadius: '10px',
-    marginBottom: '30px',
-    boxShadow: '0 1px 2px rgba(0,0,0,0.1)',
+    padding: "30px",
+    borderRadius: "10px",
+    marginBottom: "30px",
+    boxShadow: "0 1px 2px rgba(0,0,0,0.1)",
   },
   form: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '15px',
+    display: "flex",
+    flexDirection: "column",
+    gap: "15px",
   },
   input: {
-    width: '96%',
-    padding: '10px 15px',
-    border: '1px solid #ddd',
-    borderRadius: '5px',
-    fontSize: '1rem',
+    padding: "10px 15px",
+    border: "1px solid #ddd",
+    borderRadius: "5px",
+    fontSize: "1rem",
   },
   createButton: {
-    backgroundColor: '#1a73e8',
-    color: 'white',
-    padding: '10px',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
-    fontSize: '1rem',
+    color: "white",
+    padding: "10px",
+    border: "none",
+    borderRadius: "5px",
+    cursor: "pointer",
+    fontSize: "1rem",
   },
   eventsList: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '15px',
+    display: "flex",
+    flexDirection: "column",
+    gap: "15px",
   },
   eventCard: {
-    backgroundColor: 'white',
-    padding: '20px',
-    borderRadius: '10px',
-    boxShadow: '0 1px 2px rgba(0,0,0,0.1)',
+    padding: "20px",
+    borderRadius: "10px",
+    boxShadow: "0 1px 2px rgba(0,0,0,0.1)",
   },
   eventName: {
-    fontSize: '1.3rem',
-    color: '#000000',
-    marginBottom: '10px',
+    fontSize: "1.3rem",
+    marginBottom: "10px",
   },
   eventDate: {
-    fontSize: '1rem',
-    color: '#000000',
-    marginBottom: '5px',
+    fontSize: "1rem",
+    marginBottom: "5px",
   },
   eventLocation: {
-    fontSize: '1rem',
-    color: '#000000',
-    marginBottom: '5px',
+    fontSize: "1rem",
+    marginBottom: "5px",
   },
   eventParticipants: {
-    fontSize: '0.9rem',
-    color: '#000000',
-    marginBottom: '15px',
+    fontSize: "0.9rem",
+    marginBottom: "15px",
   },
   registerButton: {
-    backgroundColor: '#1a73e8',
-    color: 'white',
-    padding: '8px 16px',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
+    padding: "8px 16px",
+    border: "none",
+    borderRadius: "5px",
+    cursor: "pointer",
   },
   unregisterButton: {
-    backgroundColor: '#dc3545',
-    color: 'white',
-    padding: '8px 16px',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
+    padding: "8px 16px",
+    border: "none",
+    borderRadius: "5px",
+    cursor: "pointer",
   },
   error: {
-    color: '#dc3545',
-    padding: '10px',
-    marginBottom: '20px',
-    textAlign: 'center',
+    color: "#dc3545",
+    padding: "10px",
+    marginBottom: "20px",
+    textAlign: "center",
   },
   noEvents: {
-    textAlign: 'center',
-    color: '#000000',
-    padding: '20px',
-  }
+    textAlign: "center",
+    padding: "20px",
+  },
 };
 
-export default EventPage; 
+export default EventPage;

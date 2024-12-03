@@ -1,9 +1,4 @@
-import {
-    createContext,
-    useState,
-    useContext,
-    useEffect
-  } from "react";
+import { createContext, useState, useContext, useEffect } from "react";
 
 const UserContext = createContext();
 
@@ -16,15 +11,15 @@ const UserProvider = ({ children }) => {
     const id = localStorage.getItem("userID");
     const name = localStorage.getItem("username");
     if (id) {
-        setUserID(id);
-        setUsername(name);
+      setUserID(id);
+      setUsername(name);
     }
     setLoading(false);
   }, []);
 
   const login = (id, name) => {
     setUserID(id);
-    setUsername(name)
+    setUsername(name);
     localStorage.setItem("userID", id); // Persist in localStorage
     localStorage.setItem("username", name);
   };
@@ -37,16 +32,21 @@ const UserProvider = ({ children }) => {
   };
 
   return (
-    <UserContext.Provider value={{
-        userID, setUserID,
-        username, setUsername,
-        login, logout,
-        loading
-      }}>
+    <UserContext.Provider
+      value={{
+        userID,
+        setUserID,
+        username,
+        setUsername,
+        login,
+        logout,
+        loading,
+      }}
+    >
       {children}
     </UserContext.Provider>
   );
-}
+};
 
 function useUserContext() {
   const context = useContext(UserContext);
