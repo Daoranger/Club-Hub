@@ -5,6 +5,8 @@ const UserContext = createContext();
 const UserProvider = ({ children }) => {
   const [userID, setUserID] = useState("");
   const [username, setUsername] = useState("");
+  const [clubID, setClubID] = useState("");
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -34,10 +36,9 @@ const UserProvider = ({ children }) => {
   return (
     <UserContext.Provider
       value={{
-        userID,
-        setUserID,
-        username,
-        setUsername,
+        userID, setUserID,
+        username, setUsername,
+        clubID, setClubID,
         login,
         logout,
         loading,
