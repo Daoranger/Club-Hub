@@ -447,7 +447,7 @@ app.post("/thread-reply", (req, res) => {
   );
 });
 
-// Update the thread-replies endpoint to include nested structure
+// Add this endpoint to fetch replies for a thread
 app.get("/thread-replies/:threadId", (req, res) => {
   const threadId = req.params.threadId;
 
@@ -462,9 +462,7 @@ app.get("/thread-replies/:threadId", (req, res) => {
     LEFT JOIN ThreadReply PR ON TR.parent_reply = PR.TRID
     LEFT JOIN User PU ON PR.UID = PU.UID
     WHERE TR.TID = ?
-    ORDER BY 
-      CASE WHEN TR.parent_reply IS NULL THEN TR.TRID ELSE TR.parent_reply END,
-      TR.timestamp ASC
+    ORDER BY TR.timestamp ASC
   `;
 
   dbCon.query(query, [threadId], (err, result) => {
@@ -472,25 +470,32 @@ app.get("/thread-replies/:threadId", (req, res) => {
       console.error("Error fetching thread replies:", err);
       res.status(500).json({ message: "Failed to fetch replies" });
     } else {
-      // Transform the flat structure into a nested one
-      const nestedReplies = result.reduce((acc, reply) => {
-        if (!reply.parent_reply) {
-          // This is a top-level reply
-          reply.replies = [];
-          acc[reply.TRID] = reply;
-          return acc;
-        }
-        // This is a nested reply
-        if (acc[reply.parent_reply]) {
-          if (!acc[reply.parent_reply].replies) {
-            acc[reply.parent_reply].replies = [];
-          }
-          acc[reply.parent_reply].replies.push(reply);
-        }
-        return acc;
-      }, {});
+      // Create a map to store all replies
+      const replyMap = {};
 
-      res.json(Object.values(nestedReplies));
+      // First pass: Create all reply objects
+      result.forEach((reply) => {
+        replyMap[reply.TRID] = {
+          ...reply,
+          replies: [],
+        };
+      });
+
+      // Second pass: Build the tree structure
+      const rootReplies = [];
+      result.forEach((reply) => {
+        if (reply.parent_reply) {
+          // This is a nested reply - add it to its parent's replies array
+          if (replyMap[reply.parent_reply]) {
+            replyMap[reply.parent_reply].replies.push(replyMap[reply.TRID]);
+          }
+        } else {
+          // This is a root level reply
+          rootReplies.push(replyMap[reply.TRID]);
+        }
+      });
+
+      res.json(rootReplies);
     }
   });
 });
