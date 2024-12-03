@@ -1,24 +1,27 @@
 /* SideNavBar Styles */
 .side-navbar {
     width: 150px;
-    height: calc(100vh - 60px); /* Accounts for a top navbar height of 60px */
-    position: fixed;
-    top: 60px; /* Starts below the navbar */
+    height: 100vh; /* Accounts for a top navbar height of 60px */
+    position: flex;
+    margin-top: 5px; /* Pushes the sidebar below the top navbar */
     left: 0;
     display: flex;
     flex-direction: column;
     align-items: center; /* Center the text horizontally */
-    background-color: var(--sidebar-bg, #f4f4f4); /* Supports theming */
-    color: var(--sidebar-text, black);
     padding: 20px 0; /* Add padding above the text */
-    overflow: hidden;
     transition: width 0.3s ease; /* Smooth transition for collapsing */
     z-index: 1000; /* Keeps it above other elements */
+    border-radius: 5px 5px 5px 5px; /* Rounded corners on the left side */
 }
 
 .side-navbar.collapsed {
     width: 0; /* Collapse the sidebar */
     padding: 0; /* Remove padding when collapsed */
+}
+
+.sidebar-content {
+    width: 90%;
+    text-align: center; /* Center align text inside sidebar */
 }
 
 .side-navbar h3 {
@@ -27,91 +30,68 @@
     text-align: center; /* Center-align heading */
 }
 
-.side-navbar ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-    width: 100%; /* Ensure full width for alignment */
+/* Sidebar Buttons */
+.sidebar-button {
+    width: 90%; /* Fit button within sidebar, leaving some margin */
+    padding: 10px;
+    border: none;
+    border-radius: 8px; /* Rounded corners */
+    background-color: var(--button-bg, #0079d3);
+    color: var(--button-text, white);
+    cursor: pointer;
+    text-align: center;
+    font-size: 1rem;
+    margin: 10px auto; /* Add spacing between buttons */
+    transition: background-color 0.2s ease;
 }
 
-.side-navbar ul li {
-    margin-bottom: 10px;
-    width: 100%; /* Full width for proper alignment */
-    text-align: center; /* Center-align list items */
-}
-
-.side-navbar ul li a {
-    text-decoration: none;
-    color: var(--sidebar-link-text, black); /* Use variable for link text color */
-    display: inline-block; /* Ensure proper spacing */
-    width: 100%; /* Full width for alignment */
-}
-
-.side-navbar ul li a:hover {
-    text-decoration: underline;
-    color: var(--sidebar-link-hover-text, #0056b3); /* Use variable for link hover color */
+.sidebar-button:hover {
+    background-color: var(--button-hover-bg, #0056b3);
 }
 
 /* Dropdown Styles */
 .dropdown {
     position: relative;
-    display: block; /* Ensures dropdown is displayed inline with list items */
-    cursor: pointer;
-    margin-bottom: 10px;
+    display: block; /* Ensures dropdown is displayed inline with buttons */
     width: 100%; /* Full width for dropdown items */
-    text-align: center; /* Align dropdown text with other list items */
 }
 
 .dropdown-trigger {
-    font-size: 1rem;
-    font-weight: bold;
-    padding: 5px 10px;
-    display: inline-block;
-    color: var(--sidebar-text, black);
-    text-align: center;
-    background-color: transparent;
     border: none;
+    background: var(--button-bg, #0079d3);
+    border-radius: 8px;
+    width: 90%;
+    text-align: center;
+    color: var(--button-text, white);
     cursor: pointer;
-    width: 100%;
-}
-
-.dropdown-trigger:hover {
-    text-decoration: underline;
 }
 
 .dropdown-menu {
     position: relative;
-    background-color: var(--sidebar-bg, #f4f4f4);
-    border: 1px solid #ccc;
+    background-color: var(--dropdown-bg, #fff);
+    border: 1px solid var(--dropdown-border, #ccc);
     border-radius: 4px;
     z-index: 1000;
-    list-style-type: none;
-    padding: 0;
-    margin: 5px 0 0 0; /* Slight gap below trigger */
-    display: none; /* Initially hidden */
-    width: 100%; /* Match sidebar width */
+    padding: 10px 0;
+    margin: 5px auto 0 auto; /* Slight gap below trigger */
+    width: 90%;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-.dropdown-menu.open {
-    display: block; /* Display dropdown when open */
-}
-
-.dropdown-menu li {
-    padding: 5px 10px;
-    text-align: center; /* Center-align items */
-}
-
-.dropdown-menu li a {
+.dropdown-item {
+    border: none;
+    background: transparent;
     color: var(--sidebar-link-text, black);
-    text-decoration: none;
+    text-align: center;
+    width: 100%;
+    cursor: pointer;
+    padding: 8px 0;
     display: block;
-    width: 100%; /* Ensure links take full width of the item */
 }
 
-.dropdown-menu li a:hover {
-    background-color: #e9ecef;
-    color: black;
+.dropdown-item:hover {
+    background-color: var(--dropdown-item-hover-bg, #e9ecef);
+    color: var(--sidebar-text-hover, black);
 }
 
 /* Toggle Button Styles */
@@ -141,14 +121,4 @@
 
 .sidebar-toggle-button:hover {
     background-color: var(--button-hover-bg, #0056b3);
-}
-
-/* Main Content */
-.main-content {
-    margin-left: 150px; /* Default margin when sidebar is visible */
-    transition: margin-left 0.3s ease; /* Smooth transition */
-}
-
-.main-content.collapsed {
-    margin-left: 0; /* Adjust margin when sidebar is collapsed */
 }
