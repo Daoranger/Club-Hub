@@ -42,6 +42,24 @@ body.dark-mode .navbar {
   color: black;
 }
 
+.side-navbar {
+  background-color: #f6f8fa; /* Lighter grey for the sidebar in light mode */
+  color: black;
+}
+
+body.dark-mode .side-navbar {
+  background-color: #3c3c3c; /* Darker background for the sidebar in dark mode */
+  color: white;
+}
+
+.text {
+  color: black;
+}
+
+body.dark-mode .text {
+  color: white;
+}
+
 .light-mode {
   color: black;
 }
