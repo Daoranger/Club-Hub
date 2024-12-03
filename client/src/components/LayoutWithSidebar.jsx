@@ -7,7 +7,7 @@ const LayoutWithSidebar = () => {
     const [isCollapsed, setIsCollapsed] = useState(false);
 
     // Show SideNavBar only on routes ending with :clubID
-    const showSideNavBar = /\/club\/[^/]+/.test(location.pathname);
+    //const showSideNavBar = /\/club\/[^/]+/.test(location.pathname);
 
     const toggleSidebar = () => {
         setIsCollapsed((prev) => !prev);
@@ -16,12 +16,10 @@ const LayoutWithSidebar = () => {
     return (
         <div style={{ display: "flex" }}>
             {/* Sidebar */}
-            {showSideNavBar && (
-                <SideNavBar
-                    isCollapsed={isCollapsed}
-                    toggleSidebar={toggleSidebar}
-                />
-            )}
+            <SideNavBar
+                isCollapsed={isCollapsed}
+                toggleSidebar={toggleSidebar}
+            />
 
             {/* Main Content */}
             <div
@@ -29,7 +27,6 @@ const LayoutWithSidebar = () => {
                 style={{
                     flex: 1,
                     padding: "20px",
-                    marginLeft: showSideNavBar && !isCollapsed ? "150px" : "0",
                     transition: "margin-left 0.3s ease",
                 }}
             >
