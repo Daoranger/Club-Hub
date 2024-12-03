@@ -1,14 +1,95 @@
-/* General container styles */
-.chatroom-container {
+/* Right Sidebar: Club Member List */
+.member-list {
+  flex: 2; /* 30% width for the member list */
+  padding: 10px;
+  overflow-y: auto; /* Enable vertical scrolling */
+  background-color: #f6f8fa; /* Background for light mode */
+  border-left: 1px solid #e9ecef; /* Divider between sections */
+  display: flex;
+  flex-direction: column; /* Ensure members stack vertically */
+}
+body.dark-mode .member-list {
+  background-color: #3c3c3c; /* Background for dark mode */
+  border-left: 1px solid #5a5a5a;
+}
+
+.member-list h3 {
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+  color: var(--text-color);
+  text-align: center;
+}
+
+.member-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.member-list li {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-radius: 5px;
+  transition: background-color 0.2s ease;
+  color: var(--text-color);
+  cursor: pointer;
+}
+
+.member-list li:hover {
+  background-color: #e9ecef;
+}
+
+body.dark-mode .member-list li:hover {
+  background-color: #5a5a5a;
+}
+
+.member-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+  background-color: #d1d1d1; /* Placeholder background for avatars */
+}
+
+body.dark-mode .member-avatar {
+  background-color: #4a4a4a;
+}
+
+.member-info {
   display: flex;
   flex-direction: column;
-  width: 80%; /* Chat takes up 80% of the page width */
-  height: calc(100vh - 100px); /* Adjust height to go to the bottom of the visible webpage */
-  margin: 0; /* No margin */
-  border-radius: 8px;
-  overflow: hidden;
-  position: relative;
-  background-color: var(--container-bg); /* Use variable for background based on mode */
+}
+
+.member-name {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.member-username {
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+body.dark-mode .member-username {
+  color: #b9bbbe;
+}
+
+/* Adjust chatroom container to include the member list */
+.chatroom-container {
+  display: flex;
+  flex-direction: row; /* Align chat and member list side by side */
+  height: calc(100vh - 100px); /* Adjust height to account for the header */
+  width: 95%; /* Full width */
+}
+
+/* Main chat section now takes up 75% of the width */
+.chatroom-messages {
+  flex: 7;
+  height: 95%; /* Decrease the height of the messages box to 70% of the parent */
+  width: 60%;
+  overflow-y: auto;
+  border-right: 1px solid #e9ecef;
 }
 
 /* Light and dark mode variables */
@@ -25,14 +106,6 @@ body.dark-mode {
 /* Set text color dynamically */
 .chatroom-container {
   color: var(--text-color);
-}
-
-/* Chat messages section */
-.chatroom-messages {
-  flex-grow: 1;
-  padding: 10px;
-  overflow-y: auto;
-  border: 1px solid #e9ecef; /* Light border for light mode */
 }
 
 body.dark-mode .chatroom-messages {
@@ -134,7 +207,7 @@ body.dark-mode .timestamp {
 .chatroom-input {
   display: flex;
   flex-direction: column; /* Stack reply indicator above input + button */
-  padding: 10px;
+  padding: 0px;
   background-color: #f6f8fa; /* Input background for light mode */
   border-top: 1px solid #e9ecef;
 }
@@ -251,4 +324,51 @@ body.dark-mode .chatroom-messages::-webkit-scrollbar-track {
 
 body.dark-mode .chatroom-messages {
   scrollbar-color: #7289da #3c3c3c; /* Dark mode colors */
+}
+
+.mention {
+  color: #007bff; /* Highlight color for mentions */
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.mention:hover {
+  text-decoration: underline;
+}
+
+/* Highlight mentionable members in the member list */
+.mentionable-member {
+  cursor: pointer;
+}
+
+.mentionable-member:hover {
+  background-color: #e9ecef;
+}
+
+.mention-suggestions {
+  position: absolute;
+  bottom: 60px; /* Adjust this based on your input bar position */
+  left: 10px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  max-height: 200px; /* Limit the dropdown height */
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  padding: 5px;
+  width: 300px; /* Adjust width as needed */
+}
+
+.suggestion-item {
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.suggestion-item:hover,
+.suggestion-item.active {
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
 }
