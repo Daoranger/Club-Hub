@@ -84,8 +84,9 @@ function IndividualThreadPage() {
       <div
         style={{
           ...styles.replyItem,
-          marginLeft: `${depth * 20}px`,
-          maxWidth: `calc(100% - ${depth * 20}px)`,
+          marginLeft: `${depth * 32}px`,
+          width: `calc(100% - ${depth * 32}px)`,
+          borderLeft: depth > 0 ? "2px solid #e0e0e0" : "none",
         }}
       >
         <div style={styles.replyHeader}>
@@ -209,12 +210,14 @@ const styles = {
   mainContent: {
     maxWidth: "800px",
     margin: "0 auto",
+    overflow: "hidden",
   },
   threadContainer: {
     backgroundColor: "white",
     borderRadius: "8px",
     boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
     padding: "20px",
+    overflow: "hidden",
   },
   threadHeader: {
     marginBottom: "20px",
@@ -277,6 +280,9 @@ const styles = {
   },
   repliesList: {
     marginTop: "20px",
+    overflowX: "auto",
+    maxWidth: "100%",
+    paddingBottom: "10px",
   },
   replyItem: {
     padding: "15px",
@@ -284,6 +290,7 @@ const styles = {
     backgroundColor: "#f8f9fa",
     borderRadius: "4px",
     transition: "all 0.2s ease",
+    minWidth: "300px",
   },
   replyHeader: {
     display: "flex",
