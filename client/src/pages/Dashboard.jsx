@@ -7,7 +7,7 @@ function Dashboard() {
   const [clubs, setClubs] = useState([]);
   const [newClub, setNewClub] = useState({ name: "", description: "" });
   const [showForm, setShowForm] = useState(true); // Control form visibility
-  const { userID } = useUserContext();
+  const { userID, setClubID } = useUserContext();
   const navigate = useNavigate();
 
   async function fetchData() {
@@ -69,6 +69,7 @@ function Dashboard() {
   };
 
   const navigateToClub = (clubID) => {
+    setClubID(clubID); // Set the club ID in the context
     navigate(`/club/${clubID}`); // Redirect to the club's page
   };
 

@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { useTheme } from "../context/ThemeContext";
+import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../context/UserContext";
 import axios from "axios";
 import "../pages_css/SideNavBar.css";
 
 function SideNavBar({ isCollapsed, toggleSidebar }) {
-  const { darkMode } = useTheme();
-  const { userID } = useUserContext();
-  const { clubID } = useParams();
+  const { userID, clubID } = useUserContext();
   const navigate = useNavigate();
   const [chatrooms, setChatrooms] = useState([]);
   const [clubName, setClubName] = useState("");
@@ -49,6 +46,14 @@ function SideNavBar({ isCollapsed, toggleSidebar }) {
         {!isCollapsed && (
           <div className={`sidebar-content`}>
             <h3 className={`text`}>{clubName}</h3>
+            <div>
+              <button
+                className="sidebar-button"
+                onClick={() => navigate(`/club/${clubID}`)}
+              >
+                Home
+              </button>
+            </div>
             <div>
               <button
                 className="sidebar-button"
@@ -112,7 +117,7 @@ function SideNavBar({ isCollapsed, toggleSidebar }) {
         }`}
         onClick={toggleSidebar}
       >
-        {isCollapsed ? "▶" : "◀"}
+        {isCollapsed ? ">" : "<"}
       </button>
     </>
   );
