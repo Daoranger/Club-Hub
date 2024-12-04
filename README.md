@@ -14,7 +14,7 @@ Project description
 
 - **User authentication and authorization:** Users can sign up, log in, and log out
 - **Create club:** Each user can create a single club
-- **Search for clubs:** Join the club based on keywords
+- **Search for clubs:** Search for clubs and join based on keywords
 - **Threads discussion:** Each club can create threads and nested-reply to threads
 - **Make announcements:** Each club can create social posts as announcements
 - **Manage events:** Each club can create events and members can register/unregister for events
@@ -24,7 +24,8 @@ Project description
 
 - Node.js (v12.0.0 or higher)
 - npm (v10.1.0)
-- SQL server running on your local system and any preferred GUI (e.g. MySQL Workbench)
+
+- Option 1: MySQL server running on your local system and any preferred GUI (e.g. MySQL Workbench)
 - .env file with the following variables:
 
   - DB_HOST (e.g. localhost)
@@ -33,7 +34,7 @@ Project description
   - DB_NAME (e.g. clubhub)
   - You can run the code in clubhub_create_db.sql file to create the database and tables on your local system
 
-- Optional: We also host our database server online, in which case you can use the following variables:
+- Option 2 (preferred): We also host our database server online, in which case you can use the following variables (we used freemysqlhosting.net):
   - DB_HOST= sql3.freemysqlhosting.net
   - DB_USER= sql3749296
   - DB_PASSWORD= ZXRZuYlU94
@@ -82,4 +83,36 @@ To get started Club Hub, follow these steps:
 
 ## Usage
 
+I want to include some screenshots of the website here!
+
 ## Contributions
+
+- **Hoang Nguyen:**
+
+  - Backend
+  - Frontend
+  - Database
+
+- **Nathan Cohn:**
+
+  - Backend
+  - Frontend
+  - Database
+
+- **Nathan Durrant:**
+
+  - Backend
+  - Frontend
+  - Database
+
+- **Shervan Shahparnia:**
+
+  - Backend
+  - Frontend
+  - Database
+
+- **Aaron Sam**
+
+  - Backend
+  - Frontend
+  - Database
