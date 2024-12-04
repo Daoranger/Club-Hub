@@ -2,6 +2,8 @@
 
 Project description
 
+**Club Hub** is a web-based university club management service designed to enhance experiences among members of various clubs. The application aims to provide a platform for planning club events, managing memberships, facilitating discussions through forums, and fostering community engagement.
+
 ## Table of Contents
 
 - [Features](#features)
