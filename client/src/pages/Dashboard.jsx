@@ -7,10 +7,11 @@ function Dashboard() {
   const [clubs, setClubs] = useState([]);
   const [newClub, setNewClub] = useState({ name: "", description: "" });
   const [showForm, setShowForm] = useState(true); // Control form visibility
-  const { userID, setClubID } = useUserContext();
+  const { userID } = useUserContext();
   const navigate = useNavigate();
 
-  async function fetchData() {
+  
+  async function fetchData(userID) {
     axios.get("http://localhost:8800/clubs", { params: { userID: userID } })
     .then((response) => {
       setClubs(response.data);
@@ -27,14 +28,14 @@ function Dashboard() {
     .catch((err) => {
       console.log(err);
     });
-
+  
   }
 
   useEffect(() => {
-    fetchData();
+    fetchData(userID);
     const interval = setInterval(fetchData, 3000);
     return () => clearInterval(interval);
-  }, []);
+  }, [userID]);
 
   async function createClub() {
     axios
@@ -69,7 +70,6 @@ function Dashboard() {
   };
 
   const navigateToClub = (clubID) => {
-    setClubID(clubID); // Set the club ID in the context
     navigate(`/club/${clubID}`); // Redirect to the club's page
   };
 

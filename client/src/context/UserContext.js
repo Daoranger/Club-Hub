@@ -5,13 +5,13 @@ const UserContext = createContext();
 const UserProvider = ({ children }) => {
   const [userID, setUserID] = useState("");
   const [username, setUsername] = useState("");
-  const [clubID, setClubID] = useState("");
 
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const id = localStorage.getItem("userID");
     const name = localStorage.getItem("username");
+
     if (id) {
       setUserID(id);
       setUsername(name);
@@ -38,7 +38,6 @@ const UserProvider = ({ children }) => {
       value={{
         userID, setUserID,
         username, setUsername,
-        clubID, setClubID,
         login,
         logout,
         loading,

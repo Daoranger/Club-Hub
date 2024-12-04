@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useUserContext } from "../context/UserContext";
 import axios from "axios";
 import "../pages_css/SideNavBar.css";
 
 function SideNavBar({ isCollapsed, toggleSidebar }) {
-  const { userID, clubID } = useUserContext();
+  const { userID } = useUserContext();
   const navigate = useNavigate();
   const [chatrooms, setChatrooms] = useState([]);
+  const { clubID: CID } = useParams();
   const [clubName, setClubName] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   useEffect(() => {
-    if (clubID) {
+    if (CID) {
       axios
-        .get("http://localhost:8800/chatrooms", { params: { CID: clubID } })
+        .get("http://localhost:8800/chatrooms", { params: { CID: CID } })
         .then((response) => {
           setChatrooms(response.data); // Update chatrooms
         })
@@ -23,7 +24,7 @@ function SideNavBar({ isCollapsed, toggleSidebar }) {
         });
 
       axios
-        .get("http://localhost:8800/club", { params: { CID: clubID } })
+        .get("http://localhost:8800/club", { params: { CID: CID } })
         .then((response) => {
           setClubName(response.data[0].name);
         })
@@ -31,7 +32,7 @@ function SideNavBar({ isCollapsed, toggleSidebar }) {
           console.error("Error fetching club name:", error);
         });
     }
-  }, [clubID]);
+  }, [CID]);
 
   if (!userID) {
     return null;
@@ -49,7 +50,7 @@ function SideNavBar({ isCollapsed, toggleSidebar }) {
             <div>
               <button
                 className="sidebar-button"
-                onClick={() => navigate(`/club/${clubID}`)}
+                onClick={() => navigate(`/club/${CID}`)}
               >
                 Home
               </button>
@@ -57,7 +58,7 @@ function SideNavBar({ isCollapsed, toggleSidebar }) {
             <div>
               <button
                 className="sidebar-button"
-                onClick={() => navigate(`/club/${clubID}/threads`)}
+                onClick={() => navigate(`/club/${CID}/threads`)}
               >
                 Threads
               </button>
@@ -77,7 +78,7 @@ function SideNavBar({ isCollapsed, toggleSidebar }) {
                       <button
                         key={chatroom.CRID}
                         className="dropdown-item"
-                        onClick={() => navigate(`/club/${clubID}/chatroom/${chatroom.CRID}`)}
+                        onClick={() => navigate(`/club/${CID}/chatroom/${chatroom.CRID}`)}
                       >
                         {chatroom.name}
                       </button>
@@ -93,7 +94,7 @@ function SideNavBar({ isCollapsed, toggleSidebar }) {
             <div>
               <button
                 className="sidebar-button"
-                onClick={() => navigate(`/club/${clubID}/posts`)}
+                onClick={() => navigate(`/club/${CID}/posts`)}
               >
                 Posts
               </button>
@@ -101,7 +102,7 @@ function SideNavBar({ isCollapsed, toggleSidebar }) {
             <div>
               <button
                 className="sidebar-button"
-                onClick={() => navigate(`/club/${clubID}/events`)}
+                onClick={() => navigate(`/club/${CID}/events`)}
               >
                 Events
               </button>
