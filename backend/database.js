@@ -374,13 +374,23 @@ app.get("/threads", (req, res) => {
 });
 
 function check_err_code(err, res) {
-  res.status(500).json({
-    errors: [
-      {
-        msg: err.sqlMessage,
-      },
-    ],
-  });
+  if (err.code === "ER_DUP_ENTRY") {
+    res.status(400).json({
+      errors: [
+        {
+          msg: "Username or email already exists.",
+        },
+      ],
+    });
+  } else {
+    res.status(500).json({
+      errors: [
+        {
+          msg: err.sqlMessage,
+        },
+      ],
+    });
+  }
 }
 
 function hashPassword(password) {
@@ -411,30 +421,26 @@ app.get("/thread/:id", (req, res) => {
   });
 });
 
-// Update the thread-reply endpoint to handle parent replies
+// Add this new endpoint for thread replies
 app.post("/thread-reply", (req, res) => {
-  const { threadID, userID, content, parentReplyID } = req.body;
+  const { threadID, userID, content } = req.body;
 
   const query = `
-    INSERT INTO ThreadReply (TID, UID, content, parent_reply)
-    VALUES (?, ?, ?, ?);
+    INSERT INTO ThreadReply (TID, UID, content)
+    VALUES (?, ?, ?);
   `;
 
-  dbCon.query(
-    query,
-    [threadID, userID, content, parentReplyID || null],
-    (err, result) => {
-      if (err) {
-        console.error("Error creating thread reply:", err);
-        res.status(500).json({ message: "Failed to create reply" });
-      } else {
-        res.status(201).json({
-          message: "Reply created successfully",
-          replyId: result.insertId,
-        });
-      }
+  dbCon.query(query, [threadID, userID, content], (err, result) => {
+    if (err) {
+      console.error("Error creating thread reply:", err);
+      res.status(500).json({ message: "Failed to create reply" });
+    } else {
+      res.status(201).json({
+        message: "Reply created successfully",
+        replyId: result.insertId,
+      });
     }
-  );
+  });
 });
 
 // Add this endpoint to fetch replies for a thread
@@ -444,15 +450,11 @@ app.get("/thread-replies/:threadId", (req, res) => {
   const query = `
     SELECT 
       TR.*,
-      U.username,
-      PR.content as parent_content,
-      PU.username as parent_username
+      U.username
     FROM ThreadReply TR
     JOIN User U ON TR.UID = U.UID
-    LEFT JOIN ThreadReply PR ON TR.parent_reply = PR.TRID
-    LEFT JOIN User PU ON PR.UID = PU.UID
     WHERE TR.TID = ?
-    ORDER BY TR.timestamp ASC
+    ORDER BY TR.timestamp DESC
   `;
 
   dbCon.query(query, [threadId], (err, result) => {
@@ -460,32 +462,7 @@ app.get("/thread-replies/:threadId", (req, res) => {
       console.error("Error fetching thread replies:", err);
       res.status(500).json({ message: "Failed to fetch replies" });
     } else {
-      // Create a map to store all replies
-      const replyMap = {};
-
-      // First pass: Create all reply objects
-      result.forEach((reply) => {
-        replyMap[reply.TRID] = {
-          ...reply,
-          replies: [],
-        };
-      });
-
-      // Second pass: Build the tree structure
-      const rootReplies = [];
-      result.forEach((reply) => {
-        if (reply.parent_reply) {
-          // This is a nested reply - add it to its parent's replies array
-          if (replyMap[reply.parent_reply]) {
-            replyMap[reply.parent_reply].replies.push(replyMap[reply.TRID]);
-          }
-        } else {
-          // This is a root level reply
-          rootReplies.push(replyMap[reply.TRID]);
-        }
-      });
-
-      res.json(rootReplies);
+      res.json(result);
     }
   });
 });
@@ -499,7 +476,7 @@ app.get("/posts", (req, res) => {
     FROM Post P
     JOIN User U ON P.UID = U.UID
     WHERE P.CID = ?
-    ORDER BY P.timestamp DESC;
+    ORDER BY P.timestamp DESC
   `;
 
   dbCon.query(query, [CID], (err, result) => {
@@ -507,7 +484,7 @@ app.get("/posts", (req, res) => {
       console.error("Error fetching posts:", err);
       res.status(500).json({ message: "Failed to fetch posts" });
     } else {
-      res.send(result);
+      res.json(result);
     }
   });
 });
@@ -627,26 +604,7 @@ app.post("/unregister-event", (req, res) => {
     }
   });
 });
-// retrieve members of clubs
-app.get("/club-members", (req, res) => {
-  const { clubID } = req.query;
 
-  const query = `
-    SELECT U.UID, U.username, U.fname, U.lname
-    FROM User U
-    JOIN ClubProfile CP ON U.UID = CP.UID
-    WHERE CP.CID = ?;
-  `;
-
-  dbCon.query(query, [clubID], (err, result) => {
-    if (err) {
-      console.error("Error fetching club members:", err);
-      res.status(500).json({ message: "Failed to fetch club members" });
-    } else {
-      res.json(result);
-    }
-  });
-});
 // Add a new endpoint for searching all clubs
 app.get("/search-clubs", (req, res) => {
   const query = "SELECT * FROM Club";
@@ -672,4 +630,60 @@ app.post("/join-club", (req, res) => {
 // Start the backend server at localhost:8800
 app.listen(8800, () => {
   console.log("Connected to backend!");
+
+  // Add this endpoint to create a new comment
+  app.post("/comments", (req, res) => {
+    const { postId, userID, content } = req.body;
+
+    const query = `
+    INSERT INTO Comment (PID, UID, content)
+    VALUES (?, ?, ?)
+  `;
+
+    dbCon.query(query, [postId, userID, content], (err, result) => {
+      if (err) {
+        console.error("Error creating comment:", err);
+        res.status(500).json({ message: "Failed to create comment" });
+      } else {
+        res.status(201).json({
+          message: "Comment created successfully",
+          commentId: result.insertId,
+        });
+      }
+    });
+  });
+
+  // Add this endpoint to fetch comments for a specific post
+  app.get("/comments", (req, res) => {
+    const { PID } = req.query;
+
+    console.log(`Fetching comments for PID: ${PID}`);
+
+    const query = `
+    SELECT 
+    Comment.*,
+    User.username,
+    Post.CID
+FROM 
+    Comment
+JOIN 
+    Post ON Comment.PID = Post.PID
+JOIN 
+    User ON Comment.UID = User.UID
+WHERE 
+    Post.CID = 1 -- Replace 1 with the specific Club ID (CID)
+ORDER BY 
+    Comment.timestamp DESC; -- Most recent comments first
+  `;
+
+    dbCon.query(query, [PID], (err, results) => {
+      if (err) {
+        console.error("Error fetching comments:", err);
+        res.status(500).json({ message: "Failed to fetch comments" });
+      } else {
+        console.log(`Comments fetched: ${results.length}`);
+        res.status(200).json(results);
+      }
+    });
+  });
 });
