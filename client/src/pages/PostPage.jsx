@@ -29,10 +29,10 @@ function PostPage() {
         setPosts(postsResponse.data);
 
         // Check if user is owner
-        const rolesResponse = await axios.get(`http://localhost:8800/roles`, {
-          params: { userID }
+        const rolesResponse = await axios.post(`http://localhost:8800/isOwner`, {
+          userID: userID, clubID: clubID
         });
-        setIsOwner(rolesResponse.data.map(role => role.name).includes("Owner"));
+        setIsOwner(rolesResponse.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
