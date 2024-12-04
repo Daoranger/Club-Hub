@@ -55,6 +55,8 @@ To get started Club Hub, follow these steps:
 
    On the first terminal, navigate to the backend directory and run the following command:
 
+   Create a .env file with the variables in prerequisites section. Then run the following command:
+
    ```
    cd backend
    npm install
