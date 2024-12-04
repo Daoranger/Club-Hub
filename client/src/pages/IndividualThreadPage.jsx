@@ -7,7 +7,6 @@ function IndividualThreadPage() {
   const [thread, setThread] = useState(null);
   const [replies, setReplies] = useState([]);
   const [replyContent, setReplyContent] = useState("");
-  const [replyingTo, setReplyingTo] = useState(null);
   const { threadID } = useParams();
   const { userID } = useUserContext(); // Replace with actual user ID from your auth system
 
@@ -43,108 +42,14 @@ function IndividualThreadPage() {
         threadID,
         userID,
         content: replyContent,
-        parentReplyID: replyingTo,
       });
 
       // Clear the input and refresh replies
       setReplyContent("");
-      setReplyingTo(null);
-      fetchThreadAndReplies();
+      fetchThreadAndReplies(); // Refresh the replies after posting
     } catch (error) {
       console.error("Error posting reply:", error);
     }
-  };
-
-  // New component for rendering nested replies
-  const ReplyItem = ({ reply, depth = 0 }) => {
-    const [showReplyInput, setShowReplyInput] = useState(false);
-    const [localReplyContent, setLocalReplyContent] = useState("");
-
-    const handleLocalReply = async () => {
-      if (!localReplyContent.trim()) return;
-
-      try {
-        await axios.post("http://localhost:8800/thread-reply", {
-          threadID,
-          userID,
-          content: localReplyContent,
-          parentReplyID: reply.TRID,
-        });
-
-        // Clear the input and refresh replies
-        setLocalReplyContent("");
-        setShowReplyInput(false);
-        fetchThreadAndReplies();
-      } catch (error) {
-        console.error("Error posting reply:", error);
-      }
-    };
-
-    return (
-      <div
-        style={{
-          ...styles.replyItem,
-          marginLeft: `${depth * 32}px`,
-          width: `calc(100% - ${depth * 32}px)`,
-          borderLeft: depth > 0 ? "2px solid #e0e0e0" : "none",
-        }}
-      >
-        <div style={styles.replyHeader}>
-          <span style={styles.replyUsername}>{reply.username}</span>
-          {reply.parent_username && (
-            <span style={styles.replyingTo}>
-              replying to @{reply.parent_username}
-            </span>
-          )}
-          <span style={styles.replyTimestamp}>
-            {new Date(reply.timestamp).toLocaleString()}
-          </span>
-        </div>
-        <p style={styles.replyContent}>{reply.content}</p>
-        <button
-          style={styles.replyButton}
-          onClick={() => setShowReplyInput(!showReplyInput)}
-        >
-          Reply
-        </button>
-
-        {/* Reply input field */}
-        {showReplyInput && (
-          <div style={styles.replyForm}>
-            <textarea
-              style={styles.replyInput}
-              value={localReplyContent}
-              onChange={(e) => setLocalReplyContent(e.target.value)}
-              placeholder={`Reply to ${reply.username}...`}
-            />
-            <div style={styles.replyActions}>
-              <button style={styles.replyButton} onClick={handleLocalReply}>
-                Submit
-              </button>
-              <button
-                style={styles.cancelButton}
-                onClick={() => {
-                  setShowReplyInput(false);
-                  setLocalReplyContent("");
-                }}
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Render nested replies */}
-        {reply.replies &&
-          reply.replies.map((nestedReply) => (
-            <ReplyItem
-              key={nestedReply.TRID}
-              reply={nestedReply}
-              depth={depth + 1}
-            />
-          ))}
-      </div>
-    );
   };
 
   if (!thread) return <div>Loading...</div>;
@@ -178,15 +83,17 @@ function IndividualThreadPage() {
 
             {/* Display replies */}
             <div style={styles.repliesList}>
-              {replyingTo && (
-                <div style={styles.replyingToIndicator}>
-                  Replying to comment...
-                  <button onClick={() => setReplyingTo(null)}>Cancel</button>
-                </div>
-              )}
               {replies.length > 0 ? (
                 replies.map((reply) => (
-                  <ReplyItem key={reply.TRID} reply={reply} />
+                  <div key={reply.TRID} style={styles.replyItem}>
+                    <div style={styles.replyHeader}>
+                      <span style={styles.replyUsername}>{reply.username}</span>
+                      <span style={styles.replyTimestamp}>
+                        {new Date(reply.timestamp).toLocaleString()}
+                      </span>
+                    </div>
+                    <p style={styles.replyContent}>{reply.content}</p>
+                  </div>
                 ))
               ) : (
                 <p style={styles.noReplies}>
@@ -210,14 +117,12 @@ const styles = {
   mainContent: {
     maxWidth: "800px",
     margin: "0 auto",
-    overflow: "hidden",
   },
   threadContainer: {
     backgroundColor: "white",
     borderRadius: "8px",
     boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
     padding: "20px",
-    overflow: "hidden",
   },
   threadHeader: {
     marginBottom: "20px",
@@ -280,17 +185,13 @@ const styles = {
   },
   repliesList: {
     marginTop: "20px",
-    overflowX: "auto",
-    maxWidth: "100%",
-    paddingBottom: "10px",
   },
   replyItem: {
     padding: "15px",
+    borderBottom: "1px solid #eee",
     marginBottom: "10px",
     backgroundColor: "#f8f9fa",
     borderRadius: "4px",
-    transition: "all 0.2s ease",
-    minWidth: "300px",
   },
   replyHeader: {
     display: "flex",
@@ -316,36 +217,6 @@ const styles = {
     color: "#787c7e",
     fontStyle: "italic",
     padding: "20px 0",
-  },
-  replyingTo: {
-    fontSize: "12px",
-    color: "#666",
-    marginLeft: "8px",
-  },
-  replyingToIndicator: {
-    padding: "8px",
-    backgroundColor: "#f0f0f0",
-    borderRadius: "4px",
-    marginBottom: "10px",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  replyActions: {
-    display: "flex",
-    gap: "10px",
-    marginTop: "10px",
-  },
-  cancelButton: {
-    backgroundColor: "#e0e0e0",
-    color: "#333",
-    border: "none",
-    borderRadius: "4px",
-    padding: "8px 16px",
-    fontSize: "14px",
-    fontWeight: "600",
-    cursor: "pointer",
-    transition: "background-color 0.2s",
   },
 };
 

@@ -96,19 +96,19 @@ const ClubHomePage = () => {
           <h2>Club Content</h2>
           <div style={styles.buttonContainer}>
             <a 
-              href={`${CID}/threads`} 
+              href={`/threads/${CID}`} 
               style={styles.actionButton}
             >
               View All Threads
             </a>
             <a 
-              href={`${CID}/posts`} 
+              href={`/posts/${CID}`} 
               style={styles.actionButton}
             >
               View All Posts
             </a>
             <a 
-              href={`${CID}/events`} 
+              href={`/events/${CID}`} 
               style={styles.actionButton}
             >
               View Events
@@ -120,7 +120,7 @@ const ClubHomePage = () => {
             {clubChatrooms.map((chatroom) => (
               <a 
                 key={chatroom.CRID}
-                href={`${CID}/chatroom/${chatroom.CRID}`}
+                href={`/chatroom/${chatroom.CRID}`}
                 style={styles.chatroomButton}
               >
                 {chatroom.name}

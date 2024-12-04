@@ -34,7 +34,7 @@ function CreateThreadPage() {
     try {
       const response = await axios.post("http://localhost:8800/create-thread", threadData);
       console.log("New thread created:", response.data);
-      navigate(`/club/${clubID}/threads`);
+      navigate(`/threads/${clubID}`);
     } catch (error) {
       console.error("Error creating thread:", error);
     }

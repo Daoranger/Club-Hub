@@ -28,11 +28,11 @@ function ThreadPage() {
   }, [clubID]);
 
   const handleCreateThreadClick = () => {
-    navigate(`create-thread`);
+    navigate(`/create-thread/${clubID}`);
   };
 
   const handleThreadClick = (threadId) => {
-    navigate(`thread/${threadId}`);
+    navigate(`/thread/${threadId}`);
   };
 
   return (
