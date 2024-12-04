@@ -89,30 +89,10 @@ I want to include some screenshots of the website here!
 
 - **Hoang Nguyen:**
 
-  - Backend
-  - Frontend
-  - Database
-
 - **Nathan Cohn:**
-
-  - Backend
-  - Frontend
-  - Database
 
 - **Nathan Durrant:**
 
-  - Backend
-  - Frontend
-  - Database
-
 - **Shervan Shahparnia:**
 
-  - Backend
-  - Frontend
-  - Database
-
 - **Aaron Sam**
-
-  - Backend
-  - Frontend
-  - Database
