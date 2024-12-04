@@ -41,6 +41,26 @@ app.get("/", (req, res) => {
   });
 });
 
+app.post("/isOwner", (req, res) => {
+  const { userID, clubID } = req.body;
+
+  const query = `
+    SELECT *
+    FROM Role R
+    JOIN ClubProfile CP ON R.RID = CP.RID
+    WHERE CP.UID = ? AND CP.CID = ? AND R.name LIKE '%Owner%'
+  `;
+
+  dbCon.query(query, [userID, clubID], (err, result) => {
+    if (err) {
+      check_err_code(err, res);
+      console.log(err.sqlMessage)
+    } else {
+      res.send(result.length > 0);
+    }
+  });
+})
+
 app.get("/roles", (req, res) => {
   const { userID } = req.query;
 

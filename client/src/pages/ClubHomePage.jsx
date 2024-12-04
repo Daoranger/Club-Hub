@@ -49,11 +49,9 @@ const ClubHomePage = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8800/roles", { params: { userID } })
+      .post("http://localhost:8800/isOwner", { userID: userID, clubID: CID })
       .then((response) => {
-        // Check if the user is an owner
-        const roles = response.data.map((role) => role.name);
-        setIsOwner(roles.includes("Owner"));
+        setIsOwner(response.data);
       })
       .catch((err) => console.error(err));
   }, [userID]);

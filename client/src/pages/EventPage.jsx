@@ -29,12 +29,10 @@ function EventPage() {
         });
         setEvents(eventsResponse.data);
 
-        const rolesResponse = await axios.get(`http://localhost:8800/roles`, {
-          params: { userID },
+        const rolesResponse = await axios.post(`http://localhost:8800/isOwner`, {
+          userID: userID, clubID: clubID
         });
-        setIsOwner(
-          rolesResponse.data.map((role) => role.name).includes("Owner")
-        );
+        setIsOwner(rolesResponse.data);
       } catch (error) {
         setError("Failed to load events. Please try again later.");
       }
