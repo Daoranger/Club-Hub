@@ -11,12 +11,8 @@ function ChatRoomPage() {
   const [replyTo, setReplyTo] = useState(null);
   const [replyToContent, setReplyToContent] = useState("");
   const [replyToUser, setReplyToUser] = useState("");
-  const [members, setMembers] = useState([]); // State for member list
   const inputRef = useRef(null);
   const { userID } = useUserContext();
-  const [suggestions, setSuggestions] = useState([]); // For autocomplete suggestions
-  const [isMentioning, setIsMentioning] = useState(false); // Whether the user is typing an @mention
-  const [highlightedIndex, setHighlightedIndex] = useState(0); // Tracks the currently highlighted suggestion
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -34,23 +30,6 @@ function ChatRoomPage() {
     const interval = setInterval(fetchMessages, 3000);
     return () => clearInterval(interval);
   }, [CRID]);
-
-  useEffect(() => {
-    // Fetch the member list
-    const fetchMembers = async () => {
-      try {
-        const clubID = 1; // Replace with logic to get the actual clubID
-        const response = await axios.get(
-          `http://localhost:8800/club-members?clubID=${clubID}`
-        );
-        setMembers(response.data);
-      } catch (err) {
-        console.error("Error fetching members:", err);
-      }
-    };
-
-    fetchMembers();
-  }, []);
 
   const sendMessage = async (e) => {
     e.preventDefault();
@@ -75,6 +54,13 @@ function ChatRoomPage() {
     }
   };
 
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      sendMessage(e);
+    }
+  };
+
   const handleReply = (id, content, username) => {
     setReplyTo(id); // Use the correct message ID (MID)
     setReplyToContent(content);
@@ -84,121 +70,37 @@ function ChatRoomPage() {
     }
   };
 
-  const handleInputChange = (e) => {
-    const input = e.target.value;
-    setMessage(input);
-
-    // Detect if user is typing `@` and update suggestions
-    const mentionMatch = input.match(/@(\w*)$/);
-    if (mentionMatch) {
-      const query = mentionMatch[1].toLowerCase();
-      const filteredSuggestions = members.filter((member) =>
-        member.username.toLowerCase().startsWith(query)
-      );
-      setSuggestions(filteredSuggestions);
-      setIsMentioning(true);
-      setHighlightedIndex(0); // Reset highlighted index
-    } else {
-      setSuggestions([]);
-      setIsMentioning(false);
-    }
-  };
-
-  const handleKeyDown = (e) => {
-    if (isMentioning && suggestions.length > 0) {
-      if (e.key === "ArrowDown") {
-        e.preventDefault();
-        setHighlightedIndex(
-          (prevIndex) => (prevIndex + 1) % suggestions.length
-        );
-      } else if (e.key === "ArrowUp") {
-        e.preventDefault();
-        setHighlightedIndex(
-          (prevIndex) =>
-            (prevIndex - 1 + suggestions.length) % suggestions.length
-        );
-      } else if (e.key === "Enter") {
-        e.preventDefault();
-        handleSuggestionSelect(suggestions[highlightedIndex].username);
-      } else if (e.key === "Escape") {
-        setSuggestions([]);
-        setIsMentioning(false);
-      }
-    }
-  };
-
-  const handleSuggestionSelect = (username) => {
-    const updatedMessage = message.replace(/@\w*$/, `@${username} `);
-    setMessage(updatedMessage);
-    setSuggestions([]);
-    setIsMentioning(false);
-    setHighlightedIndex(0); // Reset highlighted index
-    if (inputRef.current) {
-      inputRef.current.focus(); // Refocus the input field
-    }
-  };
-
   return (
-    <div className="chatroom-wrapper">
-      <div className="chatroom-container">
-        <div className="chatroom-messages">
-          {messages.map((msg) => (
-            <div key={msg.message_id} className="message">
-              <span className="message-username">{msg.username}</span>
-              {/* Display the replied-to message */}
-              {msg.reply_to && (
-                <div className="replied-message">
-                  Replying to {msg.replied_user || "Unknown"}:{" "}
-                  {msg.replied_message || "Deleted Message"}
-                </div>
-              )}
-              {/* Display the main message */}
-              <div className="message-content">
-                {msg.message.split(/(\@\w+)/).map((part, index) =>
-                  part.startsWith("@") ? (
-                    <span key={index} className="mention">
-                      {part}
-                    </span>
-                  ) : (
-                    part
-                  )
-                )}
+    <div className="chatroom-container">
+      <div className="chatroom-messages">
+        {messages.map((msg) => (
+          <div key={msg.message_id} className="message">
+            <span className="message-username">{msg.username}</span>
+            {/* Display the replied-to message */}
+            {msg.reply_to && (
+              <div className="replied-message">
+                Replying to {msg.replied_user || "Unknown"}:{" "}
+                {msg.replied_message || "Deleted Message"}
               </div>
-              <button
-                className="reply-button"
-                onClick={() =>
-                  handleReply(msg.message_id, msg.message, msg.username)
-                }
-              >
-                Reply
-              </button>
-              <div className="timestamp">
-                {new Date(msg.timestamp).toLocaleTimeString([], {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
-              </div>
+            )}
+            {/* Display the main message */}
+            <div className="message-content">{msg.message}</div>
+            <button
+              className="reply-button"
+              onClick={() =>
+                handleReply(msg.message_id, msg.message, msg.username)
+              }
+            >
+              Reply
+            </button>
+            <div className="timestamp">
+              {new Date(msg.timestamp).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
             </div>
-          ))}
-        </div>
-        <div className="member-list">
-          <h3>Members</h3>
-          <ul>
-            {members.map((member) => (
-              <li
-                key={member.UID}
-                onClick={() => handleSuggestionSelect(member.username)}
-                className="mentionable-member"
-              >
-                <div className="member-avatar"></div>
-                <div className="member-info">
-                  <div className="member-name">{`${member.fname} ${member.lname}`}</div>
-                  <div className="member-username">@{member.username}</div>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
+          </div>
+        ))}
       </div>
       <form onSubmit={sendMessage} className="chatroom-input">
         {replyTo && (
@@ -211,26 +113,11 @@ function ChatRoomPage() {
           <input
             type="text"
             value={message}
-            onChange={handleInputChange}
-            onKeyDown={handleKeyDown}
+            onChange={(e) => setMessage(e.target.value)}
             placeholder="Type a message..."
+            onKeyDown={handleKeyPress}
             ref={inputRef}
           />
-          {isMentioning && suggestions.length > 0 && (
-            <div className="mention-suggestions">
-              {suggestions.map((suggestion, index) => (
-                <div
-                  key={suggestion.UID}
-                  onClick={() => handleSuggestionSelect(suggestion.username)}
-                  className={`suggestion-item ${
-                    index === highlightedIndex ? "active" : ""
-                  }`}
-                >
-                  @{suggestion.username}
-                </div>
-              ))}
-            </div>
-          )}
           <button type="submit">Send</button>
         </div>
       </form>

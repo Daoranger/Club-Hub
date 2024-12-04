@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useUserContext } from "../context/UserContext";
 
@@ -7,7 +7,7 @@ function PostPage() {
   const [posts, setPosts] = useState([]);
   const [clubName, setClubName] = useState("");
   const [newPost, setNewPost] = useState({ caption: "", mediaURL: "" });
-  const { clubID } = useParams();
+  const { clubID} = useParams(); // Extract clubID from URL parameters
   const { userID } = useUserContext();
   const [isOwner, setIsOwner] = useState(false);
   const [comments, setComments] = useState([]);
@@ -29,7 +29,7 @@ function PostPage() {
         setPosts(postsResponse.data);
 
         // Fetch comments for the posts
-        const commentsResponse = await axios.get(`http://localhost:8800/comments`, { params: {CID: clubID} });
+        const commentsResponse = await axios.get(`http://localhost:8800/comments`, { params: { CID: clubID} });
         setComments(commentsResponse.data);
         console.log(commentsResponse.data);
 
@@ -44,7 +44,6 @@ function PostPage() {
 
     fetchData();
   }, [clubID, userID]);
-
 
   const handleCreatePost = async (e) => {
     e.preventDefault();
