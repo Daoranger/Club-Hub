@@ -137,7 +137,7 @@ function PostPage() {
             <div style={styles.postHeader}>
               <span style={styles.username}>{post.username}</span>
               <span style={styles.timestamp}>
-                {new Date(post.timestamp).toLocaleDateString()}
+                {new Date(post.timestamp).toLocaleString()}
               </span>
             </div>
             {post.mediaURL && (

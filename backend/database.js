@@ -18,6 +18,7 @@ const dbCon = mysql.createConnection({
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
+  timezone: '+00:00'
 });
 
 // Testing DB connection
@@ -696,78 +697,74 @@ app.listen(8800, () => {
   
 });
 
-// Add this endpoint to create a new comment
-app.post("/comments", (req, res) => {
-  const { postId, userID, content } = req.body;
-
-  const query = `
-  INSERT INTO Comment (PID, UID, content)
-  VALUES (?, ?, ?)
-`;
-
-  dbCon.query(query, [postId, userID, content], (err, result) => {
-    if (err) {
-      console.error("Error creating comment:", err);
-      res.status(500).json({ message: "Failed to create comment" });
-    } else {
-      res.status(201).json({
-        message: "Comment created successfully",
-        commentId: result.insertId,
-      });
-    }
-  });
-});
-
-// Add this endpoint to fetch comments for a specific post
+// Get all comments for a specific poar
 app.get("/comments", (req, res) => {
   const { CID } = req.query;
 
-  console.log(`Fetching comments`);
-
   const query = `
-  SELECT 
-  Comment.*,
-  User.username,
-  Post.CID
-FROM 
-  Comment
-JOIN 
-  Post ON Comment.PID = Post.PID
-JOIN 
-  User ON Comment.UID = User.UID
-WHERE 
-  Post.CID = 1 -- Replace 1 with the specific Club ID (CID)
-ORDER BY 
-  Comment.timestamp DESC; -- Most recent comments first
-`;
+    SELECT 
+      Comment.*,
+      User.username,
+      Post.CID
+    FROM 
+      Comment
+    JOIN 
+      Post ON Comment.PID = Post.PID
+    JOIN 
+      User ON Comment.UID = User.UID
+    WHERE 
+      Post.CID = ? 
+    ORDER BY 
+      Comment.timestamp DESC
+  `;
 
   dbCon.query(query, [CID], (err, results) => {
     if (err) {
       console.error("Error fetching comments:", err);
       res.status(500).json({ message: "Failed to fetch comments" });
     } else {
-      console.log(`Comments fetched: ${results.length}`);
       res.status(200).json(results);
     }
   });
 });
 
+// Create a new comment
 app.post("/comments", (req, res) => {
   const { postId, userID, content } = req.body;
 
   const query = `
-    INSERT INTO Comment (PID, UID, content, timestamp)
-    VALUES (?, ?, ?, NOW())
+    INSERT INTO Comment (PID, UID, content)
+    VALUES (?, ?, ?)
   `;
 
   dbCon.query(query, [postId, userID, content], (err, result) => {
     if (err) {
-      console.error("Error submitting comment:", err);
-      res.status(500).json({ message: "Failed to submit comment" });
+      console.error("Error creating comment:", err);
+      res.status(500).json({ message: "Failed to create comment" });
     } else {
-      res.status(201).json({
-        message: "Comment submitted successfully",
-        commentId: result.insertId,
+      // Fetch the newly created comment with username
+      const fetchQuery = `
+        SELECT 
+          Comment.*,
+          User.username
+        FROM 
+          Comment
+        JOIN 
+          User ON Comment.UID = User.UID
+        WHERE 
+          Comment.CoID = ?
+      `;
+      
+      dbCon.query(fetchQuery, [result.insertId], (err, commentResult) => {
+        if (err) {
+          console.error("Error fetching new comment:", err);
+          res.status(201).json({
+            message: "Comment created but couldn't fetch details",
+            commentId: result.insertId
+          });
+        } else {
+          res.status(201).json(commentResult[0]);
+        }
       });
     }
   });
