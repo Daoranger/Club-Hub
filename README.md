@@ -26,7 +26,8 @@
 - npm (v10.1.0)
 
 - Option 1: MySQL server running on your local system and any preferred GUI (e.g. MySQL Workbench)
-- .env file with the following variables:
+
+  - .env file with the following variables:
 
   - DB_HOST (e.g. localhost)
   - DB_USER (e.g. root)
