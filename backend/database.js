@@ -374,23 +374,13 @@ app.get("/threads", (req, res) => {
 });
 
 function check_err_code(err, res) {
-  if (err.code === "ER_DUP_ENTRY") {
-    res.status(400).json({
-      errors: [
-        {
-          msg: "Username or email already exists.",
-        },
-      ],
-    });
-  } else {
-    res.status(500).json({
-      errors: [
-        {
-          msg: err.sqlMessage,
-        },
-      ],
-    });
-  }
+  res.status(500).json({
+    errors: [
+      {
+        msg: err.sqlMessage,
+      },
+    ],
+  });
 }
 
 function hashPassword(password) {
@@ -509,7 +499,7 @@ app.get("/posts", (req, res) => {
     FROM Post P
     JOIN User U ON P.UID = U.UID
     WHERE P.CID = ?
-    ORDER BY P.timestamp DESC
+    ORDER BY P.timestamp DESC;
   `;
 
   dbCon.query(query, [CID], (err, result) => {
@@ -517,7 +507,7 @@ app.get("/posts", (req, res) => {
       console.error("Error fetching posts:", err);
       res.status(500).json({ message: "Failed to fetch posts" });
     } else {
-      res.json(result);
+      res.send(result);
     }
   });
 });
