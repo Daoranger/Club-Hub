@@ -57,7 +57,7 @@ function SideNavBar({ isCollapsed, toggleSidebar }) {
             <div>
               <button
                 className="sidebar-button"
-                onClick={() => navigate(`/threads/${clubID}`)}
+                onClick={() => navigate(`/club/${clubID}/threads`)}
               >
                 Threads
               </button>
@@ -77,7 +77,7 @@ function SideNavBar({ isCollapsed, toggleSidebar }) {
                       <button
                         key={chatroom.CRID}
                         className="dropdown-item"
-                        onClick={() => navigate(`/chatroom/${chatroom.CRID}`)}
+                        onClick={() => navigate(`/club/${clubID}/chatroom/${chatroom.CRID}`)}
                       >
                         {chatroom.name}
                       </button>
@@ -93,7 +93,7 @@ function SideNavBar({ isCollapsed, toggleSidebar }) {
             <div>
               <button
                 className="sidebar-button"
-                onClick={() => navigate(`/posts/${clubID}`)}
+                onClick={() => navigate(`/club/${clubID}/posts`)}
               >
                 Posts
               </button>
@@ -101,7 +101,7 @@ function SideNavBar({ isCollapsed, toggleSidebar }) {
             <div>
               <button
                 className="sidebar-button"
-                onClick={() => navigate(`/events/${clubID}`)}
+                onClick={() => navigate(`/club/${clubID}/events`)}
               >
                 Events
               </button>
@@ -117,7 +117,7 @@ function SideNavBar({ isCollapsed, toggleSidebar }) {
         }`}
         onClick={toggleSidebar}
       >
-        {isCollapsed ? ">" : "<"}
+        {isCollapsed ? "▶" : "◀"}
       </button>
     </>
   );
