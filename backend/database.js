@@ -657,7 +657,7 @@ app.listen(8800, () => {
   app.get("/comments", (req, res) => {
     const { PID } = req.query;
 
-    console.log(`Fetching comments for PID: ${PID}`);
+    console.log(`Fetching comments`);
 
     const query = `
     SELECT 
@@ -687,4 +687,4 @@ ORDER BY
     });
   });
 });
-});
+
