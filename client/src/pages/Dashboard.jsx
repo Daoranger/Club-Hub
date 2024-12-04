@@ -10,7 +10,8 @@ function Dashboard() {
   const { userID } = useUserContext();
   const navigate = useNavigate();
 
-  async function fetchData() {
+  
+  async function fetchData(userID) {
     axios.get("http://localhost:8800/clubs", { params: { userID: userID } })
     .then((response) => {
       setClubs(response.data);
@@ -27,14 +28,14 @@ function Dashboard() {
     .catch((err) => {
       console.log(err);
     });
-
+  
   }
 
   useEffect(() => {
-    fetchData();
+    fetchData(userID);
     const interval = setInterval(fetchData, 3000);
     return () => clearInterval(interval);
-  }, []);
+  }, [userID]);
 
   async function createClub() {
     axios
