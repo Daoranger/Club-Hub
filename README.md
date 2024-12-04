@@ -29,11 +29,11 @@
 
   - .env file with the following variables:
 
-  - DB_HOST (e.g. localhost)
-  - DB_USER (e.g. root)
-  - DB_PASSWORD (e.g. password)
-  - DB_NAME (e.g. clubhub)
-  - You can run the code in clubhub_create_db.sql file to create the database and tables on your local system
+    - DB_HOST (e.g. localhost)
+    - DB_USER (e.g. root)
+    - DB_PASSWORD (e.g. password)
+    - DB_NAME (e.g. clubhub)
+    - You can run the code in clubhub_create_db.sql file to create the database and tables on your local system
 
 - Option 2 (preferred): We also host our database server online, in which case you can use the following variables (we used freemysqlhosting.net):
   - DB_HOST= sql3.freemysqlhosting.net
