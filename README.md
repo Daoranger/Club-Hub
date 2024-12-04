@@ -12,13 +12,13 @@ Project description
 
 ## Features
 
-- User authentication and authorization: Users can sign up, log in, and log out
-- Create club: Each user can create a single club
-- Search for clubs: Join the club based on keywords
-- Threads discussion: Each club can create threads and nested-reply to threads
-- Make announcements: Each club can create social posts as announcements
-- Manage events: Each club can create events and members can register/unregister for events
-- Chatting: Each club can create chatrooms and send messages to club members. Chatrooms are live and can be accessed by any club members.
+- **User authentication and authorization:** Users can sign up, log in, and log out
+- **Create club:** Each user can create a single club
+- **Search for clubs:** Join the club based on keywords
+- **Threads discussion:** Each club can create threads and nested-reply to threads
+- **Make announcements:** Each club can create social posts as announcements
+- **Manage events:** Each club can create events and members can register/unregister for events
+- **Chatting:** Each club can create chatrooms and send messages to club members. Chatrooms are live and can be accessed by any club members.
 
 ## Prerequisites
 
@@ -40,6 +40,8 @@ Project description
   - DB_NAME= sql3749296
 
 ## Installation
+
+To get started Club Hub, follow these steps:
 
 1. Clone the repository
 
@@ -76,7 +78,7 @@ Project description
 
    If it is your first time running the application, you will need to sign up for an account. Then log in with your account credentials.
 
-   Explore and have fun!
+   Once you login, explore and have fun!
 
 ## Usage
 
