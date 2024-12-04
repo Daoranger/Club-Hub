@@ -275,7 +275,7 @@ app.post("/chatroom", (req, res) => {
 app.get("/chatroom", (req, res) => {
   const { CRID } = req.query;
 
-  console.log(CRID);
+  console.log(CRID)
 
   const query = `
     SELECT 
@@ -730,4 +730,8 @@ ORDER BY
       res.status(200).json(results);
     }
   });
+
+// Start the backend server at localhost:8800
+app.listen(8800, () => {
+  console.log("Connected to backend!");
 });
