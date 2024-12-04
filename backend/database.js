@@ -692,4 +692,83 @@ app.post("/join-club", (req, res) => {
 // Start the backend server at localhost:8800
 app.listen(8800, () => {
   console.log("Connected to backend!");
+
+  
+});
+
+// Add this endpoint to create a new comment
+app.post("/comments", (req, res) => {
+  const { postId, userID, content } = req.body;
+
+  const query = `
+  INSERT INTO Comment (PID, UID, content)
+  VALUES (?, ?, ?)
+`;
+
+  dbCon.query(query, [postId, userID, content], (err, result) => {
+    if (err) {
+      console.error("Error creating comment:", err);
+      res.status(500).json({ message: "Failed to create comment" });
+    } else {
+      res.status(201).json({
+        message: "Comment created successfully",
+        commentId: result.insertId,
+      });
+    }
+  });
+});
+
+// Add this endpoint to fetch comments for a specific post
+app.get("/comments", (req, res) => {
+  const { CID } = req.query;
+
+  console.log(`Fetching comments`);
+
+  const query = `
+  SELECT 
+  Comment.*,
+  User.username,
+  Post.CID
+FROM 
+  Comment
+JOIN 
+  Post ON Comment.PID = Post.PID
+JOIN 
+  User ON Comment.UID = User.UID
+WHERE 
+  Post.CID = 1 -- Replace 1 with the specific Club ID (CID)
+ORDER BY 
+  Comment.timestamp DESC; -- Most recent comments first
+`;
+
+  dbCon.query(query, [CID], (err, results) => {
+    if (err) {
+      console.error("Error fetching comments:", err);
+      res.status(500).json({ message: "Failed to fetch comments" });
+    } else {
+      console.log(`Comments fetched: ${results.length}`);
+      res.status(200).json(results);
+    }
+  });
+});
+
+app.post("/comments", (req, res) => {
+  const { postId, userID, content } = req.body;
+
+  const query = `
+    INSERT INTO Comment (PID, UID, content, timestamp)
+    VALUES (?, ?, ?, NOW())
+  `;
+
+  dbCon.query(query, [postId, userID, content], (err, result) => {
+    if (err) {
+      console.error("Error submitting comment:", err);
+      res.status(500).json({ message: "Failed to submit comment" });
+    } else {
+      res.status(201).json({
+        message: "Comment submitted successfully",
+        commentId: result.insertId,
+      });
+    }
+  });
 });
