@@ -35,7 +35,7 @@
     - DB_NAME (e.g. clubhub)
     - You can run the code in clubhub_create_db.sql file to create the database and tables on your local system
 
-- Option 2 (preferred): We also host our database server online, in which case you can use the following variables (we used freemysqlhosting.net):
+- **Option 2 (preferred)**: We also host our database server online, in which case you can use the following variables (we used freemysqlhosting.net):
   - DB_HOST= sql3.freemysqlhosting.net
   - DB_USER= sql3749296
   - DB_PASSWORD= ZXRZuYlU94
@@ -51,14 +51,23 @@ To get started Club Hub, follow these steps:
    git clone https://github.com/Daoranger/Club-Hub.git
    ```
 
-2. To run Club Hub on your local system, open two terminals and run the following commands:
+2. cd into Club-Hub directory
+
+   ```
+   cd Club-Hub
+   ```
+
+3. To run Club Hub on your local system, open two terminals and run the following commands:
 
    On the first terminal, navigate to the backend directory and run the following command:
 
-   Create a .env file with the variables in prerequisites section. Then run the following command:
-
    ```
    cd backend
+   ```
+
+   Once you are in the backend directory, create a .env file with the variables in prerequisites section (we prefer the variables in **Option 2**). Then run the following command:
+
+   ```
    npm install
    npm start
    ```
@@ -78,7 +87,7 @@ To get started Club Hub, follow these steps:
    npm start
    ```
 
-   After running the command, your browser should automatically open the Club Hub application. You should see home page of Club Hub.
+   After running the command, your browser should automatically open the Club Hub application. You should see home page of Club Hub. If not, open your browser and navigate to http://localhost:3000.
 
    If it is your first time running the application, you will need to sign up for an account. Then log in with your account credentials.
 
