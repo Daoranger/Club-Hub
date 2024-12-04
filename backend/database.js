@@ -84,17 +84,18 @@ function create_role(userID, clubID, roleName, res, message="Role created succes
 
 app.get("/clubs", (req, res) => {
   const { userID } = req.query;
-
+  
   const query = `
     SELECT DISTINCT C.*
     FROM Club C
     JOIN ClubProfile CP ON C.CID = CP.CID
-    WHERE CP.UID = ?;
+    WHERE CP.UID = ?
   `;
 
   dbCon.query(query, [userID], (err, result) => {
     if (err) {
-      check_err_code(err, res);
+      console.error("Error fetching clubs:", err);
+      res.status(500).json({ message: "Failed to fetch clubs" });
     } else {
       res.json(result);
     }
@@ -254,6 +255,8 @@ app.post("/chatroom", (req, res)=> {
 
 app.get("/chatroom", (req, res)=> {
   const { CRID } = req.query;
+
+  console.log(CRID)
 
   const query = `
     SELECT 
@@ -435,6 +438,11 @@ app.get("/thread-replies/:threadId", (req, res) => {
   });
 }); 
 
+// Start the backend server at localhost:8800
+app.listen(8800, ()=>{
+  console.log("Connected to backend!");
+}); 
+
 // Get posts for a specific club
 app.get("/posts", (req, res) => {
   const { CID } = req.query;
@@ -595,7 +603,59 @@ app.post("/join-club", (req, res) => {
   create_role(userID, clubID, "Member", res, "Successfully joined the club!");
 });
 
-// Start the backend server at localhost:8800
-app.listen(8800, ()=>{
-  console.log("Connected to backend!");
-}); 
+// Add this endpoint to create a new comment
+app.post("/comments", (req, res) => {
+  const { postId, userID, content } = req.body;
+
+  const query = `
+    INSERT INTO Comment (PID, UID, content)
+    VALUES (?, ?, ?)
+  `;
+
+  dbCon.query(query, [postId, userID, content], (err, result) => {
+    if (err) {
+      console.error("Error creating comment:", err);
+      res.status(500).json({ message: "Failed to create comment" });
+    } else {
+      res.status(201).json({ 
+        message: "Comment created successfully",
+        commentId: result.insertId 
+      });
+    }
+  });
+});
+
+// Add this endpoint to fetch comments for a specific post
+app.get("/comments", (req, res) => {
+  const { PID } = req.query;
+
+  console.log(`Fetching comments for PID: ${PID}`);
+
+  const query = `
+    SELECT 
+    Comment.*,
+    User.username,
+    Post.CID
+FROM 
+    Comment
+JOIN 
+    Post ON Comment.PID = Post.PID
+JOIN 
+    User ON Comment.UID = User.UID
+WHERE 
+    Post.CID = 1 -- Replace 1 with the specific Club ID (CID)
+ORDER BY 
+    Comment.timestamp DESC; -- Most recent comments first
+  `;
+
+
+  dbCon.query(query, [PID], (err, results) => {
+    if (err) {
+      console.error("Error fetching comments:", err);
+      res.status(500).json({ message: "Failed to fetch comments" });
+    } else {
+      console.log(`Comments fetched: ${results.length}`);
+      res.status(200).json(results);
+    }
+  });
+});
