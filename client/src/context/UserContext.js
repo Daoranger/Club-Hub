@@ -5,11 +5,13 @@ const UserContext = createContext();
 const UserProvider = ({ children }) => {
   const [userID, setUserID] = useState("");
   const [username, setUsername] = useState("");
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const id = localStorage.getItem("userID");
     const name = localStorage.getItem("username");
+
     if (id) {
       setUserID(id);
       setUsername(name);
@@ -34,10 +36,8 @@ const UserProvider = ({ children }) => {
   return (
     <UserContext.Provider
       value={{
-        userID,
-        setUserID,
-        username,
-        setUsername,
+        userID, setUserID,
+        username, setUsername,
         login,
         logout,
         loading,
