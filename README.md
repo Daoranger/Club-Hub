@@ -170,7 +170,7 @@ To get started with Club Hub, follow these steps:
     - Assisted Nathan Cohn in implementing and discussing design decisions for navigation systems
     - Contributed to various styling factors for client
   
-  **Aaron Sam:**
+- **Aaron Sam:**
   - Non-technical:
     - Contributed to project proposal
     - Contributed to presentation slides
