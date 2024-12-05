@@ -11,7 +11,6 @@ function LoginPage() {
   const { login } = useUserContext();
 
   const handleSubmit = (e) => {
-    // check if the entered info matches a user
     e.preventDefault();
     axios.post("http://localhost:8800/login", { username: input, password: password })
       .then(response => {
