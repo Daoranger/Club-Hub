@@ -18,6 +18,7 @@ const dbCon = mysql.createConnection({
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
+  timezone: '+00:00'
 });
 
 // Testing DB connection
@@ -40,6 +41,26 @@ app.get("/", (req, res) => {
     }
   });
 });
+
+app.post("/isOwner", (req, res) => {
+  const { userID, clubID } = req.body;
+
+  const query = `
+    SELECT *
+    FROM Role R
+    JOIN ClubProfile CP ON R.RID = CP.RID
+    WHERE CP.UID = ? AND CP.CID = ? AND R.name LIKE '%Owner%'
+  `;
+
+  dbCon.query(query, [userID, clubID], (err, result) => {
+    if (err) {
+      check_err_code(err, res);
+      console.log(err.sqlMessage)
+    } else {
+      res.send(result.length > 0);
+    }
+  });
+})
 
 app.get("/roles", (req, res) => {
   const { userID } = req.query;
@@ -655,4 +676,79 @@ app.post("/join-club", (req, res) => {
 // Start the backend server at localhost:8800
 app.listen(8800, () => {
   console.log("Connected to backend!");
+
+  
+});
+
+// Get all comments for a specific poar
+app.get("/comments", (req, res) => {
+  const { CID } = req.query;
+
+  const query = `
+    SELECT 
+      Comment.*,
+      User.username,
+      Post.CID
+    FROM 
+      Comment
+    JOIN 
+      Post ON Comment.PID = Post.PID
+    JOIN 
+      User ON Comment.UID = User.UID
+    WHERE 
+      Post.CID = ? 
+    ORDER BY 
+      Comment.timestamp DESC
+  `;
+
+  dbCon.query(query, [CID], (err, results) => {
+    if (err) {
+      console.error("Error fetching comments:", err);
+      res.status(500).json({ message: "Failed to fetch comments" });
+    } else {
+      res.status(200).json(results);
+    }
+  });
+});
+
+// Create a new comment
+app.post("/comments", (req, res) => {
+  const { postId, userID, content } = req.body;
+
+  const query = `
+    INSERT INTO Comment (PID, UID, content)
+    VALUES (?, ?, ?)
+  `;
+
+  dbCon.query(query, [postId, userID, content], (err, result) => {
+    if (err) {
+      console.error("Error creating comment:", err);
+      res.status(500).json({ message: "Failed to create comment" });
+    } else {
+      // Fetch the newly created comment with username
+      const fetchQuery = `
+        SELECT 
+          Comment.*,
+          User.username
+        FROM 
+          Comment
+        JOIN 
+          User ON Comment.UID = User.UID
+        WHERE 
+          Comment.CoID = ?
+      `;
+      
+      dbCon.query(fetchQuery, [result.insertId], (err, commentResult) => {
+        if (err) {
+          console.error("Error fetching new comment:", err);
+          res.status(201).json({
+            message: "Comment created but couldn't fetch details",
+            commentId: result.insertId
+          });
+        } else {
+          res.status(201).json(commentResult[0]);
+        }
+      });
+    }
+  });
 });
