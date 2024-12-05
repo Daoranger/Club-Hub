@@ -221,7 +221,7 @@ To get started with Club Hub, follow these steps:
 
 ## Documentation
 
-- [Final Report](documents/pdfs/Club_Hub-Final_Report.pdf)
+- [Final Report](documents/pdfs/Club_Hub-Final_Report.pdf) In Progress
 - [EER Diagram](documents/pdfs/Club_Hub-EER_Diagram.pdf)
 - [Presentation Slides](documents/pdfs/Club_Hub-Final_Presentation_Slides.pdf)
 - [Meeting Minutes](documents/pdfs/Club_Hub-Meeting_Minutes.pdf)
