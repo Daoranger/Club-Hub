@@ -131,7 +131,21 @@ To get started Club Hub, follow these steps:
 - **Nathan Durrant:**
 
 - **Shervan Shahparnia:**
+  - Documentation:
 
+    - Pitched the idea for the name of our web app "Club Hub"
+    - Contributed to project proposal
+    - Contributed to and reviewed EER diagram (Finalized EER diagram and reorganized for readability)
+    - Contributed to presentation slides
+    - Contributed to relational model documentation discussion
+    - Kept track of meeting minutes
+    - Contributed to part of final report
+
+  - Code:
+    - Implemented initial dashboard page with club creation, application navigation bar, & dark mode functionality
+    - Implemented Club member list and @mention functionality within Chat Room
+    - Assisted Nathan Cohn in implementing and discussing design decisions for navigation systems
+    - Contributed to various styling factors for client
 - **Aaron Sam**
 
 ## Snapshots
