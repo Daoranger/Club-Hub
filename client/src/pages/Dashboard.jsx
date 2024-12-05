@@ -35,7 +35,7 @@ function Dashboard() {
     fetchData(userID);
     const interval = setInterval(fetchData, 3000);
     return () => clearInterval(interval);
-  }, [userID]);
+  }, []);
 
   async function createClub() {
     axios

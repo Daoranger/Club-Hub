@@ -1,16 +1,19 @@
 /* Right Sidebar: Club Member List */
 .member-list {
-  flex: 2; /* 30% width for the member list */
+  height: 100%; /* Full height */
+  width: 15%; /* Full width */
+  margin-top: 0px; /* Push the member list below the top navbar */
+  margin-left: 20px; /* Add space between the chat and member list */
+  margin-right: -20px; /* Add space between the chat and member list */
   padding: 10px;
   overflow-y: auto; /* Enable vertical scrolling */
   background-color: #f6f8fa; /* Background for light mode */
-  border-left: 1px solid #e9ecef; /* Divider between sections */
+  border-radius: 5px;
   display: flex;
   flex-direction: column; /* Ensure members stack vertically */
 }
 body.dark-mode .member-list {
   background-color: #3c3c3c; /* Background for dark mode */
-  border-left: 1px solid #5a5a5a;
 }
 
 .member-list h3 {
@@ -76,20 +79,20 @@ body.dark-mode .member-username {
 }
 
 /* Adjust chatroom container to include the member list */
-.chatroom-container {
+.chatroom-member-container {
   display: flex;
   flex-direction: row; /* Align chat and member list side by side */
   height: calc(100vh - 100px); /* Adjust height to account for the header */
-  width: 95%; /* Full width */
+  width: 100%;
+  overflow: hidden; /* Prevent scrolling past container boundaries */
 }
 
 /* Main chat section now takes up 75% of the width */
 .chatroom-messages {
   flex: 7;
-  height: 95%; /* Decrease the height of the messages box to 70% of the parent */
-  width: 60%;
+  height: calc(100vh - 150px); /* Adjust based on your header and input height */
+  width: 100%;
   overflow-y: auto;
-  border-right: 1px solid #e9ecef;
 }
 
 /* Light and dark mode variables */
@@ -104,12 +107,8 @@ body.dark-mode {
 }
 
 /* Set text color dynamically */
-.chatroom-container {
+.chatroom-member-container {
   color: var(--text-color);
-}
-
-body.dark-mode .chatroom-messages {
-  border: 1px solid #5a5a5a; /* Dark border for dark mode */
 }
 
 /* Message styles */
@@ -121,7 +120,7 @@ body.dark-mode .chatroom-messages {
   color: black;
   position: relative;
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* Stack username, content, and timestamp */
 }
 
 .message-username {
@@ -135,7 +134,7 @@ body.dark-mode .message {
 }
 
 body.dark-mode .message-username {
-  color: #b9bbbe;
+  color: #7289da;
 }
 
 body.dark-mode .message {
@@ -147,11 +146,10 @@ body.dark-mode .message {
 .replied-message {
   background-color: #e9ecef;
   padding: 5px 10px;
-  border-left: 3px solid #7289da; /* Highlighted border */
+  border-radius: 5px;
   margin-bottom: 5px;
   font-size: 0.9rem;
   color: #6c757d; /* Muted text color */
-  border-radius: 4px;
 }
 
 body.dark-mode .replied-message {
@@ -191,7 +189,7 @@ body.dark-mode .timestamp {
   cursor: pointer;
   position: absolute;
   right: 10px;
-  top: 5px;
+  top: 10px;
   visibility: hidden;
 }
 
@@ -209,12 +207,10 @@ body.dark-mode .timestamp {
   flex-direction: column; /* Stack reply indicator above input + button */
   padding: 0px;
   background-color: #f6f8fa; /* Input background for light mode */
-  border-top: 1px solid #e9ecef;
 }
 
 body.dark-mode .chatroom-input {
   background-color: #3c3c3c; /* Input background for dark mode */
-  border-top: 1px solid #5a5a5a;
 }
 
 /* Reply indicator positioned above the text input */
@@ -225,7 +221,7 @@ body.dark-mode .chatroom-input {
   background-color: #e9ecef;
   border-radius: 4px;
   font-size: 0.9rem;
-  margin-left: 10px; /* Space between the left edge of the container */
+  padding: 5px 10px;
   margin-bottom: 10px; /* Space between the reply indicator and the input */
   color: black;
   gap: 10px; /* Space between the text and the cancel button */
@@ -244,19 +240,29 @@ body.dark-mode .reply-indicator {
   font-size: 0.9rem;
 }
 
+.chatroom-input-container {
+  display: flex;
+  width: 100%; /* Full width for input container */
+  flex-direction: column; /* Stack reply indicator above input + button */
+  padding: 10px; /* Add padding around the input section */
+}
+
 /* Input and button row layout */
 .chat-input-container {
   display: flex;
   flex-direction: row; /* Input and button side by side */
-  align-items: center; /* Vertically align input and button */
+  align-items: center;
   gap: 10px; /* Space between input and button */
+  height: 45px; /* Set the height of the input bar */
+  width: 100%; /* Ensure it takes the full width of the parent */
 }
 
 .chatroom-input input {
-  flex-grow: 1;
-  padding: 10px;
+  flex-grow: 1; /* Let the input take up remaining space */
+  height: 100%;
+  padding: 0px 10px; /* Add padding inside the input */
   border: none;
-  border-radius: 4px;
+  border-radius: 5px;
   background-color: #e9ecef;
   color: black;
 }
@@ -276,13 +282,13 @@ body.dark-mode .chatroom-input input::placeholder {
 
 /* Send button */
 .chatroom-input button {
+  height: 100%;
   padding: 10px 20px;
   border: none;
-  border-radius: 4px;
-  background-color: #7289da; /* Primary button color */
+  border-radius: 5px;
+  background-color: #7289da;
   color: white;
   cursor: pointer;
-  flex-shrink: 0; /* Prevent the button from resizing */
 }
 
 .chatroom-input button:hover {
@@ -304,7 +310,7 @@ body.dark-mode .chatroom-messages::-webkit-scrollbar-track {
 
 .chatroom-messages::-webkit-scrollbar-thumb {
   background-color: #7289da; /* Thumb color */
-  border-radius: 4px; /* Rounded corners */
+  border-radius: 5px; /* Rounded corners */
 }
 
 .chatroom-messages::-webkit-scrollbar-thumb:hover {

@@ -17,6 +17,7 @@ function ChatRoomPage() {
   const [suggestions, setSuggestions] = useState([]); // For autocomplete suggestions
   const [isMentioning, setIsMentioning] = useState(false); // Whether the user is typing an @mention
   const [highlightedIndex, setHighlightedIndex] = useState(0); // Tracks the currently highlighted suggestion
+  const chatContainer = useRef(null);
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -34,6 +35,12 @@ function ChatRoomPage() {
     const interval = setInterval(fetchMessages, 3000);
     return () => clearInterval(interval);
   }, [CRID]);
+
+  useEffect(() => {
+    if (chatContainer.current) {
+      chatContainer.current.scrollTop = chatContainer.current.scrollHeight;
+    }
+  }, [messages]);
 
   useEffect(() => {
     // Fetch the member list
@@ -124,8 +131,17 @@ function ChatRoomPage() {
         setSuggestions([]);
         setIsMentioning(false);
       }
-    }
+    } else if (e.key === "Enter" && !e.shiftKey) { // Prevent default only when Enter is pressed
+      e.preventDefault();
+      sendMessage(e); // Call sendMessage directly
+    } 
   };
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus(); // Automatically focus on the input field
+    }
+  }, []);
 
   const handleSuggestionSelect = (username) => {
     const updatedMessage = message.replace(/@\w*$/, `@${username} `);
@@ -139,9 +155,12 @@ function ChatRoomPage() {
   };
 
   return (
-    <div className="chatroom-wrapper">
-      <div className="chatroom-container">
-        <div className="chatroom-messages">
+    <div className="chatroom-member-container">
+      <div className="chatroom-input-container">
+        <div
+          className="chatroom-messages"
+          ref={chatContainer}
+        >
           {messages.map((msg) => (
             <div key={msg.message_id} className="message">
               <span className="message-username">{msg.username}</span>
@@ -181,6 +200,41 @@ function ChatRoomPage() {
             </div>
           ))}
         </div>
+        <form onSubmit={sendMessage} className="chatroom-input">
+          {replyTo && (
+            <div className="reply-indicator">
+              Replying to {replyToUser}: {replyToContent}{" "}
+              <button onClick={() => setReplyTo(null)}>Cancel</button>
+            </div>
+          )}
+          <div className="chat-input-container">
+            <input
+              type="text"
+              value={message}
+              onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
+              placeholder="Type a message..."
+              ref={inputRef}
+            />
+            {isMentioning && suggestions.length > 0 && (
+              <div className="mention-suggestions">
+                {suggestions.map((suggestion, index) => (
+                  <div
+                    key={suggestion.UID}
+                    onClick={() => handleSuggestionSelect(suggestion.username)}
+                    className={`suggestion-item ${
+                      index === highlightedIndex ? "active" : ""
+                    }`}
+                  >
+                    @{suggestion.username}
+                  </div>
+                ))}
+              </div>
+            )}
+            <button type="submit">Send</button>
+          </div>
+        </form>
+      </div>
         <div className="member-list">
           <h3>Members</h3>
           <ul>
@@ -199,41 +253,6 @@ function ChatRoomPage() {
             ))}
           </ul>
         </div>
-      </div>
-      <form onSubmit={sendMessage} className="chatroom-input">
-        {replyTo && (
-          <div className="reply-indicator">
-            Replying to {replyToUser}: {replyToContent}{" "}
-            <button onClick={() => setReplyTo(null)}>Cancel</button>
-          </div>
-        )}
-        <div className="chat-input-container">
-          <input
-            type="text"
-            value={message}
-            onChange={handleInputChange}
-            onKeyDown={handleKeyDown}
-            placeholder="Type a message..."
-            ref={inputRef}
-          />
-          {isMentioning && suggestions.length > 0 && (
-            <div className="mention-suggestions">
-              {suggestions.map((suggestion, index) => (
-                <div
-                  key={suggestion.UID}
-                  onClick={() => handleSuggestionSelect(suggestion.username)}
-                  className={`suggestion-item ${
-                    index === highlightedIndex ? "active" : ""
-                  }`}
-                >
-                  @{suggestion.username}
-                </div>
-              ))}
-            </div>
-          )}
-          <button type="submit">Send</button>
-        </div>
-      </form>
     </div>
   );
 }

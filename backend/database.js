@@ -80,35 +80,6 @@ app.get("/roles", (req, res) => {
   });
 });
 
-function create_role(
-  userID,
-  clubID,
-  roleName,
-  res,
-  message = "Role created successfully!"
-) {
-  const query = `
-    INSERT INTO Role (CID, name) VALUES (?, ?);
-  `;
-  dbCon.query(query, [clubID, roleName], (err, result) => {
-    if (err) {
-      check_err_code(err, res);
-    } else {
-      const RID = result.insertId;
-      const query2 = `
-        INSERT INTO ClubProfile (UID, RID, CID) VALUES (?, ?, ?);
-      `;
-      dbCon.query(query2, [userID, RID, clubID], (err, result) => {
-        if (err) {
-          check_err_code(err, res);
-        } else {
-          res.send({ message: message });
-        }
-      });
-    }
-  });
-}
-
 app.get("/clubs", (req, res) => {
   const { userID } = req.query;
 
@@ -145,12 +116,6 @@ app.get("/club", (req, res) => {
   });
 });
 
-app.post("/create-role", (req, res) => {
-  const { userID, clubID, roleName } = req.body;
-
-  create_role(userID, clubID, roleName, res);
-});
-
 app.post("/create-club", (req, res) => {
   const { userID, name, description } = req.body;
 
@@ -164,7 +129,16 @@ app.post("/create-club", (req, res) => {
     } else {
       const CID = result1.insertId;
 
-      create_role(userID, CID, "Owner", res, "Club created successfully!");
+      const query2 = `
+        INSERT INTO ClubProfile (UID, CID, RID) VALUES (?, ?, 1);
+      `
+      dbCon.query(query2, [userID, CID], (err, result2) => {
+        if (err) {
+          check_err_code(err, res);
+        } else {
+          res.send({ message: "Club created successfully!" });
+        }
+      });
     }
   });
 });
@@ -294,8 +268,6 @@ app.post("/chatroom", (req, res) => {
 
 app.get("/chatroom", (req, res) => {
   const { CRID } = req.query;
-
-  console.log(CRID);
 
   const query = `
     SELECT 
@@ -686,8 +658,19 @@ app.get("/search-clubs", (req, res) => {
 app.post("/join-club", (req, res) => {
   const { userID, clubID } = req.body;
 
-  // Create a default "Member" role for the user
-  create_role(userID, clubID, "Member", res, "Successfully joined the club!");
+  const query = `
+    INSERT INTO ClubProfile (UID, CID, RID)
+    VALUES (?, ?, 2)
+  `;
+
+  dbCon.query(query, [userID, clubID], (err, result) => {
+    if (err) {
+      console.error("Error joining club:", err);
+      res.status(500).json({ message: "Failed to join club" });
+    } else {
+      res.status(201).json({ message: "Successfully joined club" });
+    }
+  });
 });
 
 // Start the backend server at localhost:8800
