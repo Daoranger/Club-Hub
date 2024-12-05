@@ -12,6 +12,7 @@
 - [Prerequisites](#prerequisites)
 - [**Installation**](#installation)
 - [Contributions](#contributions)
+- [Documentation](#documentation)
 - [Snapshots](#snapshots)
 - [Languages and Tools](#languages-and-tools)
 
@@ -30,7 +31,9 @@
 - Node.js (v12.0.0 or higher)
 
 Download: https://nodejs.org/en/download/package-manager
+
 - npm (v10.1.0)
+
 ```
 npm install npm@latest -g
 ```
@@ -111,7 +114,9 @@ To get started with Club Hub, follow these steps:
 ## Contributions
 
 - **Hoang Nguyen:**
+
   - Non-technical:
+
     - Pitched the idea of Club Management Web App
     - Contributed to project proposal
     - Organized meetings
@@ -137,7 +142,9 @@ To get started with Club Hub, follow these steps:
 - **Nathan Cohn:**
 
 - **Nathan Durrant:**
+
   - Non-technical:
+
     - Organized meetings
     - Determined tech stack
     - Contributed to project proposal
@@ -155,7 +162,9 @@ To get started with Club Hub, follow these steps:
     - Updated implementation of role checking to check if the user is specifically the owner of the club
 
 - **Shervan Shahparnia:**
+
   - Non-technical:
+
     - Pitched the idea for the name of our web app "Club Hub"
     - Contributed to project proposal
     - Contributed to and reviewed EER diagram (Finalized EER diagram and reorganized for readability)
@@ -169,9 +178,11 @@ To get started with Club Hub, follow these steps:
     - Implemented Club member list and @mention functionality within Chat Room
     - Assisted Nathan Cohn in implementing and discussing design decisions for navigation systems
     - Contributed to various styling factors for client
-  
+
 - **Aaron Sam:**
+
   - Non-technical:
+
     - Contributed to project proposal
     - Contributed to presentation slides
     - Contributed to relational model documentation discussion
@@ -184,7 +195,9 @@ To get started with Club Hub, follow these steps:
     - Contributed to various styling factors for client
 
 - **Nathan Cohn:**
+
   - Non-technical:
+
     - Helped with the project proposal.
     - Contributed to and reviewed the EER diagram.
     - Worked on mapping the EER diagram to relational tables.
@@ -193,7 +206,6 @@ To get started with Club Hub, follow these steps:
     - Removed redundancies in the EER diagram.
     - Assisted with the final report.
 
- 
   - Code:
     - Implemented and fixed dark mode for most webpages.
     - Implemented a User context to track logged-in users and save them to local storage.
@@ -206,7 +218,15 @@ To get started with Club Hub, follow these steps:
     - Created database files such as `create`, `insert`, and `drop` scripts.
     - Debugged database files to ensure consistent and valid database access.
     - Adjusted and debugged CSS on some pages to ensure correct frontend implementation.
-      
+
+## Documentation
+
+- [Final Report]()
+- [EER Diagram](documents/pdfs/Club Hub - EER Diagram.pdf)
+- [Presentation Slides](documents/pdfs/Club Hub - Final Presentation Slides.pdf)
+- [Meeting Minutes](documents/pdfs/Club Hub - Meeting Minutes.pdf)
+- [Project Proposal](documents/pdfs/Club Hub - Proposal.pdf)
+
 ## Snapshots
 
 ### Web Homepage
