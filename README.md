@@ -1,5 +1,7 @@
 # Club Hub: A Comprehensive Platform for University Club Management
 
+![Club Hub Logo](client/public/ClubHubLogo.png)
+
 **Club Hub** is a web-based university club management service designed to enhance experiences among members of various clubs. The application aims to provide a platform for planning club events, managing memberships, facilitating discussions through forums, and fostering community engagement.
 
 ## Table of Contents
@@ -132,6 +134,57 @@ To get started Club Hub, follow these steps:
 - **Aaron Sam**
 
 ## Snapshots
+
+## Snapshots
+
+### User Dashboard
+
+![User Dashboard](images/afteruserdashboard.png)
+
+### Chatroom
+
+![Chatroom](images/chatroom.png)
+
+### Club Events
+
+![Club Events](images/clubevents.png)
+
+### Club Homepage
+
+![Club Homepage](images/clubhomepage.png)
+
+### Club Post
+
+![Club Post](images/clubpost.png)
+
+### Club Threads
+
+![Club Threads](images/clubthreads.png)
+
+### Create Thread
+
+![Create Thread](images/createthread.png)
+
+### Individual Thread Page
+
+![Individual Thread Page](images/indiethreadPage.png)
+
+### Initial User Dashboard
+
+![Initial User Dashboard](images/inituserdashboard.png)
+
+### Login
+
+![Login](images/login.png)
+
+### Search Club
+
+![Search Club](images/searchjclub.png)
+
+### Signup
+
+![Signup](images/signup.png)
+!
 
 ## Languages and Tools
 
