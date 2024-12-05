@@ -183,6 +183,30 @@ To get started with Club Hub, follow these steps:
     - Contributed to the backend database functionality
     - Contributed to various styling factors for client
 
+- **Nathan Cohn:**
+  - Non-technical:
+    - Helped with the project proposal.
+    - Contributed to and reviewed the EER diagram.
+    - Worked on mapping the EER diagram to relational tables.
+    - Helped normalize relational tables to BCNF.
+    - Introduced the idea for chatroom and comments.
+    - Removed redundancies in the EER diagram.
+    - Assisted with the final report.
+
+ 
+  - Code:
+    - Implemented and fixed dark mode for most webpages.
+    - Implemented a User context to track logged-in users and save them to local storage.
+    - Created the sign-up page and its respective backend query.
+    - Implemented Private Routes to ensure the user is logged in.
+    - Developed the ChatRoom page and messaging system with related backend queries.
+    - Built the Side Bar for navigation throughout club pages with related backend queries.
+    - Added checks to ensure users can create only one club, along with the necessary queries.
+    - Fixed and reorganized navigation to be more user-friendly and useful for frontend code.
+    - Created database files such as `create`, `insert`, and `drop` scripts.
+    - Debugged database files to ensure consistent and valid database access.
+    - Adjusted and debugged CSS on some pages to ensure correct frontend implementation.
+      
 ## Snapshots
 
 ### Web Homepage
