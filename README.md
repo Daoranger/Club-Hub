@@ -1,6 +1,8 @@
 # Club Hub: A Comprehensive Platform for University Club Management
 
-![Club Hub Logo](client/public/ClubHubLogo.png)
+<p align="center">
+  <img src="client/public/ClubHubLogo.png" alt="Club Hub Logo" width="200"/>
+</p>
 
 **Club Hub** is a web-based university club management service designed to enhance experiences among members of various clubs. The application aims to provide a platform for planning club events, managing memberships, facilitating discussions through forums, and fostering community engagement.
 
@@ -139,52 +141,51 @@ To get started Club Hub, follow these steps:
 
 ### User Dashboard
 
-![User Dashboard](images/afteruserdashboard.png)
+![User Dashboard](documentation/images/afteruserdashboard.png)
 
 ### Chatroom
 
-![Chatroom](images/chatroom.png)
+![Chatroom](documentation/images/chatroom.png)
 
 ### Club Events
 
-![Club Events](images/clubevents.png)
+![Club Events](documentation/images/clubevents.png)
 
 ### Club Homepage
 
-![Club Homepage](images/clubhomepage.png)
+![Club Homepage](documentation/ images/clubhomepage.png)
 
 ### Club Post
 
-![Club Post](images/clubpost.png)
+![Club Post](documentation/ images/clubpost.png)
 
 ### Club Threads
 
-![Club Threads](images/clubthreads.png)
+![Club Threads](documentation/images/clubthreads.png)
 
 ### Create Thread
 
-![Create Thread](images/createthread.png)
+![Create Thread](documentation/images/createthread.png)
 
 ### Individual Thread Page
 
-![Individual Thread Page](images/indiethreadPage.png)
+![Individual Thread Page](documentation/images/indiethreadPage.png)
 
 ### Initial User Dashboard
 
-![Initial User Dashboard](images/inituserdashboard.png)
+![Initial User Dashboard](documentation/images/inituserdashboard.png)
 
 ### Login
 
-![Login](images/login.png)
+![Login](documentation/images/login.png)
 
 ### Search Club
 
-![Search Club](images/searchjclub.png)
+![Search Club](documentation/images/searchjclub.png)
 
 ### Signup
 
-![Signup](images/signup.png)
-!
+![Signup](documentation/images/signup.png)
 
 ## Languages and Tools
 
