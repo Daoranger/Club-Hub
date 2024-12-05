@@ -97,14 +97,12 @@
 /* Toggle Button Styles */
 .sidebar-toggle-button {
     position: fixed;
-    top: 70px; /* Places the button below the top navbar */
-    left: 150px; /* Positioned at the edge of the sidebar */
+    top: 65px; /* Places the button below the top navbar */
     z-index: 1100; /* Ensure it stays above the sidebar */
     border: none;
     border-radius: 50%;
     width: 30px;
     height: 30px;
-    display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
