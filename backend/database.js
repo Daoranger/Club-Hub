@@ -588,8 +588,8 @@ app.post("/register-event", (req, res) => {
   const { eventID, userID } = req.body;
 
   const query = `
-    INSERT INTO EventRegistration (UID, EID, date, status)
-    VALUES (?, ?, CURDATE(), 'registered')
+    INSERT INTO EventRegistration (UID, EID, date)
+    VALUES (?, ?, CURDATE())
   `;
 
   dbCon.query(query, [userID, eventID], (err, result) => {
