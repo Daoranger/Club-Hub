@@ -137,11 +137,33 @@ To get started Club Hub, follow these steps:
 
 ## Snapshots
 
-## Snapshots
+### Web Homepage
+
+![Web Homepage](documents/images/image.png)
+
+### Signup
+
+![Signup](documents/images/signup.png)
+
+### Login
+
+![Login](documents/images/login.png)
+
+### Initial User Dashboard
+
+![Initial User Dashboard](documents/images/inituserdashboard.png)
 
 ### User Dashboard
 
 ![User Dashboard](documents/images/afteruserdashboard.png)
+
+### Search Club
+
+![Search Club](documents/images/searchjclub.png)
+
+### Club Homepage
+
+![Club Homepage](documents/images/clubhomepage.png)
 
 ### Chatroom
 
@@ -151,13 +173,9 @@ To get started Club Hub, follow these steps:
 
 ![Club Events](documents/images/clubevents.png)
 
-### Club Homepage
-
-![Club Homepage](documents/ images/clubhomepage.png)
-
 ### Club Post
 
-![Club Post](documents/ images/clubpost.png)
+![Club Post](documents/images/clubpost.png)
 
 ### Club Threads
 
@@ -170,22 +188,6 @@ To get started Club Hub, follow these steps:
 ### Individual Thread Page
 
 ![Individual Thread Page](documents/images/indiethreadPage.png)
-
-### Initial User Dashboard
-
-![Initial User Dashboard](documents/images/inituserdashboard.png)
-
-### Login
-
-![Login](documents/images/login.png)
-
-### Search Club
-
-![Search Club](documents/images/searchjclub.png)
-
-### Signup
-
-![Signup](documents/images/signup.png)
 
 ## Languages and Tools
 
