@@ -18,7 +18,7 @@ const dbCon = mysql.createConnection({
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  timezone: '+00:00'
+  timezone: "+00:00",
 });
 
 // Testing DB connection
@@ -55,12 +55,12 @@ app.post("/isOwner", (req, res) => {
   dbCon.query(query, [userID, clubID], (err, result) => {
     if (err) {
       check_err_code(err, res);
-      console.log(err.sqlMessage)
+      console.log(err.sqlMessage);
     } else {
       res.send(result.length > 0);
     }
   });
-})
+});
 
 app.get("/roles", (req, res) => {
   const { userID } = req.query;
@@ -131,7 +131,7 @@ app.post("/create-club", (req, res) => {
 
       const query2 = `
         INSERT INTO ClubProfile (UID, CID, RID) VALUES (?, ?, 1);
-      `
+      `;
       dbCon.query(query2, [userID, CID], (err, result2) => {
         if (err) {
           check_err_code(err, res);
@@ -658,17 +658,33 @@ app.get("/search-clubs", (req, res) => {
 app.post("/join-club", (req, res) => {
   const { userID, clubID } = req.body;
 
-  const query = `
-    INSERT INTO ClubProfile (UID, CID, RID)
-    VALUES (?, ?, 2)
+  // Check if the user is already a member of the club
+  const checkQuery = `
+    SELECT * FROM ClubProfile WHERE UID = ? AND CID = ?
   `;
 
-  dbCon.query(query, [userID, clubID], (err, result) => {
+  dbCon.query(checkQuery, [userID, clubID], (err, result) => {
     if (err) {
-      console.error("Error joining club:", err);
-      res.status(500).json({ message: "Failed to join club" });
+      console.error("Error checking club membership:", err);
+      res.status(500).json({ message: "Failed to check club membership" });
+    } else if (result.length > 0) {
+      // User is already a member
+      res.status(400).json({ message: "User is already a member of the club" });
     } else {
-      res.status(201).json({ message: "Successfully joined club" });
+      // User is not a member, proceed to join
+      const insertQuery = `
+        INSERT INTO ClubProfile (UID, CID, RID)
+        VALUES (?, ?, 2)
+      `;
+
+      dbCon.query(insertQuery, [userID, clubID], (err, result) => {
+        if (err) {
+          console.error("Error joining club:", err);
+          res.status(500).json({ message: "Failed to join club" });
+        } else {
+          res.status(201).json({ message: "Successfully joined club" });
+        }
+      });
     }
   });
 });
@@ -676,8 +692,6 @@ app.post("/join-club", (req, res) => {
 // Start the backend server at localhost:8800
 app.listen(8800, () => {
   console.log("Connected to backend!");
-
-  
 });
 
 // Get all comments for a specific poar
@@ -737,13 +751,13 @@ app.post("/comments", (req, res) => {
         WHERE 
           Comment.CoID = ?
       `;
-      
+
       dbCon.query(fetchQuery, [result.insertId], (err, commentResult) => {
         if (err) {
           console.error("Error fetching new comment:", err);
           res.status(201).json({
             message: "Comment created but couldn't fetch details",
-            commentId: result.insertId
+            commentId: result.insertId,
           });
         } else {
           res.status(201).json(commentResult[0]);
