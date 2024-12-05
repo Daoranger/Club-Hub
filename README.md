@@ -10,7 +10,7 @@
 
 - [Features](#features)
 - [Prerequisites](#prerequisites)
-- [Installation](#installation)
+- [**Installation**](#installation)
 - [Contributions](#contributions)
 - [Snapshots](#snapshots)
 - [Languages and Tools](#languages-and-tools)
