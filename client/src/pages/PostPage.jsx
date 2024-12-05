@@ -7,10 +7,12 @@ function PostPage() {
   const [posts, setPosts] = useState([]);
   const [clubName, setClubName] = useState("");
   const [newPost, setNewPost] = useState({ caption: "", mediaURL: "" });
-  const [error, setError] = useState("");
-  const { clubID } = useParams();
+  const { clubID} = useParams(); // Extract clubID from URL parameters
   const { userID } = useUserContext();
   const [isOwner, setIsOwner] = useState(false);
+  const [comments, setComments] = useState([]);
+  const [newComment, setNewComment] = useState("");
+  const [error, setError] = useState("");
 
   // Fetch posts and club info
   useEffect(() => {
@@ -27,6 +29,11 @@ function PostPage() {
           params: { CID: clubID } 
         });
         setPosts(postsResponse.data);
+
+        // Fetch comments for the posts
+        const commentsResponse = await axios.get(`http://localhost:8800/comments`, { params: { CID: clubID} });
+        setComments(commentsResponse.data);
+        console.log(commentsResponse.data);
 
         // Check if user is owner
         const rolesResponse = await axios.post(`http://localhost:8800/isOwner`, {
@@ -79,6 +86,20 @@ function PostPage() {
     }
   };
 
+  const handleCommentSubmit = async (postId) => {
+    try {
+      const response = await axios.post(`http://localhost:8800/comments`, {
+        postId,
+        userID,
+        content: newComment,
+      });
+      setComments([...comments, response.data]);
+      setNewComment("");
+    } catch (error) {
+      console.error("Error submitting comment:", error);
+    }
+  };
+
   return (
     <div style={styles.pageContainer}>
       <header style={styles.header}>
@@ -116,7 +137,7 @@ function PostPage() {
             <div style={styles.postHeader}>
               <span style={styles.username}>{post.username}</span>
               <span style={styles.timestamp}>
-                {new Date(post.timestamp).toLocaleDateString()}
+                {new Date(post.timestamp).toLocaleString()}
               </span>
             </div>
             {post.mediaURL && (
@@ -128,6 +149,43 @@ function PostPage() {
             )}
             <div style={styles.postContent}>
               <p style={styles.caption}>{post.caption}</p>
+            </div>
+            <div>
+              <h3>Comments ({comments.filter((comment) => comment.PID === post.PID).length})</h3>
+              <div style={styles.commentForm}>
+                <textarea
+                  style={styles.commentInput}
+                  placeholder="Add a comment..."
+                  value={newComment}
+                  onChange={(e) => setNewComment(e.target.value)}
+                />
+                <button style={styles.commentButton} onClick={() => handleCommentSubmit(post.PID)}>
+                  Comment
+                </button>
+              </div>
+
+              {/* Display comments */}
+              <div style={styles.commentsList}>
+              {comments.filter((comment) => comment.PID === post.PID).length > 0 ? (
+                  comments
+                    .filter((comment) => comment.PID === post.PID)
+                    .map((comment) => (
+                      <div key={comment.CoID} style={styles.commentItem}>
+                        <div style={styles.commentHeader}>
+                          <span style={styles.commentUsername}>{comment.username}</span>
+                          <span style={styles.commentTimestamp}>
+                            {new Date(comment.timestamp).toLocaleString()}
+                          </span>
+                        </div>
+                        <p style={styles.commentContent}>{comment.content}</p>
+                      </div>
+                    ))
+                ) : (
+                  <p style={styles.noComments}>
+                    No comments yet. Be the first to comment!
+                  </p>
+                )}
+              </div>
             </div>
           </div>
         ))}
@@ -227,6 +285,72 @@ const styles = {
     backgroundColor: "#ffebee",
     borderRadius: "4px",
     fontSize: "14px",
+  },
+  commentForm: {
+    marginTop: "15px",
+    marginBottom: "20px",
+    marginLeft: "10px",
+    marginRight: "35px",
+  },
+  commentInput: {
+    width: "100%",
+    minHeight: "100px",
+    padding: "12px",
+    borderRadius: "4px",
+    border: "1px solid #ddd",
+    marginBottom: "10px",
+    fontSize: "14px",
+    resize: "vertical",
+    fontFamily: "inherit",
+  },
+  commentButton: {
+    backgroundColor: "#0079d3",
+    color: "white",
+    border: "none",
+    borderRadius: "4px",
+    padding: "8px 16px",
+    fontSize: "14px",
+    fontWeight: "600",
+    cursor: "pointer",
+    transition: "background-color 0.2s",
+    ":hover": {
+      backgroundColor: "#005fa3",
+    },
+  },
+  commentsList: {
+    marginTop: "20px",
+  },
+  commentItem: {
+    padding: "15px",
+    borderBottom: "1px solid #eee",
+    marginBottom: "10px",
+    backgroundColor: "#f8f9fa",
+    borderRadius: "4px",
+  },
+  commentHeader: {
+    display: "flex",
+    justifyContent: "space-between",
+    marginBottom: "8px",
+  },
+  commentUsername: {
+    fontWeight: "600",
+    color: "#1a1a1b",
+  },
+  commentTimestamp: {
+    color: "#787c7e",
+    fontSize: "12px",
+  },
+  commentContent: {
+    fontSize: "14px",
+    lineHeight: "1.5",
+    color: "#1a1a1b",
+    margin: 0,
+  },
+  noComments: {
+    textAlign: "center",
+    color: "#787c7e",
+    fontStyle: "italic",
+    padding: "20px 0",
   },
 };
 

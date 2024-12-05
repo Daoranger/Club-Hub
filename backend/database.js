@@ -18,6 +18,7 @@ const dbCon = mysql.createConnection({
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
+  timezone: '+00:00'
 });
 
 // Testing DB connection
@@ -79,35 +80,6 @@ app.get("/roles", (req, res) => {
   });
 });
 
-function create_role(
-  userID,
-  clubID,
-  roleName,
-  res,
-  message = "Role created successfully!"
-) {
-  const query = `
-    INSERT INTO Role (CID, name) VALUES (?, ?);
-  `;
-  dbCon.query(query, [clubID, roleName], (err, result) => {
-    if (err) {
-      check_err_code(err, res);
-    } else {
-      const RID = result.insertId;
-      const query2 = `
-        INSERT INTO ClubProfile (UID, RID, CID) VALUES (?, ?, ?);
-      `;
-      dbCon.query(query2, [userID, RID, clubID], (err, result) => {
-        if (err) {
-          check_err_code(err, res);
-        } else {
-          res.send({ message: message });
-        }
-      });
-    }
-  });
-}
-
 app.get("/clubs", (req, res) => {
   const { userID } = req.query;
 
@@ -144,12 +116,6 @@ app.get("/club", (req, res) => {
   });
 });
 
-app.post("/create-role", (req, res) => {
-  const { userID, clubID, roleName } = req.body;
-
-  create_role(userID, clubID, roleName, res);
-});
-
 app.post("/create-club", (req, res) => {
   const { userID, name, description } = req.body;
 
@@ -163,7 +129,16 @@ app.post("/create-club", (req, res) => {
     } else {
       const CID = result1.insertId;
 
-      create_role(userID, CID, "Owner", res, "Club created successfully!");
+      const query2 = `
+        INSERT INTO ClubProfile (UID, CID, RID) VALUES (?, ?, 1);
+      `
+      dbCon.query(query2, [userID, CID], (err, result2) => {
+        if (err) {
+          check_err_code(err, res);
+        } else {
+          res.send({ message: "Club created successfully!" });
+        }
+      });
     }
   });
 });
@@ -293,8 +268,6 @@ app.post("/chatroom", (req, res) => {
 
 app.get("/chatroom", (req, res) => {
   const { CRID } = req.query;
-
-  console.log(CRID);
 
   const query = `
     SELECT 
@@ -615,8 +588,8 @@ app.post("/register-event", (req, res) => {
   const { eventID, userID } = req.body;
 
   const query = `
-    INSERT INTO EventRegistration (UID, EID, date, status)
-    VALUES (?, ?, CURDATE(), 'registered')
+    INSERT INTO EventRegistration (UID, EID, date)
+    VALUES (?, ?, CURDATE())
   `;
 
   dbCon.query(query, [userID, eventID], (err, result) => {
@@ -685,11 +658,97 @@ app.get("/search-clubs", (req, res) => {
 app.post("/join-club", (req, res) => {
   const { userID, clubID } = req.body;
 
-  // Create a default "Member" role for the user
-  create_role(userID, clubID, "Member", res, "Successfully joined the club!");
+  const query = `
+    INSERT INTO ClubProfile (UID, CID, RID)
+    VALUES (?, ?, 2)
+  `;
+
+  dbCon.query(query, [userID, clubID], (err, result) => {
+    if (err) {
+      console.error("Error joining club:", err);
+      res.status(500).json({ message: "Failed to join club" });
+    } else {
+      res.status(201).json({ message: "Successfully joined club" });
+    }
+  });
 });
 
 // Start the backend server at localhost:8800
 app.listen(8800, () => {
   console.log("Connected to backend!");
+
+  
+});
+
+// Get all comments for a specific poar
+app.get("/comments", (req, res) => {
+  const { CID } = req.query;
+
+  const query = `
+    SELECT 
+      Comment.*,
+      User.username,
+      Post.CID
+    FROM 
+      Comment
+    JOIN 
+      Post ON Comment.PID = Post.PID
+    JOIN 
+      User ON Comment.UID = User.UID
+    WHERE 
+      Post.CID = ? 
+    ORDER BY 
+      Comment.timestamp DESC
+  `;
+
+  dbCon.query(query, [CID], (err, results) => {
+    if (err) {
+      console.error("Error fetching comments:", err);
+      res.status(500).json({ message: "Failed to fetch comments" });
+    } else {
+      res.status(200).json(results);
+    }
+  });
+});
+
+// Create a new comment
+app.post("/comments", (req, res) => {
+  const { postId, userID, content } = req.body;
+
+  const query = `
+    INSERT INTO Comment (PID, UID, content)
+    VALUES (?, ?, ?)
+  `;
+
+  dbCon.query(query, [postId, userID, content], (err, result) => {
+    if (err) {
+      console.error("Error creating comment:", err);
+      res.status(500).json({ message: "Failed to create comment" });
+    } else {
+      // Fetch the newly created comment with username
+      const fetchQuery = `
+        SELECT 
+          Comment.*,
+          User.username
+        FROM 
+          Comment
+        JOIN 
+          User ON Comment.UID = User.UID
+        WHERE 
+          Comment.CoID = ?
+      `;
+      
+      dbCon.query(fetchQuery, [result.insertId], (err, commentResult) => {
+        if (err) {
+          console.error("Error fetching new comment:", err);
+          res.status(201).json({
+            message: "Comment created but couldn't fetch details",
+            commentId: result.insertId
+          });
+        } else {
+          res.status(201).json(commentResult[0]);
+        }
+      });
+    }
+  });
 });
