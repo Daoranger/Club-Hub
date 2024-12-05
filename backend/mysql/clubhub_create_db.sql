@@ -141,3 +141,5 @@ CREATE TABLE ClubProfile (
 );
 
 CREATE INDEX UID_IDX on ClubProfile (UID);
+
+INSERT INTO Role (name)  VALUES ('Owner'), ('Member');

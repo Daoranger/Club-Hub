@@ -10,32 +10,32 @@ function Dashboard() {
   const { userID } = useUserContext();
   const navigate = useNavigate();
 
-  
   async function fetchData(userID) {
-    axios.get("http://localhost:8800/clubs", { params: { userID: userID } })
-    .then((response) => {
-      setClubs(response.data);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+    axios
+      .get("http://localhost:8800/clubs", { params: { userID: userID } })
+      .then((response) => {
+        setClubs(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
-    axios.get("http://localhost:8800/roles", { params: { userID: userID } })
-    .then((response) => {
-      const roles = response.data.map((role) => role.name);
-      setShowForm(!roles.includes("Owner"));
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-  
+    axios
+      .get("http://localhost:8800/roles", { params: { userID: userID } })
+      .then((response) => {
+        const roles = response.data.map((role) => role.name);
+        setShowForm(!roles.includes("Owner"));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   useEffect(() => {
     fetchData(userID);
-    const interval = setInterval(fetchData, 3000);
+    const interval = setInterval(() => fetchData(userID), 3000);
     return () => clearInterval(interval);
-  }, []);
+  }, [userID]);
 
   async function createClub() {
     axios
@@ -75,15 +75,17 @@ function Dashboard() {
 
   return (
     <div style={{ padding: "20px" }}>
-      <div style={{ 
-        display: "flex", 
-        justifyContent: "space-between", 
-        alignItems: "center",
-        marginBottom: "20px"
-      }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "20px",
+        }}
+      >
         <h1>My Clubs</h1>
         <button
-          onClick={() => navigate('/search')}
+          onClick={() => navigate("/search")}
           style={{
             padding: "10px 20px",
             backgroundColor: "#2c3e50",
