@@ -53,7 +53,7 @@ npm install npm@latest -g
 
 ## Installation
 
-To get started Club Hub, follow these steps:
+To get started with Club Hub, follow these steps:
 
 1. Clone the repository
 
@@ -111,11 +111,11 @@ To get started Club Hub, follow these steps:
 ## Contributions
 
 - **Hoang Nguyen:**
-
-  - Documentation:
-
+  - Non-technical:
     - Pitched the idea of Club Management Web App
     - Contributed to project proposal
+    - Organized meetings
+    - Determined tech stack
     - Contributed and reviewed EER diagram
     - Contributed to presentation slides
     - Contributed to relational model documentation
@@ -125,7 +125,7 @@ To get started Club Hub, follow these steps:
     - Created Club Hub Logo
 
   - Code:
-    - Set up the Github repository and initial project structure
+    - Set up the Github repository and initial project structure with Nathan Durrant
     - Set up the initial backend server and frontend structure
     - Implemented threads page, create thread, and reply to thread functionalities
     - Implemented post page and contributed to part of post comment functionality
@@ -137,7 +137,7 @@ To get started Club Hub, follow these steps:
 - **Nathan Cohn:**
 
 - **Nathan Durrant:**
-- Non-technical:
+  - Non-technical:
     - Organized meetings
     - Determined tech stack
     - Contributed to project proposal
@@ -147,7 +147,7 @@ To get started Club Hub, follow these steps:
     - Finalized relational model documentation
     - Contributed to part of final report
 
-- Code:
+  - Code:
     - Assisted Hoang in setting up file structure after intial setup
     - Implemented login page and login functionality
     - Connected club display in dashboard to the backend
@@ -155,8 +155,7 @@ To get started Club Hub, follow these steps:
     - Updated implementation of role checking to check if the user is specifically the owner of the club
 
 - **Shervan Shahparnia:**
-  - Documentation:
-
+  - Non-technical:
     - Pitched the idea for the name of our web app "Club Hub"
     - Contributed to project proposal
     - Contributed to and reviewed EER diagram (Finalized EER diagram and reorganized for readability)
@@ -170,9 +169,9 @@ To get started Club Hub, follow these steps:
     - Implemented Club member list and @mention functionality within Chat Room
     - Assisted Nathan Cohn in implementing and discussing design decisions for navigation systems
     - Contributed to various styling factors for client
-- **Aaron Sam:**
-  - Documentation:
-
+  
+  **Aaron Sam:**
+  - Non-technical:
     - Contributed to project proposal
     - Contributed to presentation slides
     - Contributed to relational model documentation discussion
