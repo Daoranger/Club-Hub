@@ -221,11 +221,11 @@ To get started with Club Hub, follow these steps:
 
 ## Documentation
 
-- [Final Report]()
-- [EER Diagram](documents/pdfs/Club Hub - EER Diagram.pdf)
-- [Presentation Slides](documents/pdfs/Club Hub - Final Presentation Slides.pdf)
-- [Meeting Minutes](documents/pdfs/Club Hub - Meeting Minutes.pdf)
-- [Project Proposal](documents/pdfs/Club Hub - Proposal.pdf)
+- [Final Report](documents/pdfs/Club_Hub-Final_Report.pdf)
+- [EER Diagram](documents/pdfs/Club_Hub-EER_Diagram.pdf)
+- [Presentation Slides](documents/pdfs/Club_Hub-Final_Presentation_Slides.pdf)
+- [Meeting Minutes](documents/pdfs/Club_Hub-Meeting_Minutes.pdf)
+- [Project Proposal](documents/pdfs/Club_Hub-Proposal.pdf)
 
 ## Snapshots
 
