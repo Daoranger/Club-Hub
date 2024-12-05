@@ -4,11 +4,51 @@
 
 ## Table of Contents
 
+- [Languages and Tools](#languages-and-tools)
 - [Features](#features)
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Contributions](#contributions)
+
+##Languages and Tools
+
+<p align="left">
+  <!-- Frontend -->
+  <a href="https://www.w3.org/html/" target="_blank" rel="noreferrer">
+    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original-wordmark.svg" alt="html5" width="40" height="40"/>
+  </a>
+  <a href="https://www.w3schools.com/css/" target="_blank" rel="noreferrer">
+    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original-wordmark.svg" alt="css3" width="40" height="40"/>
+  </a>
+  <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noreferrer">
+    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" alt="javascript" width="40" height="40"/>
+  </a>
+  <a href="https://reactjs.org/" target="_blank" rel="noreferrer">
+    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/react/react-original-wordmark.svg" alt="react" width="40" height="40"/>
+  </a>
+  
+  <!-- Backend -->
+  <a href="https://nodejs.org" target="_blank" rel="noreferrer">
+    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/nodejs/nodejs-original-wordmark.svg" alt="nodejs" width="40" height="40"/>
+  </a>
+  <a href="https://expressjs.com" target="_blank" rel="noreferrer">
+    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/express/express-original-wordmark.svg" alt="express" width="40" height="40"/>
+  </a>
+  
+  <!-- Database -->
+  <a href="https://www.mysql.com/" target="_blank" rel="noreferrer">
+    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/mysql/mysql-original-wordmark.svg" alt="mysql" width="40" height="40"/>
+  </a>
+  
+  <!-- Software Tools -->
+  <a href="https://git-scm.com/" target="_blank" rel="noreferrer">
+    <img src="https://www.vectorlogo.zone/logos/git-scm/git-scm-icon.svg" alt="git" width="40" height="40"/>
+  </a>
+  <a href="https://postman.com" target="_blank" rel="noreferrer">
+    <img src="https://www.vectorlogo.zone/logos/getpostman/getpostman-icon.svg" alt="postman" width="40" height="40"/>
+  </a>
+</p>
 
 ## Features
 
@@ -25,7 +65,7 @@
 - Node.js (v12.0.0 or higher)
 - npm (v10.1.0)
 
-- Option 1: MySQL server running on your local system and any preferred GUI (e.g. MySQL Workbench)
+- **Option 1 (preferred)**: MySQL server running on your local system and any preferred GUI (e.g. MySQL Workbench)
 
   - .env file with the following variables:
 
@@ -35,7 +75,7 @@
     - DB_NAME (e.g. clubhub)
     - You can run the code in clubhub_create_db.sql file to create the database and tables on your local system
 
-- **Option 2 (preferred)**: We also host our database server online, in which case you can use the following variables (we used freemysqlhosting.net):
+- Option 2 (optional): We also host our database server online, in which case you can use the following variables (we used freemysqlhosting.net):
   - DB_HOST= sql3.freemysqlhosting.net
   - DB_USER= sql3749296
   - DB_PASSWORD= ZXRZuYlU94
@@ -57,7 +97,9 @@ To get started Club Hub, follow these steps:
    cd Club-Hub
    ```
 
-3. To run Club Hub on your local system, open two terminals and run the following commands:
+3. Launch your local MySQL server (preferred MySQL Workbench). Copy-paste and execute the code in clubhub_create_db.sql file (path: Club-Hub/backend/mysql/clubhub_create_db.sql) to create the database and tables on your local system.
+
+4. To run Club Hub on your local system, open two terminals and run the following commands:
 
    On the first terminal, navigate to the backend directory and run the following command:
 
@@ -65,7 +107,8 @@ To get started Club Hub, follow these steps:
    cd backend
    ```
 
-   Once you are in the backend directory, create a .env file with the variables in prerequisites section (we prefer the variables in **Option 2**). Then run the following command:
+   Once you are in the backend directory, create a .env file with the variables in prerequisites section (we prefer the variables in **Option 1**). \
+   Then run the following command:
 
    ```
    npm install
@@ -100,6 +143,28 @@ I want to include some screenshots of the website here!
 ## Contributions
 
 - **Hoang Nguyen:**
+
+  - Documentation:
+
+    - Pitched the idea of Club Management Web App
+    - Contributed to project proposal
+    - Contributed and reviewed EER diagram
+    - Contributed to presentation slides
+    - Contributed to relational model documentation
+    - Kept track of meeting minutes
+    - Contributed to part of final report
+    - Wrote the README.md file
+    - Created Club Hub Logo
+
+  - Code:
+    - Set up the Github repository and initial project structure
+    - Set up the initial backend server and frontend structure
+    - Implemented threads page, create thread, and reply to thread functionalities
+    - Implemented post page and contributed to part of post comment functionality
+    - Implemented events page, created event, and registered for event functionalities
+    - Contributed to part of search club functionality
+    - Fixed bugs for signup, post's comments, and dashboard functionalities
+    - Fixed other minor bugs
 
 - **Nathan Cohn:**
 
