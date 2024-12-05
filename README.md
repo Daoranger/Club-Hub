@@ -28,7 +28,12 @@
 ## Prerequisites
 
 - Node.js (v12.0.0 or higher)
+
+Download: https://nodejs.org/en/download/package-manager
 - npm (v10.1.0)
+```
+npm install npm@latest -g
+```
 
 - **Option 1 (preferred)**: MySQL server running on your local system and any preferred GUI (e.g. MySQL Workbench)
 
@@ -132,6 +137,22 @@ To get started Club Hub, follow these steps:
 - **Nathan Cohn:**
 
 - **Nathan Durrant:**
+- Non-technical:
+    - Organized meetings
+    - Determined tech stack
+    - Contributed to project proposal
+    - Contributed to and reviewed EER diagram
+    - Contributed to final presentation slides
+    - Normalized relational tables to BCNF
+    - Finalized relational model documentation
+    - Contributed to part of final report
+
+- Code:
+    - Assisted Hoang in setting up file structure after intial setup
+    - Implemented login page and login functionality
+    - Connected club display in dashboard to the backend
+    - Implemented indexing in our create table statements to improve performance
+    - Updated implementation of role checking to check if the user is specifically the owner of the club
 
 - **Shervan Shahparnia:**
   - Documentation:
