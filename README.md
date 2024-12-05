@@ -141,51 +141,51 @@ To get started Club Hub, follow these steps:
 
 ### User Dashboard
 
-![User Dashboard](documentation/images/afteruserdashboard.png)
+![User Dashboard](documents/images/afteruserdashboard.png)
 
 ### Chatroom
 
-![Chatroom](documentation/images/chatroom.png)
+![Chatroom](documents/images/chatroom.png)
 
 ### Club Events
 
-![Club Events](documentation/images/clubevents.png)
+![Club Events](documents/images/clubevents.png)
 
 ### Club Homepage
 
-![Club Homepage](documentation/ images/clubhomepage.png)
+![Club Homepage](documents/ images/clubhomepage.png)
 
 ### Club Post
 
-![Club Post](documentation/ images/clubpost.png)
+![Club Post](documents/ images/clubpost.png)
 
 ### Club Threads
 
-![Club Threads](documentation/images/clubthreads.png)
+![Club Threads](documents/images/clubthreads.png)
 
 ### Create Thread
 
-![Create Thread](documentation/images/createthread.png)
+![Create Thread](documents/images/createthread.png)
 
 ### Individual Thread Page
 
-![Individual Thread Page](documentation/images/indiethreadPage.png)
+![Individual Thread Page](documents/images/indiethreadPage.png)
 
 ### Initial User Dashboard
 
-![Initial User Dashboard](documentation/images/inituserdashboard.png)
+![Initial User Dashboard](documents/images/inituserdashboard.png)
 
 ### Login
 
-![Login](documentation/images/login.png)
+![Login](documents/images/login.png)
 
 ### Search Club
 
-![Search Club](documentation/images/searchjclub.png)
+![Search Club](documents/images/searchjclub.png)
 
 ### Signup
 
-![Signup](documentation/images/signup.png)
+![Signup](documents/images/signup.png)
 
 ## Languages and Tools
 
