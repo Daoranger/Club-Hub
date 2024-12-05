@@ -149,7 +149,19 @@ To get started Club Hub, follow these steps:
     - Implemented Club member list and @mention functionality within Chat Room
     - Assisted Nathan Cohn in implementing and discussing design decisions for navigation systems
     - Contributed to various styling factors for client
-- **Aaron Sam**
+- **Aaron Sam:**
+ - Documentation:
+
+    - Contributed to project proposal
+    - Contributed to presentation slides
+    - Contributed to relational model documentation discussion
+    - Kept track of meeting minutes
+    - Contributed to part of final report
+
+  - Code:
+    - Implemented intial search page for the list of clubs and the comment feature for the post page
+    - Contributed to the backend database functionality
+    - Contributed to various styling factors for client
 
 ## Snapshots
 
