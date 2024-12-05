@@ -62,7 +62,7 @@ To get started Club Hub, follow these steps:
    cd Club-Hub
    ```
 
-3. Launch your local MySQL server (preferred MySQL Workbench). Copy-paste and execute the code in clubhub_create_db.sql file (path: Club-Hub/backend/mysql/clubhub_create_db.sql) to create the database and tables on your local system.
+3. Launch your local MySQL server (preferred MySQL Workbench). Copy-paste and execute the code in **clubhub_create_db.sql file (path: Club-Hub/backend/mysql/clubhub_create_db.sql)** to create the database and tables on your local system.
 
 4. To run Club Hub on your local system, open two terminals and run the following commands:
 
@@ -72,8 +72,7 @@ To get started Club Hub, follow these steps:
    cd backend
    ```
 
-   Once you are in the backend directory, create a .env file with the variables in prerequisites section (we prefer the variables in **Option 1**). \
-   Then run the following command:
+   Once you are in the backend directory, create a .env file with the variables in prerequisites section (we prefer the variables in **Option 1**). Then run the following command:
 
    ```
    npm install
