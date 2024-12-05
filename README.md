@@ -139,8 +139,6 @@ To get started with Club Hub, follow these steps:
     - Fixed bugs for signup, post's comments, and dashboard functionalities
     - Fixed other minor bugs
 
-- **Nathan Cohn:**
-
 - **Nathan Durrant:**
 
   - Non-technical:
