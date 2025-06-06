@@ -10,3 +10,4 @@ Project description
 
 ## Usage
 Read instructions in the README.md file for (each) backend and client 
+# ClubHub
